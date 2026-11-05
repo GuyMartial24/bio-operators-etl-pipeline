@@ -1,0 +1,5 @@
+# Fins de ligne Linux (LF) pour les fichiers exécutés dans les conteneurs.
+# Sans ça, Git sous Windows peut les convertir en CRLF et le script échoue dans Linux.
+*.sh  text eol=lf
+*.sql text eol=lf
+*.yml text eol=lf
