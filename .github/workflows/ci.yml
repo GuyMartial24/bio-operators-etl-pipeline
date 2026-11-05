@@ -1,0 +1,52 @@
+# Intégration continue : à chaque push, on vérifie que la base se crée correctement.
+name: CI
+
+# Flux de travail : on pousse sur develop, puis on ouvre une pull request (PR) de develop vers main.
+on:
+  push:
+    branches: [develop, main]   # chaque push sur develop, et main après la fusion d'une PR
+  pull_request:
+    branches: [main]            # chaque PR vers main : la CI doit être verte avant de fusionner
+
+# Si on pousse deux fois de suite, on annule l'exécution précédente devenue inutile
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  database:
+    name: Base PostgreSQL (schémas, rôles, droits)
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Récupérer le code du dépôt
+        uses: actions/checkout@v4
+
+      - name: Créer un .env de test (mots de passe aléatoires, jetables)
+        run: |
+          cp .env.example .env
+          for var in POSTGRES_PASSWORD ETL_WRITER_PASSWORD BI_READER_PASSWORD QA_READER_PASSWORD; do
+            sed -i "s/^${var}=.*/${var}=$(openssl rand -hex 16)/" .env
+          done
+
+      - name: Vérifier la syntaxe de docker-compose.yml
+        run: docker compose config --quiet
+
+      - name: Démarrer PostgreSQL et attendre qu'il soit prêt
+        run: docker compose up -d --wait
+
+      - name: Lancer les tests de la base
+        run: |
+          set -a; source .env; set +a
+          docker compose exec -T postgres \
+            psql -U "$POSTGRES_USER" -d "$POSTGRES_DB" -v ON_ERROR_STOP=1 \
+            < sql/tests/test_init.sql
+
+      - name: Afficher les logs de PostgreSQL en cas d'échec
+        if: failure()
+        run: docker compose logs postgres
+
+      - name: Arrêter et supprimer les conteneurs
+        if: always()
+        run: docker compose down -v
