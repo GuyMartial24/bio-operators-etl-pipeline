@@ -258,3 +258,49 @@ La racine du projet est retrouvée en remontant jusqu'au dossier qui contient `d
 **Décisions** (détail dans la synthèse du notebook) : séparer opérateur, certification et activités ;
 nettoyer plutôt que rejeter quand c'est sûr (`trim`, chiffres seuls, zéro initial) ;
 garder la ligne mais tracer l'anomalie dans `audit.rejet` quand la valeur est douteuse (SIRET invalide, date future).
+
+### Notebook `exploration/03_referentiel_geographique.ipynb`
+
+**Objectif :** construire la chaîne code postal → commune → département → région, plus la population, les exploitations agricoles et les contours.
+
+**Notions à savoir expliquer :**
+- **Chaque source a ses habitudes de format :**
+  - La Poste : `;`, ISO-8859-1, `#` devant l'en-tête ;
+  - COG : `,`, UTF-8, valeurs entre guillemets ;
+  - populations : `;`, UTF-8, fins de ligne CRLF.
+  Chaque `tFileInputDelimited` de Talend aura son propre réglage.
+- **Relation plusieurs à plusieurs :** un code postal couvre jusqu'à 46 communes, et une commune peut avoir jusqu'à 6 codes postaux.
+- **Types de communes du COG** (`TYPECOM`) :
+  - `COM` : commune de plein exercice ;
+  - `COMD` : commune déléguée ;
+  - `COMA` : commune associée ;
+  - `ARM` : arrondissement municipal.
+  On les ramène à leur commune parente (`COMPARENT`).
+- **Piège d'unicité :** 584 codes sont partagés par une `COM` et une `COMD`, car une commune nouvelle garde le code de l'ancien chef-lieu.
+  Le grain du fichier est le couple type × code, et non le code. Il faut donner la priorité à `COM`.
+  Prendre « la première ligne trouvée » est une erreur silencieuse.
+- **Population municipale (PMUN) ou totale (PTOT) :** PMUN est la référence statistique, car elle ne compte personne deux fois.
+- **GeoJSON :** des formes géographiques en JSON (`Polygon`, `MultiPolygon` pour les îles).
+- **Cohérence des clés entre sources :** on compare les listes de codes département de toutes les sources avant de joindre.
+- **Règle de rattachement** d'un opérateur :
+  1. Département unique via La Poste (99,1 % des cas).
+  2. Sinon, déduction depuis le code postal : Corse `2A` / `2B`, outre-mer sur 3 chiffres, étranger (`99xxx` = code pays, `980xx` = Monaco).
+  On trace la méthode utilisée.
+- **Limites :** Mayotte absente des populations 2023, contours sans l'outre-mer.
+
+### Notebook `exploration/04_sirene.ipynb`
+
+**Notions à savoir expliquer :**
+- **Biais d'échantillonnage :** les 5 000 premières lignes d'un fichier trié par SIREN sont les entreprises les plus anciennes (95 % fermées).
+  On s'en sert pour la structure, jamais pour des proportions.
+- **Statut de diffusion :** `P` = la personne s'est opposée à la diffusion, et ses données sont remplacées par `[ND]`.
+  SIRENE applique déjà le RGPD. On ne reconstitue jamais une donnée masquée.
+- **Minimisation (RGPD) :** sur 54 colonnes, on ne garde que celles utiles au cas d'usage.
+- **Nomenclatures NAF :** un code n'a de sens qu'avec sa nomenclature. Les établissements actifs sont en NAF rév. 2, et la NAF 2025 arrive.
+- **Tranche d'effectifs :** un code, et non un nombre. Il faut une table de correspondance.
+- **Source qui fait foi (gouvernance) :**
+  - SIRENE pour la localisation de l'établissement ;
+  - l'annuaire pour les informations bio ;
+  - les écarts sont comptés, et non corrigés à la main.
+- **Ingestion en flux :** filtrer les ~87 000 SIRET de l'annuaire pendant la lecture (lookup en mémoire dans un `tMap`),
+  puis supprimer le fichier complet (règle de rétention).
