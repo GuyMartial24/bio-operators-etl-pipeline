@@ -1,0 +1,13 @@
+# Données : jamais dans Git (téléchargées par le pipeline)
+data/
+
+# Environnement Python
+.venv/
+__pycache__/
+.ipynb_checkpoints/
+
+# Réglages personnels de l'éditeur
+.vscode/
+
+# Secrets
+.env
