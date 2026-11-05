@@ -184,4 +184,41 @@ puis installation des paquets listés dans `requirements.txt`.
 - **`.gitattributes`** force les fins de ligne LF : un `.sh` en CRLF (format Windows) plante dans Linux.
 - **Authentification ou autorisation :** dans le conteneur, les connexions locales ne demandent pas de mot de passe
   (l'authentification est en mode `trust`), mais les droits (l'autorisation) sont bien vérifiés. Depuis l'extérieur, le mot de passe est exigé.
-- **Invites :** `$` = bash, `=#` = psql prêt, `-#` = psql attend la fin d'une commande (`;`). Le pager affiche `(END)` : appuyer sur `q` pour en sortir.
+- **Invites :** `$` = bash (Ubuntu), `=#` = psql prêt, `-#` = psql attend la fin d'une commande (`;`). Le pager affiche `(END)` : appuyer sur `q` pour en sortir.
+
+---
+
+## Étape 3 — Première CI GitHub Actions (05/11/2026)
+
+**Fichiers :** `sql/tests/test_init.sql`, `.github/workflows/ci.yml`.
+
+**Notions à savoir expliquer :**
+- **CI (intégration continue)** : à chaque push, une machine neuve vérifie automatiquement que le projet fonctionne.
+  Une erreur est détectée tout de suite, avant d'arriver sur `main` ou en production.
+- **Vocabulaire GitHub Actions :**
+
+| Terme | Sens |
+|---|---|
+| **Workflow** | Le fichier YAML dans `.github/workflows/`, qui décrit l'automatisation |
+| **Événement** (`on:`) | Ce qui déclenche le workflow : push, pull request… |
+| **Job** | Un ensemble d'étapes exécutées sur une même machine |
+| **Step** | Une étape : une commande (`run:`) ou une action toute faite (`uses:`) |
+| **Runner** | La machine louée par GitHub (`ubuntu-latest`), neuve à chaque exécution |
+| **Action** | Une brique réutilisable, par exemple `actions/checkout`, qui récupère le code |
+
+- **Parité des environnements :** la CI lance PostgreSQL avec **le même `docker-compose.yml`** qu'en local et que sur le VPS.
+  On n'utilise pas les `services:` de GitHub Actions, qui démarrent la base avant la récupération du code : nos scripts `sql/init/` ne seraient pas exécutés.
+- **Secrets en CI :** le vrai `.env` n'est pas sur GitHub. La CI fabrique un `.env` jetable, avec des mots de passe aléatoires (`openssl rand`).
+- **`docker compose up --wait`** attend que le healthcheck passe à `healthy`.
+- **Tests SQL :** blocs `DO $$ ... $$` avec `RAISE EXCEPTION`, et `ON_ERROR_STOP=1`. Une erreur arrête `psql`, qui renvoie un code d'échec, et la CI passe au rouge.
+  Les fonctions `has_schema_privilege()` et `has_table_privilege()` interrogent les droits.
+- **Test sans trace :** les tables de test sont créées dans une transaction annulée par `ROLLBACK`.
+- **`if: failure()`** s'exécute seulement en cas d'échec (pour afficher les logs). **`if: always()`** s'exécute toujours (pour nettoyer).
+- **Déclencheurs adaptés au flux `develop` → PR → `main`** : push sur `develop` et `main`, plus les pull requests vers `main`.
+  **`concurrency`** annule une exécution devenue inutile quand on pousse deux fois de suite.
+
+**Git :**
+- **Commits atomiques :** un commit par sujet (configuration, documentation, exploration, base, CI). L'historique se lit comme un récit, et on peut annuler une partie précise.
+- **Git sous Windows** pour ce dépôt, car le projet est sur un disque NTFS. Vus depuis Ubuntu, les fichiers appartiennent à `root` avec les droits `777`.
+  Git y signale un « dubious ownership » (une protection de sécurité) et enregistrerait tous les fichiers comme exécutables.
+- **Résultat :** CI verte sur `develop`.
