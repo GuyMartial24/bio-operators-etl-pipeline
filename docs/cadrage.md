@@ -110,14 +110,14 @@ Flux : `fichiers sources → bronze → silver → gold → Power BI`
 
 | Couche | Talend (traitement) | Notebook (contrôle qualité) |
 |---|---|---|
-| Bronze | Téléchargement et chargement des sources telles quelles | `02_bronze.ipynb` : fichiers reçus, nombre de lignes, colonnes, encodage, fraîcheur |
-| Silver | Nettoyage, dédoublonnage, éclatement des activités, jointures géographiques et SIRENE, historique, rejets | `03_silver.ipynb` : clés uniques, taux de jointure, volume des rejets |
-| Gold | Calcul des indicateurs des trois axes | `04_gold.ipynb` : totaux cohérents, ratios plausibles, écart avec la veille |
+| Bronze | Téléchargement et chargement des sources telles quelles | `qualite/01_bronze.ipynb` : fichiers reçus, nombre de lignes, colonnes, encodage, fraîcheur |
+| Silver | Nettoyage, dédoublonnage, éclatement des activités, jointures géographiques et SIRENE, historique, rejets | `qualite/02_silver.ipynb` : clés uniques, taux de jointure, volume des rejets |
+| Gold | Calcul des indicateurs des trois axes | `qualite/03_gold.ipynb` : totaux cohérents, ratios plausibles, écart avec la veille |
 
 **Airflow** enchaîne : job bronze → contrôle bronze → job silver → contrôle silver → job gold → contrôle gold.
 Si un contrôle échoue, la chaîne s'arrête et Power BI garde les dernières données valides.
 
-Les notebooks `01_*` sont des notebooks d'**exploration**, qui servent à comprendre les sources avant de construire les jobs Talend.
+Les notebooks sont rangés par usage : `notebooks/exploration/` (un notebook par source, pour comprendre les données avant de construire les jobs Talend, lancés à la main) et `notebooks/qualite/` (contrôles par couche, exécutés chaque jour par Airflow).
 
 ## Modélisation des données
 

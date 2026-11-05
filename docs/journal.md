@@ -122,7 +122,7 @@ puis installation des paquets listés dans `requirements.txt`.
 - `.venv/` : il se recrée à partir de `requirements.txt`.
 - `.env` : il contiendra les mots de passe. Un secret ne doit jamais être publié sur GitHub.
 
-### Notebook `01_agreste_ra2020_departements.ipynb`
+
 
 **Ce qui a été fait :** transformation du fichier Agreste du format **long** au format **large**.
 
@@ -222,3 +222,85 @@ puis installation des paquets listés dans `requirements.txt`.
 - **Git sous Windows** pour ce dépôt, car le projet est sur un disque NTFS. Vus depuis Ubuntu, les fichiers appartiennent à `root` avec les droits `777`.
   Git y signale un « dubious ownership » (une protection de sécurité) et enregistrerait tous les fichiers comme exécutables.
 - **Résultat :** CI verte sur `develop`.
+
+---
+
+## Étape 4 — Analyse des sources : l'annuaire bio (05/11/2026)
+
+**Rangement des notebooks :** deux dossiers selon l'usage.
+- `notebooks/exploration/` : comprendre une source, lancé à la main.
+- `notebooks/qualite/` : contrôles par couche, exécutés chaque jour par Airflow.
+
+Le notebook Agreste devient `exploration/02_...`, et le n°01 est l'annuaire, la source centrale.
+La racine du projet est retrouvée en remontant jusqu'au dossier qui contient `docker-compose.yml`, ce qui fonctionne quel que soit l'emplacement du notebook.
+
+**Notebook :** `notebooks/exploration/01_annuaire_bio.ipynb`
+
+**Méthode, pour chaque colonne :** que contient-elle ? Quels défauts a-t-elle ? Quelle règle appliquer en silver ?
+
+**Notions à savoir expliquer :**
+- **Lire sans rien interpréter** (`dtype=str`, `keep_default_na=False`) : on voit ce que contient vraiment le fichier.
+  C'est comme ça qu'on a découvert le texte `"None"` à la place de valeurs vides.
+- **`repr()`** rend visibles les caractères cachés : un espace en fin de valeur, ou un caractère Unicode invisible (`\u202c`).
+- **Clé de Luhn :** la somme de contrôle des SIRET, qui détecte les fautes de frappe. Exception : La Poste (SIREN `356000000`).
+- **Grain d'une table :** ce que représente une ligne. Ici, une ligne est une **certification**, et non un opérateur.
+  Un opérateur peut avoir deux lignes (deux organismes, deux dates…).
+- **Clé naturelle ou clé technique :**
+  - Une **clé naturelle** vient des données (le numéro bio).
+  - Quand aucune combinaison de colonnes n'est unique, on crée une **clé technique** : ici, une empreinte (*hash*) de toute la ligne.
+    Elle est stable d'un jour à l'autre, ce qui servira à détecter les changements pour l'historique SCD 2.
+- **Première forme normale (1FN) :** une cellule contient une seule valeur. La colonne `ACTIVITES` (plusieurs valeurs) est donc éclatée en lignes (`tNormalize` dans Talend).
+- **Encodages :** l'annuaire est en UTF-8, la base de La Poste en ISO-8859-1. Lire avec le mauvais encodage abîme les accents (`Ã©` au lieu de `é`).
+- **Codes postaux :** espaces en trop, zéro initial perdu (passage par Excel), codes CEDEX absents de La Poste,
+  Corse (`20` donne `2A` ou `2B`), outre-mer (départements sur 3 chiffres). Un code postal couvre souvent plusieurs communes.
+- **RGPD :** la majorité des dénominations sont probablement des noms de personnes. Elles restent en silver, jamais en gold.
+
+**Décisions** (détail dans la synthèse du notebook) : séparer opérateur, certification et activités ;
+nettoyer plutôt que rejeter quand c'est sûr (`trim`, chiffres seuls, zéro initial) ;
+garder la ligne mais tracer l'anomalie dans `audit.rejet` quand la valeur est douteuse (SIRET invalide, date future).
+
+### Notebook `exploration/03_referentiel_geographique.ipynb`
+
+**Objectif :** construire la chaîne code postal → commune → département → région, plus la population, les exploitations agricoles et les contours.
+
+**Notions à savoir expliquer :**
+- **Chaque source a ses habitudes de format :**
+  - La Poste : `;`, ISO-8859-1, `#` devant l'en-tête ;
+  - COG : `,`, UTF-8, valeurs entre guillemets ;
+  - populations : `;`, UTF-8, fins de ligne CRLF.
+  Chaque `tFileInputDelimited` de Talend aura son propre réglage.
+- **Relation plusieurs à plusieurs :** un code postal couvre jusqu'à 46 communes, et une commune peut avoir jusqu'à 6 codes postaux.
+- **Types de communes du COG** (`TYPECOM`) :
+  - `COM` : commune de plein exercice ;
+  - `COMD` : commune déléguée ;
+  - `COMA` : commune associée ;
+  - `ARM` : arrondissement municipal.
+  On les ramène à leur commune parente (`COMPARENT`).
+- **Piège d'unicité :** 584 codes sont partagés par une `COM` et une `COMD`, car une commune nouvelle garde le code de l'ancien chef-lieu.
+  Le grain du fichier est le couple type × code, et non le code. Il faut donner la priorité à `COM`.
+  Prendre « la première ligne trouvée » est une erreur silencieuse.
+- **Population municipale (PMUN) ou totale (PTOT) :** PMUN est la référence statistique, car elle ne compte personne deux fois.
+- **GeoJSON :** des formes géographiques en JSON (`Polygon`, `MultiPolygon` pour les îles).
+- **Cohérence des clés entre sources :** on compare les listes de codes département de toutes les sources avant de joindre.
+- **Règle de rattachement** d'un opérateur :
+  1. Département unique via La Poste (99,1 % des cas).
+  2. Sinon, déduction depuis le code postal : Corse `2A` / `2B`, outre-mer sur 3 chiffres, étranger (`99xxx` = code pays, `980xx` = Monaco).
+  On trace la méthode utilisée.
+- **Limites :** Mayotte absente des populations 2023, contours sans l'outre-mer.
+
+### Notebook `exploration/04_sirene.ipynb`
+
+**Notions à savoir expliquer :**
+- **Biais d'échantillonnage :** les 5 000 premières lignes d'un fichier trié par SIREN sont les entreprises les plus anciennes (95 % fermées).
+  On s'en sert pour la structure, jamais pour des proportions.
+- **Statut de diffusion :** `P` = la personne s'est opposée à la diffusion, et ses données sont remplacées par `[ND]`.
+  SIRENE applique déjà le RGPD. On ne reconstitue jamais une donnée masquée.
+- **Minimisation (RGPD) :** sur 54 colonnes, on ne garde que celles utiles au cas d'usage.
+- **Nomenclatures NAF :** un code n'a de sens qu'avec sa nomenclature. Les établissements actifs sont en NAF rév. 2, et la NAF 2025 arrive.
+- **Tranche d'effectifs :** un code, et non un nombre. Il faut une table de correspondance.
+- **Source qui fait foi (gouvernance) :**
+  - SIRENE pour la localisation de l'établissement ;
+  - l'annuaire pour les informations bio ;
+  - les écarts sont comptés, et non corrigés à la main.
+- **Ingestion en flux :** filtrer les ~87 000 SIRET de l'annuaire pendant la lecture (lookup en mémoire dans un `tMap`),
+  puis supprimer le fichier complet (règle de rétention).
