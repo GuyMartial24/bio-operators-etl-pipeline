@@ -122,7 +122,7 @@ puis installation des paquets listés dans `requirements.txt`.
 - `.venv/` : il se recrée à partir de `requirements.txt`.
 - `.env` : il contiendra les mots de passe. Un secret ne doit jamais être publié sur GitHub.
 
-### Notebook `01_agreste_ra2020_departements.ipynb`
+
 
 **Ce qui a été fait :** transformation du fichier Agreste du format **long** au format **large**.
 
@@ -222,3 +222,39 @@ puis installation des paquets listés dans `requirements.txt`.
 - **Git sous Windows** pour ce dépôt, car le projet est sur un disque NTFS. Vus depuis Ubuntu, les fichiers appartiennent à `root` avec les droits `777`.
   Git y signale un « dubious ownership » (une protection de sécurité) et enregistrerait tous les fichiers comme exécutables.
 - **Résultat :** CI verte sur `develop`.
+
+---
+
+## Étape 4 — Analyse des sources : l'annuaire bio (05/11/2026)
+
+**Rangement des notebooks :** deux dossiers selon l'usage.
+- `notebooks/exploration/` : comprendre une source, lancé à la main.
+- `notebooks/qualite/` : contrôles par couche, exécutés chaque jour par Airflow.
+
+Le notebook Agreste devient `exploration/02_...`, et le n°01 est l'annuaire, la source centrale.
+La racine du projet est retrouvée en remontant jusqu'au dossier qui contient `docker-compose.yml`, ce qui fonctionne quel que soit l'emplacement du notebook.
+
+**Notebook :** `notebooks/exploration/01_annuaire_bio.ipynb`
+
+**Méthode, pour chaque colonne :** que contient-elle ? Quels défauts a-t-elle ? Quelle règle appliquer en silver ?
+
+**Notions à savoir expliquer :**
+- **Lire sans rien interpréter** (`dtype=str`, `keep_default_na=False`) : on voit ce que contient vraiment le fichier.
+  C'est comme ça qu'on a découvert le texte `"None"` à la place de valeurs vides.
+- **`repr()`** rend visibles les caractères cachés : un espace en fin de valeur, ou un caractère Unicode invisible (`\u202c`).
+- **Clé de Luhn :** la somme de contrôle des SIRET, qui détecte les fautes de frappe. Exception : La Poste (SIREN `356000000`).
+- **Grain d'une table :** ce que représente une ligne. Ici, une ligne est une **certification**, et non un opérateur.
+  Un opérateur peut avoir deux lignes (deux organismes, deux dates…).
+- **Clé naturelle ou clé technique :**
+  - Une **clé naturelle** vient des données (le numéro bio).
+  - Quand aucune combinaison de colonnes n'est unique, on crée une **clé technique** : ici, une empreinte (*hash*) de toute la ligne.
+    Elle est stable d'un jour à l'autre, ce qui servira à détecter les changements pour l'historique SCD 2.
+- **Première forme normale (1FN) :** une cellule contient une seule valeur. La colonne `ACTIVITES` (plusieurs valeurs) est donc éclatée en lignes (`tNormalize` dans Talend).
+- **Encodages :** l'annuaire est en UTF-8, la base de La Poste en ISO-8859-1. Lire avec le mauvais encodage abîme les accents (`Ã©` au lieu de `é`).
+- **Codes postaux :** espaces en trop, zéro initial perdu (passage par Excel), codes CEDEX absents de La Poste,
+  Corse (`20` donne `2A` ou `2B`), outre-mer (départements sur 3 chiffres). Un code postal couvre souvent plusieurs communes.
+- **RGPD :** la majorité des dénominations sont probablement des noms de personnes. Elles restent en silver, jamais en gold.
+
+**Décisions** (détail dans la synthèse du notebook) : séparer opérateur, certification et activités ;
+nettoyer plutôt que rejeter quand c'est sûr (`trim`, chiffres seuls, zéro initial) ;
+garder la ligne mais tracer l'anomalie dans `audit.rejet` quand la valeur est douteuse (SIRET invalide, date future).
