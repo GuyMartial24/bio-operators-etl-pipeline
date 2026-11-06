@@ -383,3 +383,17 @@ c'est éviter de refaire les jobs quand on découvre une erreur de grain.
 - **Idempotence et atomicité :** relancer une date remplace ses lignes. La purge et l'insertion sont dans **une transaction** (connexion sans auto-commit, tDBCommit, tDBRollback), alors que l'audit a sa propre connexion en auto-commit pour survivre à un échec.
 - Testé : réussite (88 143 lignes en 7 s, empreintes identiques à PostgreSQL), relance sans doublon, échec (fichier absent → `ECHEC`, bronze intact grâce au rollback).
 - **Les séquences ne reculent jamais**, même après un `ROLLBACK` : des trous dans les identifiants sont normaux.
+
+## Étape 7 — Simplification du périmètre (06/11/2026)
+
+**Décision :** réduire le projet pour le terminer, sans perdre ce que l'offre demande.
+
+- Sources : annuaire, départements et régions (COG), populations. **Écartées** : La Poste, SIRENE, recensement agricole (trop lourdes pour leur apport, restent des extensions possibles).
+- Département déduit du **code postal** (règle Corse, outre-mer, étranger) au lieu de la commune.
+- Axes : structure, marché, et développement par **date d'engagement**. Les sorties et changements de certificateur restent historisés en silver pour plus tard.
+- Silver : SCD 2 sur la seule `certification` ; `operateur` en SCD 1 (état courant).
+- Gold : **une étoile** (`fait_certification_activite` + 4 dimensions). Les indicateurs deviennent des mesures DAX dans Power BI.
+- Un seul notebook de contrôle qualité. Le VPS devient optionnel.
+- `sql/init/05_bronze.sql` : 4 tables bronze au lieu de 8 ; tables inutiles supprimées de la base locale sans la recréer (données gardées).
+
+**À retenir :** limiter le périmètre (*scope*) est une décision de projet à part entière. Un livrable terminé, documenté et testé vaut mieux qu'un projet plus large inachevé.

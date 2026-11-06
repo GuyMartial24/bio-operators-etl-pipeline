@@ -2,7 +2,7 @@
 
 ## Contexte
 
-L'Agence Bio publie chaque jour l'annuaire des opérateurs bio certifiés en France (~88 000 opérateurs).
+L'Agence Bio publie chaque jour l'annuaire des opérateurs bio certifiés en France (~88 000 lignes).
 Ce fichier dit **qui** est certifié, **où**, **depuis quand**, **pour quelles activités** et **par quel organisme**.
 Pris tel quel, il ne répond à aucune question de pilotage. Ce projet le transforme en observatoire.
 
@@ -14,9 +14,7 @@ et les aides à la structuration des filières bio.
 
 ## Question centrale
 
-> **Où la filière bio est-elle déséquilibrée, comment évolue-t-elle, et qui la certifie ?**
-
-Elle se découpe en trois axes, qui forment un seul observatoire.
+> **Où la filière bio est-elle déséquilibrée, comment s'est-elle développée, et qui la certifie ?**
 
 ### Axe 1 — Structure : les déserts de transformation
 
@@ -24,26 +22,24 @@ Elle se découpe en trois axes, qui forment un seul observatoire.
 
 | Indicateur | Définition |
 |---|---|
-| Nb d'opérateurs par activité | Production, préparation, distribution, stockage… par département |
+| Nb d'opérateurs par activité | Production, préparation, distribution… par département |
 | Ratio de transformation | Nb de préparateurs / nb de producteurs |
 | Ratio de distribution | Nb de distributeurs / nb de producteurs |
 | Densité bio | Nb de producteurs pour 10 000 habitants |
 | Indice de désert | Département avec beaucoup de producteurs (quartile haut) mais un ratio de transformation faible (quartile bas) |
 
-### Axe 2 — Dynamique : la filière dans le temps
+### Axe 2 — Développement : les engagements dans le temps
 
-*La filière grandit-elle, où, et qui la quitte ?*
+*Depuis quand et où la filière s'est-elle développée ?*
 
 | Indicateur | Définition |
 |---|---|
-| Nouveaux engagés | Nb d'opérateurs par année ou mois d'engagement (historique depuis 1994) |
+| Engagements | Nb d'opérateurs par année d'engagement (historique depuis 1994) |
 | Croissance | Évolution annuelle des engagements par département et par activité |
-| Sorties | Opérateurs présents dans une copie du fichier et absents de la suivante |
-| Solde net | Entrées − sorties sur la période |
 
-Limite : le fichier ne contient que les opérateurs **actuellement** certifiés.
-Les entrées passées se déduisent de la date d'engagement, mais les **sorties** ne sont visibles
-qu'à partir du moment où Airflow conserve une copie quotidienne du fichier.
+Les sorties et les changements de certificateur ne se voient qu'en comparant des copies successives du fichier.
+L'historique SCD 2 de la couche silver les enregistre à partir de la première copie (05/11/2026) :
+ils pourront être ajoutés au tableau de bord quand plusieurs mois de copies seront disponibles.
 
 ### Axe 3 — Marché : la certification
 
@@ -54,130 +50,115 @@ qu'à partir du moment où Airflow conserve une copie quotidienne du fichier.
 | Part de marché | Nb d'opérateurs certifiés par organisme / total, par région |
 | Concentration (HHI) | Somme des carrés des parts de marché (> 2 500 = marché très concentré) |
 | Leader local | Organisme majoritaire par département |
-| Changements de certificateur | Opérateurs qui changent d'organisme entre deux copies (lien avec l'axe 2) |
 
 ## Sources de données
 
 | Source | Usage | Fréquence |
 |---|---|---|
 | Annuaire des opérateurs bio (Agence Bio, data.gouv.fr) | Source principale | Quotidienne |
-| Base officielle des codes postaux (La Poste, data.gouv.fr) | Code postal → commune → département | Ponctuelle |
-| Référentiel géographique INSEE (communes, départements, régions) | Hiérarchie géographique | Annuelle |
-| Population légale INSEE par département | Calcul de densité | Annuelle |
-| Recensement agricole 2020 (Agreste) — exploitations par département | Taux de bio (exploitations bio / total) | Ponctuelle |
-| Contours des départements (GeoJSON / TopoJSON) | Cartes colorées dans Power BI | Ponctuelle |
-| Base SIRENE (INSEE), filtrée sur les SIRET de l'annuaire | Code NAF, taille, établissement actif ou fermé | Mensuelle |
+| Départements et régions (Code officiel géographique INSEE) | Libellés, région de chaque département | Annuelle |
+| Populations légales INSEE par département | Densité | Annuelle |
+| Contours des départements (GeoJSON) | Cartes dans Power BI | Ponctuelle |
 
-### Enrichissement du fichier de base
+Le département de chaque opérateur est **déduit de son code postal** (voir le modèle de données) :
+c'est le niveau de tous les indicateurs.
 
-L'annuaire reste la table centrale (une ligne par opérateur). Les autres jeux s'y rattachent par jointure.
+### Sources écartées
 
-| Jeu de données | Clé de jointure | Niveau | Couche |
-|---|---|---|---|
-| Codes postaux (La Poste) | code postal → code commune INSEE | Opérateur | Silver |
-| Code officiel géographique (INSEE) | code commune → département → région | Opérateur | Silver |
-| SIRENE (INSEE) | SIRET | Opérateur | Silver |
-| Populations légales (INSEE) | code département | Département | Gold |
-| Recensement agricole 2020 (Agreste) | code département | Département | Gold |
-| Contours des départements | code département | Département | Power BI |
+L'exploration (`notebooks/exploration/`) a aussi étudié La Poste (code postal → commune), SIRENE (activité NAF, taille, établissement actif)
+et le recensement agricole 2020 (exploitations par département). Elles ont été **écartées** pour garder un projet de taille raisonnable :
 
-Les 701 opérateurs sans SIRET ne peuvent pas être enrichis par SIRENE. Leur nombre est suivi par les contrôles de qualité.
+| Source | Raison |
+|---|---|
+| La Poste | Utile seulement au niveau commune ; au niveau département, la règle sur le code postal suffit |
+| SIRENE | Fichier de plusieurs Go, mensuel, pour des informations hors des trois axes |
+| Recensement agricole 2020 | Archive de 1,5 Go dans une archive, pour un seul indicateur (part des exploitations en bio) |
 
-Points d'attention : un code postal peut couvrir plusieurs communes, et ses deux premiers chiffres
-ne donnent pas toujours le département (Corse 2A/2B, outre-mer 97x, CEDEX).
+Elles restent des extensions possibles.
 
-## Qualité des données (constats initiaux sur le fichier du 05/11/2026)
+## Qualité des données (constats sur le fichier du 05/11/2026)
 
-- 88 143 lignes, encodage UTF-8, séparateur `;`
-- 701 SIRET vides, ~1 000 SIRET en doublon
-- 1 322 dates d'engagement à `None`, toutes chez les « Dispense de certification »
-- 5 dates d'engagement en 2027 (dans le futur)
+- 88 143 lignes, encodage UTF-8, séparateur `;`, guillemets CSV sur 77 lignes
+- Grain : une ligne = une certification (opérateur × organisme), pas un opérateur : 69 numéros bio sur deux lignes
+- SIRET : 701 vides, 75 `None` en texte, 1 caractère invisible, 11 clés de Luhn invalides
+- 1 322 dates d'engagement à `None`, toutes chez les « Dispense de certification » ; 6 dates dans le futur
+- Codes postaux : espaces en fin de valeur, un zéro de tête perdu
 - Colonne `ACTIVITES` multi-valuée (`Production,Préparation,…`), à éclater
+- ~77 % des dénominations contiennent probablement un nom de personne (RGPD)
 
 ## Organisation des données : architecture en médaillon
 
-Les données traversent trois couches, chacune dans son propre schéma PostgreSQL.
-
 | Couche | Contenu | Règles |
 |---|---|---|
-| **Bronze** | Données brutes, telles que reçues : chaque copie quotidienne de l'annuaire et chaque référentiel | Aucune transformation. Tout en texte, plus la date de chargement et le nom du fichier source. On ne supprime jamais rien, ce qui permet de tout rejouer |
-| **Silver** | Données nettoyées, typées et modélisées : opérateurs, activités, certificateurs, géographie | Doublons traités, dates et SIRET contrôlés, activités éclatées, codes postaux reliés aux communes. Historique des opérateurs (entrées, sorties, changements de certificateur). Lignes invalides placées dans une table de rejets |
-| **Gold** | Indicateurs prêts à l'emploi pour Power BI, un jeu de tables par axe | Agrégats par département et région : ratios et indice de désert (axe 1), entrées, sorties et solde (axe 2), parts de marché et HHI (axe 3) |
+| **Bronze** | Données brutes, telles que reçues | Aucune transformation, tout en texte, plus 6 colonnes techniques. Relancer une copie la remplace (idempotence) |
+| **Silver** | Données nettoyées, typées et modélisées : opérateurs, certifications, activités, référentiels | Valeurs douteuses qualifiées, activités éclatées, département déduit, historique SCD 2 des certifications, rejets tracés |
+| **Gold** | Modèle en étoile prêt pour Power BI | Une table de faits et 4 dimensions, sans donnée personnelle. Les indicateurs sont calculés dans Power BI |
 
 Flux : `fichiers sources → bronze → silver → gold → Power BI`
 
-**Talend fait tous les traitements. Un notebook par couche contrôle le résultat.**
+**Talend fait tous les traitements. Un notebook contrôle le résultat.**
 
-| Couche | Talend (traitement) | Notebook (contrôle qualité) |
+| Couche | Job Talend | Contrôle (notebook `qualite/controle_qualite.ipynb`) |
 |---|---|---|
-| Bronze | Téléchargement et chargement des sources telles quelles | `qualite/01_bronze.ipynb` : fichiers reçus, nombre de lignes, colonnes, encodage, fraîcheur |
-| Silver | Nettoyage, dédoublonnage, éclatement des activités, jointures géographiques et SIRENE, historique, rejets | `qualite/02_silver.ipynb` : clés uniques, taux de jointure, volume des rejets |
-| Gold | Calcul des indicateurs des trois axes | `qualite/03_gold.ipynb` : totaux cohérents, ratios plausibles, écart avec la veille |
+| Bronze | `bronze_agence_bio`, `bronze_insee` | Nombre de lignes, fraîcheur, empreintes |
+| Silver | `silver_referentiels`, `silver_annuaire` | Clés uniques, une seule version courante, part des départements inconnus, rejets |
+| Gold | `gold_etoile` | Totaux cohérents avec silver, aucune clé orpheline |
 
-**Airflow** enchaîne : job bronze → contrôle bronze → job silver → contrôle silver → job gold → contrôle gold.
-Si un contrôle échoue, la chaîne s'arrête et Power BI garde les dernières données valides.
+**Airflow** enchaîne chaque jour : jobs bronze → jobs silver → job gold → contrôle qualité.
+Si un job ou un contrôle échoue, la chaîne s'arrête et Power BI garde les dernières données valides.
 
-Les notebooks sont rangés par usage : `notebooks/exploration/` (un notebook par source, pour comprendre les données avant de construire les jobs Talend, lancés à la main) et `notebooks/qualite/` (contrôles par couche, exécutés chaque jour par Airflow).
+Les notebooks sont rangés par usage : `notebooks/exploration/` (comprendre les sources, lancés à la main)
+et `notebooks/qualite/` (contrôle, exécuté par Airflow avec Papermill).
 
 ## Modélisation des données
 
 | Couche | Modèle | Pourquoi |
 |---|---|---|
-| Silver | Modèle relationnel normalisé, avec **historique SCD de type 2** sur les opérateurs | SCD 2 (*Slowly Changing Dimension*) : chaque changement d'un opérateur (certificateur, activités) crée une nouvelle version datée (`date_debut`, `date_fin`, `est_courant`). C'est ce qui permet de mesurer les entrées, les sorties et les changements de certificateur |
-| Gold | **Modèle en étoile** : une table de faits au centre, reliée à des tables de dimensions | Le modèle de référence des entrepôts de données et de Power BI : requêtes simples et rapides, indicateurs faciles à filtrer |
+| Silver | Modèle relationnel normalisé, avec **historique SCD de type 2** sur les certifications | Chaque changement d'une certification (activités, date) ou sa disparition crée une version datée (`date_debut`, `date_fin`, `est_courant`). C'est la base des futurs indicateurs de sorties et de changements de certificateur |
+| Gold | **Modèle en étoile** | Le modèle de référence des entrepôts de données et de Power BI : requêtes simples, filtres rapides |
 
-Modèle en étoile de la couche gold :
+Étoile de la couche gold :
 
-- **Faits** : `fait_operateur_activite` (une ligne par certification × activité, à une date de copie)
-  et `fait_mouvement` (entrées, sorties, changements de certificateur). Deux faits qui partagent leurs dimensions forment un schéma en constellation
-- **Dimensions** : `dim_geographie` (département → région, population, exploitations RA 2020),
-  `dim_activite`, `dim_certificateur`, `dim_date`, `dim_operateur` (sans données personnelles)
-- **Tables d'indicateurs** des trois axes, calculées à partir de l'étoile
+- **Fait** `fait_certification_activite` : une ligne par certification en cours × activité
+- **Dimensions** : `dim_departement` (département, région, population), `dim_activite`, `dim_certificateur`, `dim_date` (date d'engagement)
 
-Les schémas du modèle (conceptuel, logique, physique) sont documentés dans `docs/modele_donnees.md`.
+Détails : `docs/modele_donnees.md` et `docs/dictionnaire_donnees.md`.
 
 ## Gouvernance des données
 
 | Thème | Mise en œuvre |
 |---|---|
-| **Responsabilités** | Un propriétaire par couche et par table (fiche dans le dictionnaire de données) |
-| **Sécurité** | Rôles PostgreSQL séparés : `etl_writer` (Talend, écriture), `bi_reader` (Power BI, lecture seule sur gold), `qa_reader` (notebooks de contrôle, lecture). Mots de passe hors du code (fichier `.env`, secrets GitHub) |
-| **Données personnelles (RGPD)** | L'annuaire contient des noms d'entrepreneurs individuels. Ils restent en silver, avec un accès restreint, et ne sont jamais exposés en gold ni dans Power BI |
-| **Rétention** | Règles de conservation par donnée (voir *Gestion du stockage*), appliquées par un DAG de maintenance |
-| **Audit** | Table `audit.execution` alimentée par chaque job Talend : job, date, lignes lues, écrites et rejetées, durée, statut. Table `audit.rejet` pour les lignes rejetées et leur motif |
-| **Qualité** | Un notebook de contrôle par couche. Les résultats sont enregistrés dans `audit.controle_qualite` |
-| **Documentation** | Dictionnaire de données (`docs/dictionnaire_donnees.md`) : description, type, source et règle de calcul de chaque table et colonne |
+| **Responsabilités** | Un propriétaire par table (fiche dans le dictionnaire de données) |
+| **Sécurité** | Rôles PostgreSQL séparés : `etl_writer` (Talend, écriture), `bi_reader` (Power BI, lecture seule sur gold), `qa_reader` (notebook de contrôle, lecture). Mots de passe hors du code (`.env`, `talend/contexte_local.properties`, secrets GitHub) |
+| **Données personnelles (RGPD)** | Les noms d'entrepreneurs individuels restent en silver, accès restreint. Gold et Power BI n'ont ni nom, ni SIRET, ni numéro bio |
+| **Rétention** | Règles par table (voir *Gestion du stockage*) |
+| **Audit** | `audit.execution` (chaque job : statut, lignes lues et écrites), `audit.rejet` (lignes refusées et motif), `audit.controle_qualite` (résultats des contrôles) |
+| **Documentation** | Dictionnaire de données, commentaires SQL dans la base (`COMMENT ON`) |
 
-## Gestion du stockage (VPS, 200 Go)
+## Gestion du stockage
 
-| Donnée | Volume brut | Règle de conservation |
+| Donnée | Volume | Règle de conservation |
 |---|---|---|
-| Annuaire bio (quotidien) | 8,5 Mo / jour, soit ~3 Go / an | Fichier archivé compressé (~0,7 Go / an). En base, bronze ne garde que les 30 derniers chargements |
-| SIRENE (mensuel) | 2,9 Go par fichier | Lu en flux et filtré sur les SIRET de l'annuaire (~25 Mo gardés). Le fichier complet n'est jamais conservé |
-| Référentiels (La Poste, INSEE, contours) | < 20 Mo | Une version par millésime |
-| Silver | Quelques centaines de Mo / an | Historique : seules les modifications sont enregistrées |
+| Annuaire bio (quotidien) | 8,5 Mo / jour | Fichier archivé compressé. En base, bronze garde les 30 dernières copies (~600 Mo) |
+| Référentiels INSEE | < 1 Mo | Une version par millésime |
+| Silver | Quelques dizaines de Mo / an | Historique : seules les modifications sont enregistrées |
 | Gold | Quelques Mo | Recalculé à chaque exécution |
-| Sauvegardes PostgreSQL | Quelques Go | 7 quotidiennes + 4 hebdomadaires |
-| Images Docker et logs Airflow | 3 à 5 Go | Purge automatique des logs de plus de 30 jours |
-
-Estimation après un an : 15 à 20 Go. Un DAG Airflow de maintenance applique ces règles
-et alerte si le disque dépasse 80 %. En local, on ne travaille qu'avec quelques jours de données.
+| Audit | Faible | 2 ans ; `audit.rejet` 90 jours (peut contenir des noms) |
 
 ## Livrable final : tableau de bord Power BI
 
-1. **Vue d'ensemble** : chiffres clés, carte de France des opérateurs
+1. **Vue d'ensemble** : chiffres clés, carte des opérateurs par département, engagements par année
 2. **Déserts de transformation** : carte de l'indice de désert, ratios par département
-3. **Dynamique** : courbes d'engagements, entrées et sorties, solde net
-4. **Marché de la certification** : parts de marché, HHI, leaders locaux, changements de certificateur
+3. **Marché de la certification** : parts de marché, HHI par région, leaders locaux
 
 ## Rôle de chaque technologie
 
 | Techno | Rôle dans le projet |
 |---|---|
-| **Talend** | Moteur ETL des trois couches : ingestion (bronze), nettoyage, jointures et historique (silver), indicateurs (gold), rejets. Compétence clé du poste visé |
-| **Notebooks Jupyter** | Un notebook de contrôle qualité par couche, exécuté par Airflow avec Papermill, plus des notebooks d'exploration |
-| **PostgreSQL** | Schémas `bronze` (brut), `silver` (nettoyé, historisé en SCD 2), `gold` (modèle en étoile et indicateurs pour Power BI), `audit` (exécutions, rejets, contrôles qualité). Rôles séparés pour la sécurité |
-| **Airflow** | Orchestration quotidienne : télécharger → archiver la copie → lancer Talend → calculer les indicateurs → contrôler la qualité |
-| **Docker** | PostgreSQL, Airflow et les jobs Talend dans des conteneurs, identiques en local et sur le VPS |
-| **Power BI Desktop** | Tableau de bord des trois axes |
-| **GitHub Actions** | CI : tests SQL, DAG Airflow et qualité des données. CD : construction des images et déploiement sur le VPS |
+| **Talend** | Moteur ETL des trois couches : ingestion, nettoyage, historique SCD 2, étoile, audit, transactions. Compétence clé du poste visé |
+| **PostgreSQL** | Schémas `bronze`, `silver`, `gold`, `audit`, rôles séparés, contraintes et commentaires |
+| **Notebook Jupyter** | Contrôle qualité des trois couches, exécuté par Airflow avec Papermill ; notebooks d'exploration |
+| **Airflow** | Orchestration quotidienne : télécharger l'annuaire → jobs Talend → contrôle qualité |
+| **Docker** | PostgreSQL, Airflow et les jobs Talend dans des conteneurs, identiques en local et sur un serveur |
+| **Power BI Desktop** | Tableau de bord des trois axes, indicateurs en DAX |
+| **GitHub Actions** | CI : tests de la base, des DAG et du notebook. Déploiement sur le VPS en option |
