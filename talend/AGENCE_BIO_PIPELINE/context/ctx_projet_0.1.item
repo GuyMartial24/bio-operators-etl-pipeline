@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<talendfile:ContextType xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:talendfile="platform:/resource/org.talend.model/model/TalendFile.xsd" xmi:id="_NYQAkNnZEfGbtZkEuG976g" confirmationNeeded="false" hide="false" name="local">
+  <contextParameter xmi:id="_NYQAkdnZEfGbtZkEuG976g" comment="Serveur PostgreSQL" name="pg_hote" prompt="pg_hote?" promptNeeded="false" repositoryContextId="built-in" type="id_String" value="localhost"/>
+  <contextParameter xmi:id="_NYQAktnZEfGbtZkEuG976g" comment="Port PostgreSQL" name="pg_port" prompt="pg_port?" promptNeeded="false" repositoryContextId="built-in" type="id_String" value="5432"/>
+  <contextParameter xmi:id="_NYQAk9nZEfGbtZkEuG976g" comment="Nom de la base" name="pg_base" prompt="pg_base?" promptNeeded="false" repositoryContextId="built-in" type="id_String" value="bio_observatoire"/>
+  <contextParameter xmi:id="_NYQAlNnZEfGbtZkEuG976g" comment="Rôle d'écriture de Talend" name="pg_utilisateur" prompt="pg_utilisateur?" promptNeeded="false" repositoryContextId="built-in" type="id_String" value="etl_writer"/>
+  <contextParameter xmi:id="_NYQAldnZEfGbtZkEuG976g" comment="Chargé depuis un fichier hors Git" name="pg_mot_de_passe" prompt="pg_mot_de_passe?" promptNeeded="false" repositoryContextId="built-in" type="id_Password" value=""/>
+  <contextParameter xmi:id="_NYQAltnZEfGbtZkEuG976g" comment="Racine des fichiers sources" name="dossier_donnees" prompt="dossier_donnees?" promptNeeded="false" repositoryContextId="built-in" type="id_String" value="F:/Projets_Data/bio-operators-etl-pipeline/data"/>
+  <contextParameter xmi:id="_UxafINncEfGbtZkEuG976g" comment="Vide : schéma choisi dans chaque composant" name="pg_schema" prompt="pg_schema?" promptNeeded="false" repositoryContextId="built-in" type="id_String" value=""/>
+  <contextParameter xmi:id="_UxafIdncEfGbtZkEuG976g" comment="Paramètres JDBC supplémentaires (ssl=true sur le VPS" name="pg_parametres" prompt="pg_parametres?" promptNeeded="false" repositoryContextId="built-in" type="id_String" value=""/>
+</talendfile:ContextType>

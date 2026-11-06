@@ -503,4 +503,6 @@ C'est ce qui garantit la règle RGPD : les noms ne sortent jamais de silver, car
 - **NAF 2025** : la colonne est prévue dans `etablissement_sirene`, à basculer quand l'INSEE l'imposera.
 - **Commune** dans `dim_geographie` : possible pour les opérateurs localisés par SIRENE, si une carte plus fine est demandée.
 
-Les scripts de création des tables (DDL) seront écrits dans `sql/ddl/`, couche par couche, au moment de construire les jobs Talend correspondants.
+Les scripts de création des tables (DDL) sont dans `sql/init/`, un par couche (`04_audit.sql`, `05_bronze.sql`…), écrits au moment de construire les jobs Talend correspondants.
+PostgreSQL les exécute à la création de la base, et la CI les teste (`sql/tests/test_init.sql`).
+Ils ne s'appliquent qu'à une base vide : sur le VPS, une fois les données en place, les évolutions passeront par des scripts de migration.

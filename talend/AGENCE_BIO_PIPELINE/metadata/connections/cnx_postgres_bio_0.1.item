@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xmi:XMI xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:TalendMetadata="http://www.talend.org/metadata/connection/2010" xmlns:orgomg.cwm.resource.relational="http:///orgomg/cwm/resource/relational.ecore">
+  <TalendMetadata:DatabaseConnection xmi:id="_G07WINncEfGbtZkEuG976g" name="cnx_postgres_bio" id="_YCWWUNnaEfGbtZkEuG976g" label="cnx_postgres_bio" dataPackage="_G2T2MNncEfGbtZkEuG976g" ContextMode="true" ContextId="_NXvqQNnZEfGbtZkEuG976g" contextName="local" DatabaseType="PostgreSQL" DriverClass="org.postgresql.Driver" URL="jdbc:postgresql://localhost:5432/bio_observatoire?" dbVersionString="V9_X" Port="context.pg_port" Username="context.pg_utilisateur" Password="context.pg_mot_de_passe" ServerName="context.pg_hote" DatasourceName="" FileFieldName="" SID="context.pg_base" SqlSynthax="" StringQuote="" NullChar="" DbmsId="postgres_id" ProductId="POSTGRESQL" AdditionalParams="context.pg_parametres" StandardSQL="true" SQLMode="false" UiSchema="context.pg_schema" supportNLS="false">
+    <taggedValue xmi:id="_G1FHINncEfGbtZkEuG976g" tag="Is Conn Need Reload" value="false"/>
+    <taggedValue xmi:id="_G1PfMNncEfGbtZkEuG976g" tag="package filter" value=""/>
+    <taggedValue xmi:id="_G1jBMNncEfGbtZkEuG976g" tag="Status" value=""/>
+    <taggedValue xmi:id="_G1jBMdncEfGbtZkEuG976g" tag="Version" value="0.1"/>
+    <taggedValue xmi:id="_G1jBMtncEfGbtZkEuG976g" tag="Purpose" value=""/>
+    <taggedValue xmi:id="_G1jBM9ncEfGbtZkEuG976g" tag="Description" value=""/>
+    <taggedValue xmi:id="_G1jBNNncEfGbtZkEuG976g" tag="Author" value=""/>
+    <taggedValue xmi:id="_G1jBNdncEfGbtZkEuG976g" tag="otherParameter"/>
+    <taggedValue xmi:id="_G14_cNncEfGbtZkEuG976g" tag="DB ProductName" value="PostgreSQL"/>
+    <taggedValue xmi:id="_G14_cdncEfGbtZkEuG976g" tag="DB ProductVersion" value="17.11 (Debian 17.11-1.pgdg13+2)"/>
+    <taggedValue xmi:id="_G14_ctncEfGbtZkEuG976g" tag="DB IdentifierQuoteString" value="&quot;"/>
+    <parameters xmi:id="_G1FHIdncEfGbtZkEuG976g" key="CONN_PARA_KEY_USERNAME" value="context.pg_utilisateur"/>
+    <parameters xmi:id="_Xku7UNncEfGbtZkEuG976g" key="CONN_PARA_KEY_MAPRDB_TABLE_NS_MAPPING" value=""/>
+  </TalendMetadata:DatabaseConnection>
+  <orgomg.cwm.resource.relational:Catalog xmi:id="_G2T2MNncEfGbtZkEuG976g" name="bio_observatoire" dataManager="_G07WINncEfGbtZkEuG976g">
+    <ownedElement xsi:type="orgomg.cwm.resource.relational:Schema" xmi:id="_G2VEUNncEfGbtZkEuG976g" name="audit"/>
+    <ownedElement xsi:type="orgomg.cwm.resource.relational:Schema" xmi:id="_G2VEUdncEfGbtZkEuG976g" name="bronze"/>
+    <ownedElement xsi:type="orgomg.cwm.resource.relational:Schema" xmi:id="_G2VEUtncEfGbtZkEuG976g" name="gold"/>
+    <ownedElement xsi:type="orgomg.cwm.resource.relational:Schema" xmi:id="_G2VEU9ncEfGbtZkEuG976g" name="information_schema"/>
+    <ownedElement xsi:type="orgomg.cwm.resource.relational:Schema" xmi:id="_G2VEVNncEfGbtZkEuG976g" name="pg_catalog"/>
+    <ownedElement xsi:type="orgomg.cwm.resource.relational:Schema" xmi:id="_G2VEVdncEfGbtZkEuG976g" name="public"/>
+    <ownedElement xsi:type="orgomg.cwm.resource.relational:Schema" xmi:id="_G2VEVtncEfGbtZkEuG976g" name="silver"/>
+  </orgomg.cwm.resource.relational:Catalog>
+</xmi:XMI>

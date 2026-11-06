@@ -338,3 +338,24 @@ c'est éviter de refaire les jobs quand on découvre une erreur de grain.
 - **Pseudonymisation :** ni nom, ni SIRET, ni numéro bio en gold (le numéro bio permettrait de retrouver le nom dans l'annuaire public).
   `operateur_id` est un pseudonyme ; la correspondance reste en silver, inaccessible à Power BI.
 - **Types :** les codes sont du texte (`01400`, `2A`), les ratios en `numeric` (calcul exact), les horodatages en `timestamptz`.
+
+## Étape 6 — Premier job Talend : l'annuaire en bronze (06/11/2026)
+
+### 6a. Le projet Talend dans Git
+
+- Outil : **Talaxie Open Studio 8.9.0**, la version communautaire qui a pris la suite de Talend Open Studio (arrêté par Qlik en 2024).
+- **Espace de travail** (dossier où Talend cherche les projets) déplacé dans `talend/` du dépôt. Les jobs sont des fichiers XML (`.item`), versionnables comme du code.
+- On versionne ce qu'on crée, pas ce que l'outil génère : `.metadata`, `.JETEmitters`, `temp`, `poms` sont exclus par `.gitignore`.
+- Après un déplacement, chercher les **chemins absolus** restants. Pour savoir quel dossier un outil utilise, regarder où il écrit.
+- **Suppression logique :** la Corbeille de Talend marque `deleted="true"` sans effacer ; vider la Corbeille supprime vraiment.
+
+### 6b. Les tables audit et bronze en SQL
+
+- `sql/init/04_audit.sql` : `audit.execution`, `audit.rejet`, `audit.controle_qualite`.
+- `sql/init/05_bronze.sql` : les 8 tables bronze, colonnes de source en `text` et 6 colonnes techniques.
+- **`SET ROLE etl_writer`** : les scripts d'initialisation tournent en super-utilisateur. Sans ce changement de rôle, les tables appartiendraient à `bio_admin` et les droits automatiques (`DEFAULT PRIVILEGES FOR ROLE etl_writer`) ne s'appliqueraient pas.
+- **Moindre privilège :** `qa_reader` n'écrit que dans `audit.controle_qualite` (`REVOKE INSERT` sur les deux autres tables d'audit).
+- **Contraintes :** `CHECK` (valeurs autorisées, fin après début, date de fin obligatoire si le job est terminé), clé étrangère de chaque ligne bronze vers son exécution.
+- `COMMENT ON` : la documentation vit aussi dans la base, visible depuis n'importe quel outil SQL.
+- **Limite de `docker-entrypoint-initdb.d` :** exécuté seulement sur une base vide (`docker compose down -v` pour rejouer). En production : des migrations (Flyway, Liquibase).
+- Tests ajoutés (6 à 9) : existence, propriétaire, commentaires, colonnes techniques, droits, contraintes. Un test de contrainte vérifie qu'une **insertion interdite est bien refusée**.
