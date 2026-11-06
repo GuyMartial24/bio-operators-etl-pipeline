@@ -128,8 +128,9 @@ Les notebooks sont rangés par usage : `notebooks/exploration/` (un notebook par
 
 Modèle en étoile de la couche gold :
 
-- **Fait** `fait_operateur_activite` : une ligne par opérateur × activité, à une date de copie
-- **Dimensions** : `dim_geographie` (commune → département → région, population, exploitations RA 2020),
+- **Faits** : `fait_operateur_activite` (une ligne par certification × activité, à une date de copie)
+  et `fait_mouvement` (entrées, sorties, changements de certificateur). Deux faits qui partagent leurs dimensions forment un schéma en constellation
+- **Dimensions** : `dim_geographie` (département → région, population, exploitations RA 2020),
   `dim_activite`, `dim_certificateur`, `dim_date`, `dim_operateur` (sans données personnelles)
 - **Tables d'indicateurs** des trois axes, calculées à partir de l'étoile
 
