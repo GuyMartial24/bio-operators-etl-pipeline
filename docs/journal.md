@@ -359,3 +359,27 @@ c'est éviter de refaire les jobs quand on découvre une erreur de grain.
 - `COMMENT ON` : la documentation vit aussi dans la base, visible depuis n'importe quel outil SQL.
 - **Limite de `docker-entrypoint-initdb.d` :** exécuté seulement sur une base vide (`docker compose down -v` pour rejouer). En production : des migrations (Flyway, Liquibase).
 - Tests ajoutés (6 à 9) : existence, propriétaire, commentaires, colonnes techniques, droits, contraintes. Un test de contrainte vérifie qu'une **insertion interdite est bien refusée**.
+
+### 6c. Contexte et connexion dans Talend
+
+- **Variable de contexte / environnement / groupe :** une variable (`pg_hote`), un jeu de valeurs (`local`, plus tard `vps`), un groupe partagé (`ctx_projet`) qu'on importe dans chaque job.
+- **Connexion du Référentiel** (`cnx_postgres_bio`) en mode contexte : une seule définition, réutilisée par tous les composants.
+- **Secrets :** le mot de passe n'est pas dans Git. Il est lu au démarrage par le **chargement implicite du contexte** depuis `talend/contexte_local.properties` (exclu de Git, modèle `.example` versionné).
+- Trois chemins de fuite d'un secret : le code versionné, un chiffrement à clé connue (`enc:system.encryption.key.v1` = clé par défaut de Talend), les journaux (« Afficher les opérations »).
+- **Caractères invisibles :** des tabulations collées au début des valeurs (`&#x9;` dans le XML). Toujours taper les valeurs de configuration.
+
+### 6d. Le job `bronze_agence_bio`
+
+- **Structure :** tPrejob (connexions, ouverture de l'audit, purge) → flux principal (lecture → tMap → écriture, puis commit et déclaration du succès) → tPostjob (fermeture de l'audit, rollback, fermeture des connexions). Le tPostjob s'exécute **toujours**, même après une erreur.
+- **Composants `tDB…` génériques :** posés depuis la Palette, ils n'acceptent aucun lien tant que la base n'est pas choisie. Les créer en glissant la connexion du Référentiel.
+- **Lecture CSV :** options CSV (guillemets doublés `""`), UTF-8, contrôle du nombre de champs, arrêt sur erreur. Un champ vide arrive en `''`, pas en `NULL`.
+- **tMap :** une expression Java par colonne de sortie, appliquée ligne par ligne et en flux. Fait aussi jointures, filtres, rejets et plusieurs sorties.
+- **Routine `Empreinte.md5` :** même résultat que `md5()` de PostgreSQL, car calculé sur les mêmes octets (UTF-8) avec un séparateur.
+- **globalMap :** dictionnaire partagé par tout le job (l'`execution_id`, le statut, les compteurs `…_NB_LINE` de Talend). Les sous-jobs ne se passent pas de lignes.
+- **Déclencheurs :** On Component Ok, On Subjob Ok (ordre d'exécution, sans données) ; lien Main (données).
+- **Schéma alternatif :** avec une connexion existante, le schéma vient de la connexion ; le préciser dans les paramètres avancés du tDBOutput.
+- **« Arrêter en cas d'erreur » :** décoché par défaut sur tDBOutput. Sans lui, le job finit avec un code de sortie 0 malgré l'erreur, et Airflow le croirait réussi.
+- **Statut prudent :** `ECHEC` par défaut, `SUCCES` seulement après le commit.
+- **Idempotence et atomicité :** relancer une date remplace ses lignes. La purge et l'insertion sont dans **une transaction** (connexion sans auto-commit, tDBCommit, tDBRollback), alors que l'audit a sa propre connexion en auto-commit pour survivre à un échec.
+- Testé : réussite (88 143 lignes en 7 s, empreintes identiques à PostgreSQL), relance sans doublon, échec (fichier absent → `ECHEC`, bronze intact grâce au rollback).
+- **Les séquences ne reculent jamais**, même après un `ROLLBACK` : des trous dans les identifiants sont normaux.
