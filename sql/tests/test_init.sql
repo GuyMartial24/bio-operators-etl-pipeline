@@ -88,4 +88,91 @@ BEGIN
 END $$;
 ROLLBACK;
 
+\echo '== Test 6 : les tables audit et bronze existent, appartiennent à etl_writer et sont documentées'
+DO $$
+DECLARE t text;
+BEGIN
+    FOREACH t IN ARRAY ARRAY[
+        'audit.execution', 'audit.rejet', 'audit.controle_qualite',
+        'bronze.agence_bio_operateur', 'bronze.laposte_code_postal',
+        'bronze.insee_cog_commune', 'bronze.insee_cog_departement', 'bronze.insee_cog_region',
+        'bronze.insee_population_departement', 'bronze.agreste_ra2020', 'bronze.sirene_etablissement'
+    ] LOOP
+        IF to_regclass(t) IS NULL THEN
+            RAISE EXCEPTION 'Table % absente', t;
+        END IF;
+        IF (SELECT pg_get_userbyid(relowner) FROM pg_class WHERE oid = to_regclass(t)) <> 'etl_writer' THEN
+            RAISE EXCEPTION 'Table % : le propriétaire doit être etl_writer', t;
+        END IF;
+        IF obj_description(to_regclass(t), 'pg_class') IS NULL THEN
+            RAISE EXCEPTION 'Table % sans commentaire', t;
+        END IF;
+    END LOOP;
+END $$;
+
+\echo '== Test 7 : chaque table bronze a les 6 colonnes techniques, et ses colonnes de source sont en text'
+DO $$
+DECLARE t text; c text;
+BEGIN
+    FOR t IN SELECT tablename FROM pg_tables WHERE schemaname = 'bronze' LOOP
+        FOREACH c IN ARRAY ARRAY['_execution_id', '_date_copie', '_fichier_source',
+                                 '_numero_ligne', '_hash_ligne', '_date_chargement'] LOOP
+            IF NOT EXISTS (SELECT 1 FROM information_schema.columns
+                           WHERE table_schema = 'bronze' AND table_name = t
+                             AND column_name = c AND is_nullable = 'NO') THEN
+                RAISE EXCEPTION 'bronze.% : colonne technique % absente ou facultative', t, c;
+            END IF;
+        END LOOP;
+        IF EXISTS (SELECT 1 FROM information_schema.columns
+                   WHERE table_schema = 'bronze' AND table_name = t
+                     AND column_name NOT LIKE '\_%' AND data_type <> 'text') THEN
+            RAISE EXCEPTION 'bronze.% : une colonne de source n''est pas en text', t;
+        END IF;
+    END LOOP;
+END $$;
+
+\echo '== Test 8 : droits sur les tables réelles'
+DO $$
+BEGIN
+    IF has_table_privilege('bi_reader', 'bronze.agence_bio_operateur', 'SELECT')
+       OR has_table_privilege('bi_reader', 'audit.execution', 'SELECT') THEN
+        RAISE EXCEPTION 'bi_reader ne doit lire ni bronze ni audit';
+    END IF;
+    IF NOT has_table_privilege('qa_reader', 'bronze.agence_bio_operateur', 'SELECT') THEN
+        RAISE EXCEPTION 'qa_reader doit pouvoir lire bronze';
+    END IF;
+    IF NOT has_table_privilege('qa_reader', 'audit.controle_qualite', 'INSERT') THEN
+        RAISE EXCEPTION 'qa_reader doit pouvoir écrire ses résultats dans audit.controle_qualite';
+    END IF;
+    IF has_table_privilege('qa_reader', 'audit.execution', 'INSERT')
+       OR has_table_privilege('qa_reader', 'audit.rejet', 'INSERT') THEN
+        RAISE EXCEPTION 'qa_reader ne doit écrire ni dans audit.execution ni dans audit.rejet';
+    END IF;
+END $$;
+
+\echo '== Test 9 : les contraintes de audit.execution refusent les valeurs interdites'
+BEGIN;
+SET ROLE etl_writer;
+INSERT INTO audit.execution (job_nom, couche) VALUES ('test_ci', 'bronze');  -- valeurs par défaut : EN_COURS, now()
+DO $$
+BEGIN
+    BEGIN
+        INSERT INTO audit.execution (job_nom, couche, statut) VALUES ('test_ci', 'bronze', 'TERMINE');
+        RAISE EXCEPTION 'Un statut inconnu aurait dû être refusé';
+    EXCEPTION WHEN check_violation THEN NULL;  -- refus attendu
+    END;
+    BEGIN
+        INSERT INTO audit.execution (job_nom, couche, statut) VALUES ('test_ci', 'bronze', 'SUCCES');
+        RAISE EXCEPTION 'Un job terminé sans date de fin aurait dû être refusé';
+    EXCEPTION WHEN check_violation THEN NULL;
+    END;
+    BEGIN
+        INSERT INTO bronze.agence_bio_operateur (numero_bio, _execution_id, _date_copie, _fichier_source, _numero_ligne, _hash_ligne)
+        VALUES ('1', -1, current_date, 'test.csv', 1, md5('test'));
+        RAISE EXCEPTION 'Une ligne bronze liée à une exécution inexistante aurait dû être refusée';
+    EXCEPTION WHEN foreign_key_violation THEN NULL;
+    END;
+END $$;
+ROLLBACK;
+
 \echo '== Tous les tests sont passés'
