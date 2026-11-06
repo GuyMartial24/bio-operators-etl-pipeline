@@ -11,3 +11,10 @@ __pycache__/
 
 # Secrets
 .env
+
+# Talend : on versionne les projets, pas ce que le Studio génère
+talend/.metadata/
+talend/.JETEmitters/
+talend/temp/
+talend/*/poms/
+talend/*/temp/
