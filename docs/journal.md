@@ -304,3 +304,37 @@ garder la ligne mais tracer l'anomalie dans `audit.rejet` quand la valeur est do
   - les écarts sont comptés, et non corrigés à la main.
 - **Ingestion en flux :** filtrer les ~87 000 SIRET de l'annuaire pendant la lecture (lookup en mémoire dans un `tMap`),
   puis supprimer le fichier complet (règle de rétention).
+
+## Étape 5 — Modèle de données et dictionnaire (06/11/2026)
+
+**Ce qui a été fait :** `docs/modele_donnees.md` (modèle conceptuel, logique et physique des quatre schémas)
+et `docs/dictionnaire_donnees.md` (une fiche par table, une ligne par colonne).
+
+**Pourquoi maintenant :** les jobs Talend écriront dans ces tables. Fixer le modèle avant d'écrire un job,
+c'est éviter de refaire les jobs quand on découvre une erreur de grain.
+
+**Notions à savoir expliquer :**
+- **Trois niveaux de modèle :**
+  - conceptuel : les objets du métier et leurs liens, sans technique ;
+  - logique : tables, clés, relations, historique ;
+  - physique : types PostgreSQL, contraintes, index.
+- **Grain :** ce que représente une ligne. Celui de l'annuaire est la certification (opérateur × organisme), pas l'opérateur.
+  Vérifié : 67 des 69 numéros bio en double ont deux certificateurs différents.
+- **Clés :** naturelle (`numero_bio`), technique (`operateur_version_id`, générée), durable (`operateur_id`, stable pour toutes les versions), empreinte (MD5 pour détecter un changement).
+- **SCD 2 :** fermer l'ancienne version et en ouvrir une nouvelle au lieu d'écraser.
+  - Intervalle semi-ouvert `[date_debut, date_fin[` : deux versions ne se chevauchent jamais.
+  - Requête *as of* : `date_debut <= D and (date_fin is null or date_fin > D)` reconstruit n'importe quel jour passé.
+  - Trois cas : nouvelle clé, clé modifiée (hash différent), clé disparue (sortie).
+  - `tPostgresqlSCD` gère les deux premiers ; les disparitions se détectent par anti-jointure dans un `tMap`.
+  - Index unique partiel `where est_courant` : c'est la base qui garantit une seule version courante.
+- **Rejeter le moins possible :** une valeur douteuse est mise à vide et qualifiée par une colonne `_statut`, la ligne reste comptée.
+- **Modèle en étoile / constellation :** faits (ce qu'on compte) au centre, dimensions (axes d'analyse) autour.
+  Deux faits qui partagent leurs dimensions = constellation.
+  - Instantané périodique (`fait_operateur_activite`) : une photo par date.
+  - Fait transactionnel (`fait_mouvement`) : un événement par ligne.
+- **Dimension à rôles multiples :** `dim_date` sert à la fois de date de copie, d'engagement et de mouvement.
+- **Membre « inconnu » (`-1`) :** un fait sans dimension ne disparaît pas dans une jointure.
+- **Piège du comptage :** un opérateur à 3 activités a 3 lignes ; nombre d'opérateurs = `DISTINCTCOUNT`, pas `SUM`.
+- **Pseudonymisation :** ni nom, ni SIRET, ni numéro bio en gold (le numéro bio permettrait de retrouver le nom dans l'annuaire public).
+  `operateur_id` est un pseudonyme ; la correspondance reste en silver, inaccessible à Power BI.
+- **Types :** les codes sont du texte (`01400`, `2A`), les ratios en `numeric` (calcul exact), les horodatages en `timestamptz`.
