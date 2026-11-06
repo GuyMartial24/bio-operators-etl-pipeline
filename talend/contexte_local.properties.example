@@ -1,0 +1,3 @@
+# Copier en contexte_local.properties et remplacer la valeur (ETL_WRITER_PASSWORD du .env).
+# Lu au démarrage de chaque job Talend (chargement implicite du contexte). Ne jamais versionner la copie.
+pg_mot_de_passe=changer_moi
