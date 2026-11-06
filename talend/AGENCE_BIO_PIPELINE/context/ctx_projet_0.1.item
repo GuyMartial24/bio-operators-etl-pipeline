@@ -8,4 +8,5 @@
   <contextParameter xmi:id="_NYQAltnZEfGbtZkEuG976g" comment="Racine des fichiers sources" name="dossier_donnees" prompt="dossier_donnees?" promptNeeded="false" repositoryContextId="built-in" type="id_String" value="F:/Projets_Data/bio-operators-etl-pipeline/data"/>
   <contextParameter xmi:id="_UxafINncEfGbtZkEuG976g" comment="Vide : schéma choisi dans chaque composant" name="pg_schema" prompt="pg_schema?" promptNeeded="false" repositoryContextId="built-in" type="id_String" value=""/>
   <contextParameter xmi:id="_UxafIdncEfGbtZkEuG976g" comment="Paramètres JDBC supplémentaires (ssl=true sur le VPS" name="pg_parametres" prompt="pg_parametres?" promptNeeded="false" repositoryContextId="built-in" type="id_String" value=""/>
+  <contextParameter xmi:id="_obeSINngEfGbtZkEuG976g" comment="Date de la copie à charger (AAAA-MM-JJ), fournie par Airflow" name="date_copie" prompt="date_copie?" promptNeeded="false" repositoryContextId="built-in" type="id_String" value="2026-11-05"/>
 </talendfile:ContextType>

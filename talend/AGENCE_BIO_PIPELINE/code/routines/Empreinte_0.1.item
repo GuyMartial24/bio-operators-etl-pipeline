@@ -1,0 +1,43 @@
+package routines;
+
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+
+public class Empreinte {
+
+    /**
+     * md5 : empreinte MD5 (32 caractères hexadécimaux) de plusieurs valeurs mises bout à bout.
+     * Les valeurs sont séparées par le séparateur ; une valeur null compte comme une chaîne vide.
+     *
+     * {talendTypes} String
+     * {Category} Empreinte
+     * {param} string(";") separateur : texte placé entre deux valeurs
+     * {param} string("a") valeurs : les valeurs à assembler
+     * {example} md5(";", "a", "b") # "5f2f9c6b..."
+     */
+    public static String md5(String separateur, String... valeurs) {
+        StringBuilder texte = new StringBuilder();
+        for (int i = 0; i < valeurs.length; i++) {
+            if (i > 0) {
+                texte.append(separateur);
+            }
+            if (valeurs[i] != null) {
+                texte.append(valeurs[i]);
+            }
+        }
+        try {
+            byte[] octets = MessageDigest.getInstance("MD5")
+                    .digest(texte.toString().getBytes(StandardCharsets.UTF_8));
+            StringBuilder hexa = new StringBuilder();
+            for (byte octet : octets) {
+                hexa.append(String.format("%02x", octet));
+            }
+            return hexa.toString();
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException("MD5 indisponible", e);
+        }
+    }
+}
+
+
