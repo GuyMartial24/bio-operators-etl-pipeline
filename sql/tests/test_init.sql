@@ -234,4 +234,57 @@ BEGIN
 END $$;
 ROLLBACK;
 
+\echo '== Test 11 : la fusion de l''annuaire historise les certifications (SCD 2)'
+-- Deux copies fictives (2099) d'un opérateur fictif (-2), puis tout est annulé.
+BEGIN;
+SET ROLE etl_writer;
+DELETE FROM silver.annuaire_prepare;
+INSERT INTO silver.ref_region VALUES ('84', 'Auvergne-Rhône-Alpes', 2026) ON CONFLICT DO NOTHING;
+INSERT INTO silver.ref_departement VALUES ('01', 'Ain', '84', false, 2026) ON CONFLICT DO NOTHING;
+INSERT INTO silver.ref_activite VALUES ('PRODUCTION', 'Production', 'production'),
+                                       ('TRANSPORT', 'Transport', 'logistique') ON CONFLICT DO NOTHING;
+INSERT INTO audit.execution (job_nom, couche, date_copie) VALUES ('test_ci', 'silver', '2099-01-01');
+INSERT INTO silver.annuaire_prepare
+    VALUES (-2, NULL, 'ABSENT', 'Test', '01000', 'VALIDE', '01', 'CODE_POSTAL', '2020-01-01', 'VALIDE',
+            'Production', 'Organisme test CI', 1, currval('audit.execution_execution_id_seq'));
+CALL silver.verifier_ordre_copie('2099-01-01');
+CALL silver.ajouter_certificateurs('2099-01-01');
+CALL silver.fusionner_operateurs('2099-01-01');
+CALL silver.historiser_certifications('2099-01-01', currval('audit.execution_execution_id_seq'));
+-- Copie suivante : une activité de plus
+INSERT INTO audit.execution (job_nom, couche, date_copie) VALUES ('test_ci', 'silver', '2099-01-02');
+UPDATE silver.annuaire_prepare SET activites = 'Production,Transport';
+CALL silver.verifier_ordre_copie('2099-01-02');
+CALL silver.fusionner_operateurs('2099-01-02');
+CALL silver.historiser_certifications('2099-01-02', currval('audit.execution_execution_id_seq'));
+DO $$
+BEGIN
+    IF (SELECT count(*) FROM silver.certification WHERE numero_bio = -2) <> 2 THEN
+        RAISE EXCEPTION 'Un changement d''activités doit créer une seconde version';
+    END IF;
+    IF NOT EXISTS (SELECT 1 FROM silver.certification
+                   WHERE numero_bio = -2 AND date_fin = '2099-01-02' AND NOT est_courant) THEN
+        RAISE EXCEPTION 'L''ancienne version doit être fermée à la date de la copie suivante';
+    END IF;
+    IF (SELECT activites_liste FROM silver.certification WHERE numero_bio = -2 AND est_courant)
+       <> 'PRODUCTION,TRANSPORT' THEN
+        RAISE EXCEPTION 'La version courante doit porter la nouvelle liste d''activités';
+    END IF;
+    IF (SELECT count(*) FROM silver.certification_activite a
+        JOIN silver.certification v USING (certification_version_id)
+        WHERE v.numero_bio = -2 AND v.est_courant) <> 2 THEN
+        RAISE EXCEPTION 'La version courante doit avoir ses 2 activités';
+    END IF;
+    IF (SELECT date_derniere_observation FROM silver.operateur WHERE numero_bio = -2) <> '2099-01-02' THEN
+        RAISE EXCEPTION 'L''opérateur doit être mis à jour (SCD 1)';
+    END IF;
+    BEGIN
+        CALL silver.verifier_ordre_copie('2099-01-01');
+        RAISE EXCEPTION 'Une copie plus ancienne que la dernière historisée aurait dû être refusée';
+    EXCEPTION WHEN raise_exception THEN
+        IF SQLERRM NOT LIKE 'Copie du %' THEN RAISE; END IF;  -- seul le refus attendu est accepté
+    END;
+END $$;
+ROLLBACK;
+
 \echo '== Tous les tests sont passés'
