@@ -410,3 +410,25 @@ c'est éviter de refaire les jobs quand on découvre une erreur de grain.
 - `sql/init/05_bronze.sql` : 4 tables bronze au lieu de 8 ; tables inutiles supprimées de la base locale sans la recréer (données gardées).
 
 **À retenir :** limiter le périmètre (*scope*) est une décision de projet à part entière. Un livrable terminé, documenté et testé vaut mieux qu'un projet plus large inachevé.
+
+## Étape 8 — Couche silver (07/11/2026)
+
+### 8a. Les tables silver
+
+- `sql/init/06_silver.sql` : 8 tables (référentiels, `operateur`, `certification`, `certification_activite`), toutes avec clé primaire.
+- **Clés étrangères** entre tables : une région avant ses départements, un département avant ses populations et ses opérateurs.
+- **`CHECK` de cohérence entre colonnes**, pas seulement de domaine : un SIRET n'est présent que si son statut vaut `VALIDE`, `est_courant` équivaut à `date_fin is null`, un membre spécial (`99`, `00`) n'a pas de région.
+- **Index unique partiel** `where est_courant` : une seule version en cours par certification, garanti par la base.
+- Test 10 : un jeu de lignes valides, puis des lignes interdites qui doivent être refusées, le tout annulé par `ROLLBACK`.
+
+### 8b. Le job `silver_referentiels`
+
+- Quatre flux enchaînés dans l'ordre des clés étrangères : régions → départements → populations → activités, un seul commit.
+- **Lecture en SQL depuis bronze** (`tDBInput`) : dernière version avec `max(_date_copie)`, renommage avec `AS`, conversion de type (`pmun::integer`). Les membres spéciaux `99` et `00` sont ajoutés par `UNION ALL`, dans une CTE (`WITH`).
+- **tMap** seulement pour une règle de gestion visible : `est_outre_mer = code_departement.length() == 3`.
+- **tFixedFlowInput** pour les 8 activités et leur famille : des valeurs fixes, versionnées avec le job.
+- **Insert or update** au lieu de purger : on ne peut pas supprimer un département auquel des opérateurs sont rattachés. La colonne cochée **Clé** dans le schéma sert à retrouver la ligne à mettre à jour.
+- **Audit** : lignes écrites = insérées + mises à jour (229 à chaque exécution).
+- **« Deviner le schéma »** échoue volontairement : le mot de passe n'est chargé qu'à l'exécution. Le schéma se saisit à la main.
+- **Pièges rencontrés** : un Ctrl+C non pris en compte colle l'ancien presse-papiers (ici des composants d'un autre job) ; un sous-job sans déclencheur s'exécute hors de l'enchaînement et ses écritures sont perdues au rollback ; le contenu en ligne saisi sous Windows finit ses lignes par `\r\n`.
+- Testé : premier chargement (insertions), relance (mises à jour, aucun doublon), échec du dernier flux (`ECHEC`, une valeur altérée dans silver reste altérée, preuve du rollback), puis rechargement normal qui corrige cette valeur à partir de bronze.

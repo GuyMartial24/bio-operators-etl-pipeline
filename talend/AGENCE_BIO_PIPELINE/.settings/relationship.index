@@ -40,4 +40,23 @@
     "version" : "Latest",
     "type" : "routine"
   } ]
+}, {
+  "baseItem" : {
+    "id" : "_oN8B0NqjEfGpkIxm4-3qeg",
+    "version" : "0.1",
+    "type" : "job"
+  },
+  "relatedItems" : [ {
+    "id" : "_NXvqQNnZEfGbtZkEuG976g",
+    "version" : "Latest",
+    "type" : "context"
+  }, {
+    "id" : "_YCWWUNnaEfGbtZkEuG976g",
+    "version" : "Latest",
+    "type" : "property"
+  }, {
+    "id" : "Empreinte",
+    "version" : "Latest",
+    "type" : "routine"
+  } ]
 } ]
