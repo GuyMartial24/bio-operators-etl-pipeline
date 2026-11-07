@@ -88,14 +88,17 @@ BEGIN
 END $$;
 ROLLBACK;
 
-\echo '== Test 6 : les tables audit et bronze existent, appartiennent à etl_writer et sont documentées'
+\echo '== Test 6 : les tables audit, bronze et silver existent, appartiennent à etl_writer et sont documentées'
 DO $$
 DECLARE t text;
 BEGIN
     FOREACH t IN ARRAY ARRAY[
         'audit.execution', 'audit.rejet', 'audit.controle_qualite',
         'bronze.agence_bio_operateur', 'bronze.insee_cog_departement', 'bronze.insee_cog_region',
-        'bronze.insee_population_departement'
+        'bronze.insee_population_departement',
+        'silver.ref_region', 'silver.ref_departement', 'silver.population_departement',
+        'silver.ref_activite', 'silver.ref_certificateur', 'silver.operateur',
+        'silver.certification', 'silver.certification_activite'
     ] LOOP
         IF to_regclass(t) IS NULL THEN
             RAISE EXCEPTION 'Table % absente', t;
@@ -134,8 +137,13 @@ END $$;
 DO $$
 BEGIN
     IF has_table_privilege('bi_reader', 'bronze.agence_bio_operateur', 'SELECT')
-       OR has_table_privilege('bi_reader', 'audit.execution', 'SELECT') THEN
-        RAISE EXCEPTION 'bi_reader ne doit lire ni bronze ni audit';
+       OR has_table_privilege('bi_reader', 'audit.execution', 'SELECT')
+       OR has_table_privilege('bi_reader', 'silver.operateur', 'SELECT') THEN
+        RAISE EXCEPTION 'bi_reader ne doit lire ni bronze, ni silver (données personnelles), ni audit';
+    END IF;
+    IF NOT has_table_privilege('qa_reader', 'silver.operateur', 'SELECT')
+       OR has_table_privilege('qa_reader', 'silver.operateur', 'INSERT') THEN
+        RAISE EXCEPTION 'qa_reader doit lire silver sans pouvoir y écrire';
     END IF;
     IF NOT has_table_privilege('qa_reader', 'bronze.agence_bio_operateur', 'SELECT') THEN
         RAISE EXCEPTION 'qa_reader doit pouvoir lire bronze';
@@ -170,6 +178,56 @@ BEGIN
         VALUES ('1', -1, current_date, 'test.csv', 1, md5('test'));
         RAISE EXCEPTION 'Une ligne bronze liée à une exécution inexistante aurait dû être refusée';
     EXCEPTION WHEN foreign_key_violation THEN NULL;
+    END;
+END $$;
+ROLLBACK;
+
+\echo '== Test 10 : les contraintes de silver refusent les incohérences'
+-- On insère un jeu minimal valide, on tente des lignes interdites, puis on annule tout.
+BEGIN;
+SET ROLE etl_writer;
+INSERT INTO audit.execution (job_nom, couche) VALUES ('test_ci', 'silver');
+INSERT INTO silver.ref_region VALUES ('84', 'Auvergne-Rhône-Alpes', 2026);
+INSERT INTO silver.ref_departement VALUES ('01', 'Ain', '84', false, 2026), ('00', 'Inconnu', NULL, false, 2026);
+INSERT INTO silver.ref_certificateur (certificateur_libelle, est_dispense, date_premiere_observation)
+    VALUES ('Organisme test', false, '2026-11-05');
+INSERT INTO silver.operateur (numero_bio, siret_statut, denomination, code_postal, code_postal_statut,
+                              code_departement, methode_rattachement, est_present,
+                              date_premiere_observation, date_derniere_observation)
+    VALUES (1, 'ABSENT', 'Test', '01000', 'VALIDE', '01', 'CODE_POSTAL', true, '2026-11-05', '2026-11-05');
+INSERT INTO silver.certification (numero_bio, certificateur_id, date_engagement_statut, activites_liste,
+                                  hash_attributs, date_debut, est_courant, est_chargement_initial, _execution_id)
+    SELECT 1, max(certificateur_id), 'ABSENTE', 'PRODUCTION', md5('x'), '2026-11-05', true, true, max(e.execution_id)
+    FROM silver.ref_certificateur, audit.execution e;
+DO $$
+BEGIN
+    BEGIN
+        INSERT INTO silver.certification (numero_bio, certificateur_id, date_engagement_statut, activites_liste,
+                                          hash_attributs, date_debut, est_courant, est_chargement_initial, _execution_id)
+            SELECT numero_bio, certificateur_id, 'ABSENTE', 'PREPARATION', md5('y'), '2026-11-06', true, false, _execution_id
+            FROM silver.certification;
+        RAISE EXCEPTION 'Deux versions courantes pour la même certification auraient dû être refusées';
+    EXCEPTION WHEN unique_violation THEN NULL;  -- refus attendu
+    END;
+    BEGIN
+        UPDATE silver.certification SET date_fin = '2026-11-06';  -- fermée mais encore marquée courante
+        RAISE EXCEPTION 'Une version fermée marquée courante aurait dû être refusée';
+    EXCEPTION WHEN check_violation THEN NULL;
+    END;
+    BEGIN
+        UPDATE silver.operateur SET siret = '12345678901234';  -- SIRET présent avec le statut ABSENT
+        RAISE EXCEPTION 'Un SIRET incohérent avec son statut aurait dû être refusé';
+    EXCEPTION WHEN check_violation THEN NULL;
+    END;
+    BEGIN
+        UPDATE silver.operateur SET code_departement = '00';  -- département inconnu avec la méthode CODE_POSTAL
+        RAISE EXCEPTION 'Un rattachement incohérent aurait dû être refusé';
+    EXCEPTION WHEN check_violation THEN NULL;
+    END;
+    BEGIN
+        INSERT INTO silver.ref_departement VALUES ('99', 'Étranger', '84', false, 2026);
+        RAISE EXCEPTION 'Un membre spécial rattaché à une région aurait dû être refusé';
+    EXCEPTION WHEN check_violation THEN NULL;
     END;
 END $$;
 ROLLBACK;
