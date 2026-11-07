@@ -57,9 +57,17 @@ BEGIN
     END IF;
 END $$;
 
+-- Statistiques : une table remplie dans la transaction en cours garde les statistiques d'avant
+-- (vide au premier chargement). PostgreSQL choisirait alors des plans faits pour quelques lignes,
+-- par exemple parcourir toute la table operateur pour vérifier chaque clé étrangère.
+-- Chaque procédure recalcule donc les statistiques de la table qu'elle vient de remplir (ANALYZE).
+
 -- 3. Rejets et anomalies, tracés depuis bronze avec la ligne source complète en JSON.
 CREATE PROCEDURE silver.tracer_rejets_annuaire(p_date_copie date, p_execution_id bigint)
 LANGUAGE sql AS $$
+    -- La table de travail vient d'être remplie par Talend
+    ANALYZE silver.annuaire_prepare;
+
     -- Ligne écartée par Talend : numéro bio absent ou non numérique
     INSERT INTO audit.rejet (execution_id, table_source, hash_ligne_source, table_cible, motif_code, motif_detail, ligne_source)
     SELECT p_execution_id, 'bronze.agence_bio_operateur', b._hash_ligne, 'silver.operateur',
@@ -95,6 +103,8 @@ LANGUAGE sql AS $$
     SELECT DISTINCT certificateur_libelle, certificateur_libelle = 'Dispense de certification', p_date_copie
     FROM silver.annuaire_prepare
     ON CONFLICT (certificateur_libelle) DO NOTHING;
+
+    ANALYZE silver.ref_certificateur;
 $$;
 
 -- 5. Opérateurs, état courant (SCD 1)
@@ -126,11 +136,18 @@ LANGUAGE sql AS $$
     SET est_present = false
     WHERE o.est_present
       AND NOT EXISTS (SELECT 1 FROM silver.annuaire_prepare p WHERE p.numero_bio = o.numero_bio);
+
+    ANALYZE silver.operateur;
 $$;
 
 -- 6. Certifications, historique (SCD 2)
+-- SET enable_nestloop = off, le temps de la procédure : l'étape b lit la table où elle écrit.
+-- Au premier chargement, la table est vide et PostgreSQL choisirait une boucle imbriquée qui relit
+-- toute la table pour chaque ligne insérée (88 000 fois). La jointure par hachage la lit une fois.
 CREATE PROCEDURE silver.historiser_certifications(p_date_copie date, p_execution_id bigint)
-LANGUAGE sql AS $$
+LANGUAGE sql
+SET enable_nestloop = off
+AS $$
     -- a. Fermer les versions courantes modifiées ou disparues
     UPDATE silver.certification v
     SET date_fin = p_date_copie, est_courant = false
@@ -154,12 +171,16 @@ LANGUAGE sql AS $$
                         AND v.numero_bio = c.numero_bio
                         AND v.certificateur_id = c.certificateur_id);
 
+    ANALYZE silver.certification;
+
     -- c. Les activités des versions ouvertes par cette exécution
     INSERT INTO silver.certification_activite (certification_version_id, activite_code)
     SELECT v.certification_version_id, a.activite_code
     FROM silver.certification v
     CROSS JOIN LATERAL unnest(string_to_array(v.activites_liste, ',')) AS a(activite_code)
     WHERE v._execution_id = p_execution_id;
+
+    ANALYZE silver.certification_activite;
 $$;
 
 RESET ROLE;
