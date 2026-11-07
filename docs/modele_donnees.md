@@ -294,6 +294,11 @@ Les noms ne sortent jamais de silver, car Power BI n'a aucun droit sur silver.
 
 ### 4.5 Scripts
 
-Les scripts de création des tables sont dans `sql/init/`, un par couche (`04_audit.sql`, `05_bronze.sql`, puis silver et gold),
+Les scripts de création des tables sont dans `sql/init/`, un par couche (`04_audit.sql`, `05_bronze.sql`, `06_silver.sql`, puis gold).
+`07_silver_fusion.sql` contient les procédures appelées par `silver_annuaire` : le nettoyage ligne par ligne est fait par Talend
+(routine `Nettoyage`, jointure sur `ref_departement`) dans la table de travail `silver.annuaire_prepare` ; la fusion par ensembles
+(rejets, organismes, opérateurs en SCD 1, certifications en SCD 2) est faite par ces procédures, dans la transaction du job.
+Les copies se traitent dans l'ordre chronologique : `verifier_ordre_copie` refuse une copie plus ancienne que la dernière historisée.
+Les scripts sont
 exécutés à la création de la base et testés par la CI (`sql/tests/test_init.sql`).
 Ils ne s'appliquent qu'à une base vide : sur un serveur, les évolutions passeraient par des scripts de migration.

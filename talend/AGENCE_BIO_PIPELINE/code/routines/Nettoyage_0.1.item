@@ -1,0 +1,105 @@
+package routines;
+
+import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
+
+/*
+ * Règles de nettoyage de l'annuaire Agence Bio (docs/modele_donnees.md, § 3.3).
+ * Chaque donnée a deux fonctions : la valeur nettoyée (null si invalide) et son statut.
+ */
+public class Nettoyage {
+
+    // Retire les espaces et les caractères invisibles (ex. U+202C collé à un SIRET).
+    private static String compacter(String brut) {
+        if (brut == null) return null;
+        return brut.replaceAll("[\\s\\p{Cf}]", "");
+    }
+
+    /* ---------- SIRET ---------- */
+
+    public static String siretStatut(String brut) {
+        String s = compacter(brut);
+        if (s == null || s.isEmpty()) return "ABSENT";
+        if (s.equals("None")) return "TEXTE_NONE";
+        if (!s.matches("[0-9]{14}")) return "FORMAT_INVALIDE";
+        if (!siretCleValide(s)) return "LUHN_INVALIDE";
+        return "VALIDE";
+    }
+
+    public static String siret(String brut) {
+        return siretStatut(brut).equals("VALIDE") ? compacter(brut) : null;
+    }
+
+    // Clé de Luhn : un chiffre sur deux, en partant de la droite, est doublé ; la somme doit être un multiple de 10.
+    // Exception : les établissements de La Poste (SIREN 356000000) peuvent avoir à la place
+    // une somme de chiffres multiple de 5.
+    private static boolean siretCleValide(String s) {
+        int somme = 0;
+        for (int i = 0; i < 14; i++) {
+            int chiffre = s.charAt(13 - i) - '0';
+            if (i % 2 == 1) {
+                chiffre *= 2;
+                if (chiffre > 9) chiffre -= 9;
+            }
+            somme += chiffre;
+        }
+        if (somme % 10 == 0) return true;
+        if (s.startsWith("356000000")) {
+            int sommeChiffres = 0;
+            for (char c : s.toCharArray()) sommeChiffres += c - '0';
+            return sommeChiffres % 5 == 0;
+        }
+        return false;
+    }
+
+
+    /* ---------- Code postal ---------- */
+
+    public static String codePostal(String brut) {
+        String s = compacter(brut);
+        if (s == null || s.isEmpty() || s.equals("None")) return null;
+        if (s.matches("[0-9]{4}")) s = "0" + s;   // 8850 -> 08850 (zéro perdu par un tableur)
+        return s.matches("[0-9]{5}") ? s : null;
+    }
+
+    public static String codePostalStatut(String brut) {
+        String s = compacter(brut);
+        if (s == null || s.isEmpty() || s.equals("None")) return "ABSENT";
+        return codePostal(brut) != null ? "VALIDE" : "FORMAT_INVALIDE";
+    }
+
+    /* ---------- Département déduit du code postal ---------- */
+
+    // Renvoie le code département candidat, à confirmer par une jointure sur silver.ref_departement.
+    // "99" signale l'étranger. null si le code postal est absent ou invalide.
+    public static String departementCandidat(String codePostalNettoye) {
+        String cp = codePostalNettoye;
+        if (cp == null) return null;
+        if (cp.startsWith("99") || cp.startsWith("980")) return "99";   // code pays INSEE, Monaco
+        if (cp.startsWith("97")) return cp.substring(0, 3);               // outre-mer
+        if (cp.startsWith("20")) return (cp.charAt(2) <= '1') ? "2A" : "2B";  // Corse
+        return cp.substring(0, 2);
+    }
+
+    /* ---------- Date d'engagement ---------- */
+
+    public static String dateEngagementStatut(String brut, String dateCopie) {
+        LocalDate d = lireDate(brut);
+        if (d == null) return "ABSENTE";
+        return d.isAfter(LocalDate.parse(dateCopie)) ? "FUTURE" : "VALIDE";
+    }
+
+    public static java.util.Date dateEngagement(String brut, String dateCopie) {
+        if (!dateEngagementStatut(brut, dateCopie).equals("VALIDE")) return null;
+        return java.sql.Date.valueOf(lireDate(brut));
+    }
+
+    private static LocalDate lireDate(String brut) {
+        if (brut == null) return null;
+        try {
+            return LocalDate.parse(brut.trim());   // format ISO : 2020-07-08
+        } catch (DateTimeParseException e) {
+            return null;                           // "None", vide, format inconnu
+        }
+    }
+}

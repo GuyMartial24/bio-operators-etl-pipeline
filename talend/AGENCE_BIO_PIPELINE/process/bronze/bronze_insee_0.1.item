@@ -238,7 +238,7 @@
       <column comment="" key="false" length="-1" name="_hash_ligne" nullable="false" pattern="" precision="-1" sourceType="" type="id_String" originalLength="-1" usefulColumn="true"/>
     </metadata>
     <nodeData xsi:type="TalendMapper:MapperData">
-      <uiProperties shellMaximized="true"/>
+      <uiProperties/>
       <varTables sizeState="INTERMEDIATE" name="Var" minimized="true"/>
       <outputTables sizeState="INTERMEDIATE" name="bronze">
         <mapperTableEntries name="dep" expression="row1.dep" type="id_String" nullable="true"/>
@@ -508,7 +508,7 @@
     <elementParameter field="LABEL" name="NOTE" value="This option only applies when deploying and running in the Talaxie Runtime" show="false"/>
     <elementParameter field="CHECK" name="SPECIFY_DATASOURCE_ALIAS" value="false" show="false"/>
     <elementParameter field="TEXT" name="DATASOURCE_ALIAS" value="&quot;&quot;" show="false"/>
-    <elementParameter field="CHECK" name="DIE_ON_ERROR" value="false"/>
+    <elementParameter field="CHECK" name="DIE_ON_ERROR" value="true"/>
     <elementParameter field="TEXT" name="PROPERTIES" value="context.pg_parametres" show="false"/>
     <elementParameter field="CHECK" name="PROPAGATE_RECORD_SET" value="false"/>
     <elementParameter field="COLUMN_LIST" name="RECORD_SET_COLUMN" value="" show="false"/>
@@ -733,7 +733,7 @@
       <column comment="" key="false" length="-1" name="_hash_ligne" nullable="false" pattern="" precision="-1" sourceType="" type="id_String" originalLength="-1" usefulColumn="true"/>
     </metadata>
     <nodeData xsi:type="TalendMapper:MapperData">
-      <uiProperties shellMaximized="true"/>
+      <uiProperties/>
       <varTables sizeState="INTERMEDIATE" name="Var" minimized="true"/>
       <outputTables sizeState="INTERMEDIATE" name="copyOfbronze">
         <mapperTableEntries name="reg" expression="row3.reg" type="id_String" nullable="true"/>
@@ -1023,7 +1023,7 @@
       <column comment="" key="false" length="-1" name="_hash_ligne" nullable="false" pattern="" precision="-1" sourceType="" type="id_String" originalLength="-1" usefulColumn="true"/>
     </metadata>
     <nodeData xsi:type="TalendMapper:MapperData">
-      <uiProperties shellMaximized="true"/>
+      <uiProperties/>
       <varTables sizeState="INTERMEDIATE" name="Var" minimized="true"/>
       <outputTables sizeState="INTERMEDIATE" name="copyOfcopyOfbronze">
         <mapperTableEntries name="reg" expression="row4.reg" type="id_String" nullable="true"/>

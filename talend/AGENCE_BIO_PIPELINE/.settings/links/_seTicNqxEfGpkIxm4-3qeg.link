@@ -1,0 +1,35 @@
+{
+  "itemId" : "_seTicNqxEfGpkIxm4-3qeg",
+  "contextList" : [ {
+    "contextName" : "local",
+    "repoId" : "_NXvqQNnZEfGbtZkEuG976g",
+    "parameterList" : [ {
+      "id" : "_obeSINngEfGbtZkEuG976g",
+      "name" : "date_copie"
+    }, {
+      "id" : "_NYQAltnZEfGbtZkEuG976g",
+      "name" : "dossier_donnees"
+    }, {
+      "id" : "_NYQAk9nZEfGbtZkEuG976g",
+      "name" : "pg_base"
+    }, {
+      "id" : "_NYQAkdnZEfGbtZkEuG976g",
+      "name" : "pg_hote"
+    }, {
+      "id" : "_NYQAldnZEfGbtZkEuG976g",
+      "name" : "pg_mot_de_passe"
+    }, {
+      "id" : "_UxafIdncEfGbtZkEuG976g",
+      "name" : "pg_parametres"
+    }, {
+      "id" : "_NYQAktnZEfGbtZkEuG976g",
+      "name" : "pg_port"
+    }, {
+      "id" : "_UxafINncEfGbtZkEuG976g",
+      "name" : "pg_schema"
+    }, {
+      "id" : "_NYQAlNnZEfGbtZkEuG976g",
+      "name" : "pg_utilisateur"
+    } ]
+  } ]
+}

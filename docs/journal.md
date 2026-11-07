@@ -432,3 +432,14 @@ c'est éviter de refaire les jobs quand on découvre une erreur de grain.
 - **« Deviner le schéma »** échoue volontairement : le mot de passe n'est chargé qu'à l'exécution. Le schéma se saisit à la main.
 - **Pièges rencontrés** : un Ctrl+C non pris en compte colle l'ancien presse-papiers (ici des composants d'un autre job) ; un sous-job sans déclencheur s'exécute hors de l'enchaînement et ses écritures sont perdues au rollback ; le contenu en ligne saisi sous Windows finit ses lignes par `\r\n`.
 - Testé : premier chargement (insertions), relance (mises à jour, aucun doublon), échec du dernier flux (`ECHEC`, une valeur altérée dans silver reste altérée, preuve du rollback), puis rechargement normal qui corrige cette valeur à partir de bronze.
+
+### 8c. Le job `silver_annuaire`
+
+- **Partage Talend / SQL** : Talend nettoie ligne par ligne (routine `Nettoyage`, tMap avec lookup) et écrit dans une table de travail ; des **procédures stockées** (`07_silver_fusion.sql`) font la fusion par ensembles. Le job orchestre, la base exécute, et le SQL est testé par la CI.
+- **Routine `Nettoyage`** : une fonction pour la valeur, une pour son statut (SIRET et clé de Luhn, code postal, département candidat, date d'engagement). Testée hors de Talend sur 27 cas et sur les 88 143 lignes réelles : le test a trouvé une erreur sur la règle de La Poste.
+- **Lookup dans le tMap** : `ref_departement` chargé en mémoire, clé de jointure calculée (`departementCandidat(...)`), **Left Outer Join** pour garder les codes inexistants (rattachés à `00`). Les variables `Var` s'évaluent après la jointure.
+- **Filtre de sortie** avant `Integer.parseInt` : une ligne sans numéro bio valide ne fait pas planter le job ; elle est tracée en SQL avec `to_jsonb(ligne)`.
+- **SCD 2 en SQL** : fermer les versions courantes dont l'empreinte a changé ou qui ont disparu, ouvrir une version pour chaque certification sans version courante, puis enregistrer ses activités. **SCD 1** : `INSERT … ON CONFLICT DO UPDATE`, l'upsert natif de PostgreSQL, en une instruction pour 88 000 lignes.
+- **« Arrêter en cas d'erreur »** est aussi décoché par défaut sur `tDBRow` : corrigé sur les purges des jobs bronze et sur les appels de ce job. Il reste décoché sur `audit_fermer`, pour que le rollback et la fermeture s'exécutent toujours.
+- **Performance** : premier chargement en 2 min 10. Cause : les statistiques d'une table vide (PostgreSQL relisait 88 000 fois la table en cours de remplissage). Corrigé par `ANALYZE` après chaque remplissage et `enable_nestloop = off` dans la procédure SCD 2 : 9 s.
+- Testé : premier chargement (88 074 opérateurs, 88 141 certifications, 134 260 activités, 2 doublons fusionnés), relance sans aucun changement, échec de la dernière instruction (`ECHEC`, tout annulé y compris le `TRUNCATE`), rechargement qui restaure une valeur altérée.
