@@ -160,4 +160,29 @@ COMMENT ON TABLE  silver.certification_activite IS 'Activités de chaque version
 COMMENT ON COLUMN silver.certification_activite.certification_version_id IS 'Version de certification';
 COMMENT ON COLUMN silver.certification_activite.activite_code            IS 'Activité';
 
+-- 5. Table de travail du job silver_annuaire
+-- Reçoit les lignes de l'annuaire nettoyées par Talend (une par ligne de bronze), vidée à chaque exécution.
+-- Les requêtes de fusion (opérateur, certification) partent de cette table.
+CREATE TABLE silver.annuaire_prepare (
+    numero_bio              integer NOT NULL,
+    siret                   char(14),
+    siret_statut            text    NOT NULL,
+    denomination            text,
+    code_postal             text,
+    code_postal_statut      text    NOT NULL,
+    code_departement        text    NOT NULL,
+    methode_rattachement    text    NOT NULL,
+    date_engagement         date,
+    date_engagement_statut  text    NOT NULL,
+    activites               text,
+    certificateur_libelle   text    NOT NULL,
+    _numero_ligne           integer NOT NULL,
+    _execution_id           bigint  NOT NULL
+);
+COMMENT ON TABLE silver.annuaire_prepare IS
+    'Table de travail : lignes de l''annuaire nettoyées par silver_annuaire, avant fusion. Vidée à chaque exécution';
+COMMENT ON COLUMN silver.annuaire_prepare.activites             IS 'Libellés d''activités tels que dans l''annuaire, séparés par des virgules';
+COMMENT ON COLUMN silver.annuaire_prepare.certificateur_libelle IS 'Nom de l''organisme tel que dans l''annuaire';
+COMMENT ON COLUMN silver.annuaire_prepare._numero_ligne         IS 'Numéro de la ligne en bronze, pour retrouver la source d''un rejet';
+
 RESET ROLE;

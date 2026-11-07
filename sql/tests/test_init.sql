@@ -98,7 +98,7 @@ BEGIN
         'bronze.insee_population_departement',
         'silver.ref_region', 'silver.ref_departement', 'silver.population_departement',
         'silver.ref_activite', 'silver.ref_certificateur', 'silver.operateur',
-        'silver.certification', 'silver.certification_activite'
+        'silver.certification', 'silver.certification_activite', 'silver.annuaire_prepare'
     ] LOOP
         IF to_regclass(t) IS NULL THEN
             RAISE EXCEPTION 'Table % absente', t;
@@ -184,20 +184,22 @@ ROLLBACK;
 
 \echo '== Test 10 : les contraintes de silver refusent les incohérences'
 -- On insère un jeu minimal valide, on tente des lignes interdites, puis on annule tout.
+-- ON CONFLICT DO NOTHING et numero_bio = -1 : le test fonctionne aussi sur une base déjà remplie.
 BEGIN;
 SET ROLE etl_writer;
 INSERT INTO audit.execution (job_nom, couche) VALUES ('test_ci', 'silver');
-INSERT INTO silver.ref_region VALUES ('84', 'Auvergne-Rhône-Alpes', 2026);
-INSERT INTO silver.ref_departement VALUES ('01', 'Ain', '84', false, 2026), ('00', 'Inconnu', NULL, false, 2026);
+INSERT INTO silver.ref_region VALUES ('84', 'Auvergne-Rhône-Alpes', 2026) ON CONFLICT DO NOTHING;
+INSERT INTO silver.ref_departement VALUES ('01', 'Ain', '84', false, 2026), ('00', 'Inconnu', NULL, false, 2026)
+    ON CONFLICT DO NOTHING;
 INSERT INTO silver.ref_certificateur (certificateur_libelle, est_dispense, date_premiere_observation)
-    VALUES ('Organisme test', false, '2026-11-05');
+    VALUES ('Organisme test CI', false, '2026-11-05');
 INSERT INTO silver.operateur (numero_bio, siret_statut, denomination, code_postal, code_postal_statut,
                               code_departement, methode_rattachement, est_present,
                               date_premiere_observation, date_derniere_observation)
-    VALUES (1, 'ABSENT', 'Test', '01000', 'VALIDE', '01', 'CODE_POSTAL', true, '2026-11-05', '2026-11-05');
+    VALUES (-1, 'ABSENT', 'Test', '01000', 'VALIDE', '01', 'CODE_POSTAL', true, '2026-11-05', '2026-11-05');
 INSERT INTO silver.certification (numero_bio, certificateur_id, date_engagement_statut, activites_liste,
                                   hash_attributs, date_debut, est_courant, est_chargement_initial, _execution_id)
-    SELECT 1, max(certificateur_id), 'ABSENTE', 'PRODUCTION', md5('x'), '2026-11-05', true, true, max(e.execution_id)
+    SELECT -1, max(certificateur_id), 'ABSENTE', 'PRODUCTION', md5('x'), '2026-11-05', true, true, max(e.execution_id)
     FROM silver.ref_certificateur, audit.execution e;
 DO $$
 BEGIN
@@ -205,22 +207,22 @@ BEGIN
         INSERT INTO silver.certification (numero_bio, certificateur_id, date_engagement_statut, activites_liste,
                                           hash_attributs, date_debut, est_courant, est_chargement_initial, _execution_id)
             SELECT numero_bio, certificateur_id, 'ABSENTE', 'PREPARATION', md5('y'), '2026-11-06', true, false, _execution_id
-            FROM silver.certification;
+            FROM silver.certification WHERE numero_bio = -1;
         RAISE EXCEPTION 'Deux versions courantes pour la même certification auraient dû être refusées';
     EXCEPTION WHEN unique_violation THEN NULL;  -- refus attendu
     END;
     BEGIN
-        UPDATE silver.certification SET date_fin = '2026-11-06';  -- fermée mais encore marquée courante
+        UPDATE silver.certification SET date_fin = '2026-11-06' WHERE numero_bio = -1;  -- fermée mais encore marquée courante
         RAISE EXCEPTION 'Une version fermée marquée courante aurait dû être refusée';
     EXCEPTION WHEN check_violation THEN NULL;
     END;
     BEGIN
-        UPDATE silver.operateur SET siret = '12345678901234';  -- SIRET présent avec le statut ABSENT
+        UPDATE silver.operateur SET siret = '12345678901234' WHERE numero_bio = -1;  -- SIRET présent avec le statut ABSENT
         RAISE EXCEPTION 'Un SIRET incohérent avec son statut aurait dû être refusé';
     EXCEPTION WHEN check_violation THEN NULL;
     END;
     BEGIN
-        UPDATE silver.operateur SET code_departement = '00';  -- département inconnu avec la méthode CODE_POSTAL
+        UPDATE silver.operateur SET code_departement = '00' WHERE numero_bio = -1;  -- département inconnu avec la méthode CODE_POSTAL
         RAISE EXCEPTION 'Un rattachement incohérent aurait dû être refusé';
     EXCEPTION WHEN check_violation THEN NULL;
     END;
@@ -228,6 +230,59 @@ BEGIN
         INSERT INTO silver.ref_departement VALUES ('99', 'Étranger', '84', false, 2026);
         RAISE EXCEPTION 'Un membre spécial rattaché à une région aurait dû être refusé';
     EXCEPTION WHEN check_violation THEN NULL;
+    END;
+END $$;
+ROLLBACK;
+
+\echo '== Test 11 : la fusion de l''annuaire historise les certifications (SCD 2)'
+-- Deux copies fictives (2099) d'un opérateur fictif (-2), puis tout est annulé.
+BEGIN;
+SET ROLE etl_writer;
+DELETE FROM silver.annuaire_prepare;
+INSERT INTO silver.ref_region VALUES ('84', 'Auvergne-Rhône-Alpes', 2026) ON CONFLICT DO NOTHING;
+INSERT INTO silver.ref_departement VALUES ('01', 'Ain', '84', false, 2026) ON CONFLICT DO NOTHING;
+INSERT INTO silver.ref_activite VALUES ('PRODUCTION', 'Production', 'production'),
+                                       ('TRANSPORT', 'Transport', 'logistique') ON CONFLICT DO NOTHING;
+INSERT INTO audit.execution (job_nom, couche, date_copie) VALUES ('test_ci', 'silver', '2099-01-01');
+INSERT INTO silver.annuaire_prepare
+    VALUES (-2, NULL, 'ABSENT', 'Test', '01000', 'VALIDE', '01', 'CODE_POSTAL', '2020-01-01', 'VALIDE',
+            'Production', 'Organisme test CI', 1, currval('audit.execution_execution_id_seq'));
+CALL silver.verifier_ordre_copie('2099-01-01');
+CALL silver.ajouter_certificateurs('2099-01-01');
+CALL silver.fusionner_operateurs('2099-01-01');
+CALL silver.historiser_certifications('2099-01-01', currval('audit.execution_execution_id_seq'));
+-- Copie suivante : une activité de plus
+INSERT INTO audit.execution (job_nom, couche, date_copie) VALUES ('test_ci', 'silver', '2099-01-02');
+UPDATE silver.annuaire_prepare SET activites = 'Production,Transport';
+CALL silver.verifier_ordre_copie('2099-01-02');
+CALL silver.fusionner_operateurs('2099-01-02');
+CALL silver.historiser_certifications('2099-01-02', currval('audit.execution_execution_id_seq'));
+DO $$
+BEGIN
+    IF (SELECT count(*) FROM silver.certification WHERE numero_bio = -2) <> 2 THEN
+        RAISE EXCEPTION 'Un changement d''activités doit créer une seconde version';
+    END IF;
+    IF NOT EXISTS (SELECT 1 FROM silver.certification
+                   WHERE numero_bio = -2 AND date_fin = '2099-01-02' AND NOT est_courant) THEN
+        RAISE EXCEPTION 'L''ancienne version doit être fermée à la date de la copie suivante';
+    END IF;
+    IF (SELECT activites_liste FROM silver.certification WHERE numero_bio = -2 AND est_courant)
+       <> 'PRODUCTION,TRANSPORT' THEN
+        RAISE EXCEPTION 'La version courante doit porter la nouvelle liste d''activités';
+    END IF;
+    IF (SELECT count(*) FROM silver.certification_activite a
+        JOIN silver.certification v USING (certification_version_id)
+        WHERE v.numero_bio = -2 AND v.est_courant) <> 2 THEN
+        RAISE EXCEPTION 'La version courante doit avoir ses 2 activités';
+    END IF;
+    IF (SELECT date_derniere_observation FROM silver.operateur WHERE numero_bio = -2) <> '2099-01-02' THEN
+        RAISE EXCEPTION 'L''opérateur doit être mis à jour (SCD 1)';
+    END IF;
+    BEGIN
+        CALL silver.verifier_ordre_copie('2099-01-01');
+        RAISE EXCEPTION 'Une copie plus ancienne que la dernière historisée aurait dû être refusée';
+    EXCEPTION WHEN raise_exception THEN
+        IF SQLERRM NOT LIKE 'Copie du %' THEN RAISE; END IF;  -- seul le refus attendu est accepté
     END;
 END $$;
 ROLLBACK;

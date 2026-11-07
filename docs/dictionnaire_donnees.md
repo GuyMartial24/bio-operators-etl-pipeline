@@ -154,6 +154,15 @@ Grain : une version de certification × une activité. Alimentation : `silver_an
 | `certification_version_id` | `bigint` PK, FK | non | Version de certification |
 | `activite_code` | `text` PK, FK | non | Activité |
 
+### `silver.annuaire_prepare` (table de travail)
+
+Grain : une ligne de l'annuaire nettoyée, pour la copie en cours. Alimentation : `silver_annuaire` (Talend, routine `Nettoyage`). **Vidée à chaque exécution.**
+Mêmes colonnes nettoyées que `silver.operateur` et `silver.certification`, plus `activites` et `certificateur_libelle` (texte de l'annuaire), `_numero_ligne` et `_execution_id`.
+
+### `silver.certification_copie` (vue)
+
+Les certifications de la copie en cours, calculées à partir de `annuaire_prepare` : une ligne par `numero_bio` + `certificateur_id`, doublons fusionnés (union des activités, date d'engagement la plus ancienne), `activites_liste` triée et `hash_attributs`. Sert de point de comparaison à la SCD 2.
+
 ---
 
 ## Schéma `gold`
