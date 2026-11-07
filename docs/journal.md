@@ -455,3 +455,14 @@ c'est éviter de refaire les jobs quand on découvre une erreur de grain.
 - Test 12 : aucune colonne `denomination`, `siret` ou `numero_bio` en gold, lecture par `bi_reader`, membres `-1`.
 - Premiers résultats : 88 074 opérateurs, 61 992 producteurs ; le Gers est le premier département producteur (1 940).
 - Testé : reconstruction (6 s), échec (`ECHEC`, gold intact). Une procédure `LANGUAGE sql` vérifie toutes ses tables avant la première instruction : une table absente échoue avant le `TRUNCATE`.
+
+## Étape 10 — Orchestration avec Airflow (07/11/2026)
+
+- **Jobs portables** : le fichier de contexte implicite est choisi par la variable `TALEND_CONTEXTE` (`System.getenv().getOrDefault(...)`), avec le fichier du PC par défaut. Un seul build pour tous les environnements.
+- **Build Job** : chaque job devient un programme Java autonome (`talend/build`, non versionné), lancé par `<job>_run.sh`. Le mot de passe n'est pas dans le build. `--context_param nom=valeur` remplace une variable au lancement. Le code de sortie (0 = réussite) est ce que lit Airflow.
+- **Image** `airflow/Dockerfile` : `apache/airflow:3.3.2-python3.12` + `openjdk-17-jre-headless`, version figée, nettoyage dans la même couche, retour à l'utilisateur `airflow`.
+- **Base de métadonnées** séparée (`sql/init/09_airflow.sh`) : base et rôle `airflow`, sans accès à `bio_observatoire`. Nécessaire au `LocalExecutor` (SQLite n'autorise qu'une tâche à la fois).
+- **Service `airflow`** (mode `standalone`) : volumes pour les DAG, les jobs exportés (`:ro`), le fichier de contexte Docker (`:ro`) et les données. Les chemins de droite sont ceux de l'image (`/opt/airflow/dags`, `logs`) ou ceux que l'on choisit, à condition de les utiliser partout pareil.
+- **DAG `pipeline_bio`** : 5 `BashOperator` créés par une fonction, tous les jours à 6 h (Paris), `max_active_runs=1` (copies dans l'ordre), 2 relances, dépendances calquées sur les données (les deux bronze en parallèle).
+- **Pièges** : une commande `BashOperator` qui finit par `.sh` est prise pour un fichier modèle (`TemplateNotFound`) ; `{{ ds }}` est en UTC, donc minuit à Paris donnait la copie de la veille. Corrigé par `logical_date.in_timezone('Europe/Paris')`. `airflow tasks render` vérifie un modèle sans rien exécuter.
+- Testé avec `airflow dags test pipeline_bio 2026-11-05` : les 5 jobs en 36 s, dans l'ordre, avec la bonne date de copie.
