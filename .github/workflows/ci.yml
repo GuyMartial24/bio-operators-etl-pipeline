@@ -26,7 +26,7 @@ jobs:
       - name: Créer un .env de test (mots de passe aléatoires, jetables)
         run: |
           cp .env.example .env
-          for var in POSTGRES_PASSWORD ETL_WRITER_PASSWORD BI_READER_PASSWORD QA_READER_PASSWORD; do
+          for var in POSTGRES_PASSWORD ETL_WRITER_PASSWORD BI_READER_PASSWORD QA_READER_PASSWORD AIRFLOW_DB_PASSWORD; do
             sed -i "s/^${var}=.*/${var}=$(openssl rand -hex 16)/" .env
           done
 
@@ -34,7 +34,8 @@ jobs:
         run: docker compose config --quiet
 
       - name: Démarrer PostgreSQL et attendre qu'il soit prêt
-        run: docker compose up -d --wait
+        # Seulement le service postgres : Airflow n'est pas nécessaire pour tester la base
+        run: docker compose up -d --wait postgres
 
       - name: Lancer les tests de la base
         run: |
