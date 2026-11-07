@@ -384,6 +384,19 @@ c'est éviter de refaire les jobs quand on découvre une erreur de grain.
 - Testé : réussite (88 143 lignes en 7 s, empreintes identiques à PostgreSQL), relance sans doublon, échec (fichier absent → `ECHEC`, bronze intact grâce au rollback).
 - **Les séquences ne reculent jamais**, même après un `ROLLBACK` : des trous dans les identifiants sont normaux.
 
+### 6e. Le job `bronze_insee` (07/11/2026)
+
+- Job dupliqué de `bronze_agence_bio` : même prejob, même transaction, même postjob. Seuls les flux changent.
+- **Trois flux dans un job** (départements, régions, populations), enchaînés par **On Subjob Ok** puis un seul commit : tout ou rien sur les 3 tables.
+- **Millésimes en variables du job** (`millesime_cog = 2026`, `millesime_population = 2023`) ; `_date_copie` = 1er janvier du millésime, la même date pour la purge et l'écriture.
+- **Formats différents :** COG en `,` avec guillemets et fin de ligne LF ; populations en `;` sans guillemets et en CRLF (séparateur de lignes `"\r\n"`, sinon un `\r` reste collé à la dernière colonne).
+- **`Numeric.sequence` :** un compteur par nom pour toute la durée du job, donc un nom par flux.
+- **Copier-coller de composants :** tout est copié, y compris ce qui devient faux (fichier, séquence, hash, table). Renommer un lien sortant d'un tMap crée une nouvelle sortie vide : ne pas le faire.
+- **Compteurs additionnés en SQL avec `coalesce`** : après un échec, les compteurs des flux non exécutés valent `null` ; en Java, l'addition planterait dans le postjob.
+- Testé : réussite (219 lignes en 0,8 s, empreintes identiques à PostgreSQL), relance sans doublon, échec du dernier flux (`ECHEC`, départements et régions annulés par le rollback).
+- **Mayotte** est absente du fichier des populations 2023 : pas d'indicateur par habitant pour ce département.
+- Limite : après un échec, `nb_lignes_ecrites` compte des lignes ensuite annulées par le rollback. Le statut `ECHEC` indique que rien n'est resté.
+
 ## Étape 7 — Simplification du périmètre (06/11/2026)
 
 **Décision :** réduire le projet pour le terminer, sans perdre ce que l'offre demande.

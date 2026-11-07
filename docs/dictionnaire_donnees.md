@@ -18,7 +18,7 @@ Toutes les colonnes de source sont en `text`, sans transformation. Accès : `etl
 | Colonne | Type | Null | Description |
 |---|---|---|---|
 | `_execution_id` | `bigint` | non | Exécution qui a chargé la ligne (`audit.execution`) |
-| `_date_copie` | `date` | non | Date de la version de la source |
+| `_date_copie` | `date` | non | Date de la version de la source. Source annuelle : 1er janvier du millésime (`2026-01-01` pour le COG 2026) |
 | `_fichier_source` | `text` | non | Chemin du fichier, relatif à `data/raw` |
 | `_numero_ligne` | `integer` | non | Numéro de la ligne dans le fichier, hors en-tête |
 | `_hash_ligne` | `char(32)` | non | MD5 des valeurs de la ligne séparées par `;` (identique à `md5(concat_ws(';', …))` de PostgreSQL) |
@@ -249,7 +249,7 @@ Grain : une exécution d'un job. Rétention : 2 ans.
 | `dag_run_id` | `text` | oui | Exécution Airflow (vide pour un lancement manuel) |
 | `job_nom` | `text` | non | Nom du job Talend |
 | `couche` | `text` | non | `bronze`, `silver`, `gold` |
-| `date_copie` | `date` | oui | Version de la source traitée |
+| `date_copie` | `date` | oui | Version de la source traitée. Vide si le job lit plusieurs versions (`bronze_insee` : COG 2026 et populations 2023) |
 | `date_debut` | `timestamptz` | non | Début du job (`DEFAULT now()`) |
 | `date_fin` | `timestamptz` | oui | Fin du job ; obligatoire si le statut n'est plus `EN_COURS` |
 | `statut` | `text` | non | `EN_COURS`, `SUCCES`, `ECHEC` |
