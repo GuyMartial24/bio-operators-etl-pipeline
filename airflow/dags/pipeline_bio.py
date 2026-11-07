@@ -14,11 +14,15 @@ réglages (hôte, mot de passe, dossier des données) dans le fichier indiqué
 par la variable d'environnement TALEND_CONTEXTE.
 """
 
+import logging
 from datetime import timedelta
+from pathlib import Path
 
 import pendulum
+import requests
 from airflow.providers.standard.operators.bash import BashOperator
-from airflow.sdk import DAG
+from airflow.sdk import DAG, task
+
 
 # Dossier des jobs exportés, côté conteneur (partie droite du volume
 # « ./talend/build:/opt/talend/jobs:ro » dans docker-compose.yml).
@@ -38,6 +42,74 @@ PARAMETRE_DATE_COPIE = (
     " --context_param date_copie="
     "{{ logical_date.in_timezone('" + FUSEAU + "').strftime('%Y-%m-%d') }}"
 )
+
+# Adresse stable de l'annuaire sur data.gouv.fr : elle redirige toujours
+# vers la dernière version, publiée chaque nuit par l'Agence Bio.
+URL_ANNUAIRE = (
+    "https://www.data.gouv.fr/api/1/datasets/r/"
+    "657789db-d349-4554-aef6-eabde4bd1c57"
+)
+
+# Dossier des copies, côté conteneur : une copie par date, comme
+# l'attend le job bronze_agence_bio.
+DOSSIER_ANNUAIRE = Path("/opt/airflow/data/raw/agence_bio")
+
+# En-tête attendu : s'il change, la source a changé de structure et le
+# job bronze échouerait plus loin, avec un message moins clair.
+EN_TETE_ANNUAIRE = (
+    "SIRET;NUMERO BIO;DENOMINATION;CODE POSTAL SIEGE SOCIAL;"
+    "DATEENGAGEMENT;ACTIVITES;ORGANISME CERTIFICATEUR"
+)
+
+log = logging.getLogger(__name__)
+
+
+@task
+def telecharger_annuaire(logical_date=None):
+    """Télécharge la copie du jour de l'annuaire, si elle n'existe pas.
+
+    Args:
+        logical_date: date logique de l'exécution, fournie par Airflow.
+
+    Returns:
+        Le chemin du fichier de la copie, côté conteneur.
+
+    Raises:
+        ValueError: copie d'un jour passé introuvable, ou en-tête inattendu.
+    """
+    date_copie = logical_date.in_timezone(FUSEAU).strftime("%Y-%m-%d")
+    fichier = DOSSIER_ANNUAIRE / date_copie / "operateursbio.csv"
+
+    # Idempotence : une copie déjà téléchargée n'est jamais remplacée.
+    # Relancer un jour passé retraite donc la copie de ce jour-là.
+    if fichier.exists():
+        log.info("Copie déjà présente : %s", fichier)
+        return str(fichier)
+
+    # La source ne fournit que la dernière version : on ne télécharge
+    # que pour la date du jour.
+    if date_copie != pendulum.now(FUSEAU).strftime("%Y-%m-%d"):
+        raise ValueError(
+            f"Copie du {date_copie} absente : la source ne fournit que "
+            "la version du jour."
+        )
+
+    reponse = requests.get(URL_ANNUAIRE, timeout=120)
+    reponse.raise_for_status()
+    contenu = reponse.content
+
+    premiere_ligne = contenu.split(b"\n", 1)[0].decode("utf-8").strip()
+    if premiere_ligne != EN_TETE_ANNUAIRE:
+        raise ValueError(f"En-tête inattendu : {premiere_ligne!r}")
+
+    # Écriture dans un fichier temporaire, puis renommage : le job bronze
+    # ne peut jamais lire un fichier à moitié écrit.
+    fichier.parent.mkdir(parents=True, exist_ok=True)
+    temporaire = fichier.with_suffix(".tmp")
+    temporaire.write_bytes(contenu)
+    temporaire.replace(fichier)
+    log.info("%d octets écrits dans %s", len(contenu), fichier)
+    return str(fichier)
 
 
 def job_talend(nom, avec_date_copie=False):
@@ -86,6 +158,8 @@ with DAG(
 ):
     # Couche bronze : copie fidèle des sources. Les deux jobs sont
     # indépendants et s'exécutent en parallèle.
+        # Acquisition : la copie du jour de l'annuaire, avant la couche bronze.
+    telecharger = telecharger_annuaire()
     bronze_agence_bio = job_talend("bronze_agence_bio", avec_date_copie=True)
     bronze_insee = job_talend("bronze_insee")
 
@@ -100,3 +174,5 @@ with DAG(
     # silver_annuaire attend l'annuaire en bronze et ref_departement en silver.
     bronze_insee >> silver_referentiels
     [bronze_agence_bio, silver_referentiels] >> silver_annuaire >> gold_etoile
+    telecharger >> bronze_agence_bio
+
