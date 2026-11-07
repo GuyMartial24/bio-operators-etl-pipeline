@@ -94,9 +94,8 @@ DECLARE t text;
 BEGIN
     FOREACH t IN ARRAY ARRAY[
         'audit.execution', 'audit.rejet', 'audit.controle_qualite',
-        'bronze.agence_bio_operateur', 'bronze.laposte_code_postal',
-        'bronze.insee_cog_commune', 'bronze.insee_cog_departement', 'bronze.insee_cog_region',
-        'bronze.insee_population_departement', 'bronze.agreste_ra2020', 'bronze.sirene_etablissement'
+        'bronze.agence_bio_operateur', 'bronze.insee_cog_departement', 'bronze.insee_cog_region',
+        'bronze.insee_population_departement'
     ] LOOP
         IF to_regclass(t) IS NULL THEN
             RAISE EXCEPTION 'Table % absente', t;

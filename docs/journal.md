@@ -383,3 +383,30 @@ c'est éviter de refaire les jobs quand on découvre une erreur de grain.
 - **Idempotence et atomicité :** relancer une date remplace ses lignes. La purge et l'insertion sont dans **une transaction** (connexion sans auto-commit, tDBCommit, tDBRollback), alors que l'audit a sa propre connexion en auto-commit pour survivre à un échec.
 - Testé : réussite (88 143 lignes en 7 s, empreintes identiques à PostgreSQL), relance sans doublon, échec (fichier absent → `ECHEC`, bronze intact grâce au rollback).
 - **Les séquences ne reculent jamais**, même après un `ROLLBACK` : des trous dans les identifiants sont normaux.
+
+### 6e. Le job `bronze_insee` (07/11/2026)
+
+- Job dupliqué de `bronze_agence_bio` : même prejob, même transaction, même postjob. Seuls les flux changent.
+- **Trois flux dans un job** (départements, régions, populations), enchaînés par **On Subjob Ok** puis un seul commit : tout ou rien sur les 3 tables.
+- **Millésimes en variables du job** (`millesime_cog = 2026`, `millesime_population = 2023`) ; `_date_copie` = 1er janvier du millésime, la même date pour la purge et l'écriture.
+- **Formats différents :** COG en `,` avec guillemets et fin de ligne LF ; populations en `;` sans guillemets et en CRLF (séparateur de lignes `"\r\n"`, sinon un `\r` reste collé à la dernière colonne).
+- **`Numeric.sequence` :** un compteur par nom pour toute la durée du job, donc un nom par flux.
+- **Copier-coller de composants :** tout est copié, y compris ce qui devient faux (fichier, séquence, hash, table). Renommer un lien sortant d'un tMap crée une nouvelle sortie vide : ne pas le faire.
+- **Compteurs additionnés en SQL avec `coalesce`** : après un échec, les compteurs des flux non exécutés valent `null` ; en Java, l'addition planterait dans le postjob.
+- Testé : réussite (219 lignes en 0,8 s, empreintes identiques à PostgreSQL), relance sans doublon, échec du dernier flux (`ECHEC`, départements et régions annulés par le rollback).
+- **Mayotte** est absente du fichier des populations 2023 : pas d'indicateur par habitant pour ce département.
+- Limite : après un échec, `nb_lignes_ecrites` compte des lignes ensuite annulées par le rollback. Le statut `ECHEC` indique que rien n'est resté.
+
+## Étape 7 — Simplification du périmètre (06/11/2026)
+
+**Décision :** réduire le projet pour le terminer, sans perdre ce que l'offre demande.
+
+- Sources : annuaire, départements et régions (COG), populations. **Écartées** : La Poste, SIRENE, recensement agricole (trop lourdes pour leur apport, restent des extensions possibles).
+- Département déduit du **code postal** (règle Corse, outre-mer, étranger) au lieu de la commune.
+- Axes : structure, marché, et développement par **date d'engagement**. Les sorties et changements de certificateur restent historisés en silver pour plus tard.
+- Silver : SCD 2 sur la seule `certification` ; `operateur` en SCD 1 (état courant).
+- Gold : **une étoile** (`fait_certification_activite` + 4 dimensions). Les indicateurs deviennent des mesures DAX dans Power BI.
+- Un seul notebook de contrôle qualité. Le VPS devient optionnel.
+- `sql/init/05_bronze.sql` : 4 tables bronze au lieu de 8 ; tables inutiles supprimées de la base locale sans la recréer (données gardées).
+
+**À retenir :** limiter le périmètre (*scope*) est une décision de projet à part entière. Un livrable terminé, documenté et testé vaut mieux qu'un projet plus large inachevé.
