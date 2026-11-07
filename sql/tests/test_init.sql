@@ -46,6 +46,17 @@ BEGIN
     END IF;
 END $$;
 
+\echo '== Test 3 bis : airflow n''a accès qu''à sa propre base'
+DO $$
+BEGIN
+    IF has_database_privilege('airflow', current_database(), 'CONNECT') THEN
+        RAISE EXCEPTION 'airflow ne doit pas pouvoir se connecter à la base des données';
+    END IF;
+    IF NOT has_database_privilege('airflow', 'airflow', 'CONNECT') THEN
+        RAISE EXCEPTION 'airflow doit pouvoir se connecter à sa base de métadonnées';
+    END IF;
+END $$;
+
 \echo '== Test 4 : qa_reader (notebooks) entre dans les 4 schémas, sans pouvoir y créer'
 DO $$
 DECLARE s text;

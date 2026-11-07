@@ -22,3 +22,7 @@ talend/*/temp/
 
 # Secrets Talend (modèle versionné : talend/contexte_local.properties.example)
 talend/contexte_local.properties
+talend/contexte_docker.properties
+
+# Jobs exportés par Build Job (régénérables)
+talend/build/
