@@ -167,7 +167,7 @@ Les certifications de la copie en cours, calculées à partir de `annuaire_prepa
 
 ## Schéma `gold`
 
-Alimentation : `gold_etoile`, quotidien, recalculé entièrement. Sensibilité : **interne, aucune donnée personnelle**.
+Alimentation : `gold_etoile`, quotidien, recalculé entièrement par la procédure `gold.reconstruire_etoile()` (`sql/init/08_gold.sql`). Sensibilité : **interne, aucune donnée personnelle**.
 Accès : `etl_writer`, `qa_reader`, `bi_reader`.
 
 ### `gold.dim_date`
@@ -202,6 +202,7 @@ Grain : un département, plus `99` (étranger), `00` et `-1` (inconnu).
 | Colonne | Type | Null | Description |
 |---|---|---|---|
 | `activite_id` | `smallint` PK | non | Clé technique (`-1` = inconnue) |
+| `activite_code` | `text` unique | non | Code (`PREPARATION`), sert à la jointure avec silver |
 | `activite_libelle` | `text` | non | Libellé |
 | `famille` | `text` | non | Famille d'activités |
 

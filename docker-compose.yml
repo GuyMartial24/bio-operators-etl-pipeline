@@ -15,6 +15,8 @@ services:
       ETL_WRITER_PASSWORD: ${ETL_WRITER_PASSWORD}
       BI_READER_PASSWORD: ${BI_READER_PASSWORD}
       QA_READER_PASSWORD: ${QA_READER_PASSWORD}
+      # Mot de passe du rôle airflow, lu par sql/init/09_airflow.sh
+      AIRFLOW_DB_PASSWORD: ${AIRFLOW_DB_PASSWORD}
       TZ: Europe/Paris
     ports:
       # Accessible uniquement depuis ce PC (127.0.0.1), pas depuis le réseau
@@ -30,5 +32,34 @@ services:
       timeout: 5s
       retries: 5
 
+  # Orchestrateur : lance chaque jour les jobs Talend exportés (talend/build), dans l'ordre.
+  # Interface web : http://localhost:8080
+  airflow:
+    build: ./airflow
+    image: bio-airflow:3.3.2
+    container_name: bio_airflow
+    restart: unless-stopped
+    command: standalone
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:${AIRFLOW_DB_PASSWORD}@postgres:5432/airflow
+      AIRFLOW__CORE__EXECUTOR: LocalExecutor
+      AIRFLOW__CORE__LOAD_EXAMPLES: "False"
+      AIRFLOW__CORE__DEFAULT_TIMEZONE: Europe/Paris
+      TALEND_CONTEXTE: /opt/talend/contexte_docker.properties
+      TZ: Europe/Paris
+    ports:
+      - "127.0.0.1:8080:8080"
+    volumes:
+      - ./airflow/dags:/opt/airflow/dags
+      - airflow_logs:/opt/airflow/logs
+      - ./talend/build:/opt/talend/jobs:ro
+      - ./talend/contexte_docker.properties:/opt/talend/contexte_docker.properties:ro
+      - ./data:/opt/airflow/data
+
 volumes:
   pgdata:
+  airflow_logs:
+

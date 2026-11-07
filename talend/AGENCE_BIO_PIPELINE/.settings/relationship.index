@@ -19,6 +19,25 @@
   } ]
 }, {
   "baseItem" : {
+    "id" : "_gMD3QNq9EfGpkIxm4-3qeg",
+    "version" : "0.1",
+    "type" : "job"
+  },
+  "relatedItems" : [ {
+    "id" : "_NXvqQNnZEfGbtZkEuG976g",
+    "version" : "Latest",
+    "type" : "context"
+  }, {
+    "id" : "_YCWWUNnaEfGbtZkEuG976g",
+    "version" : "Latest",
+    "type" : "property"
+  }, {
+    "id" : "Empreinte",
+    "version" : "Latest",
+    "type" : "routine"
+  } ]
+}, {
+  "baseItem" : {
     "id" : "_kvxaoNobEfGpkIxm4-3qeg",
     "version" : "0.1",
     "type" : "job"

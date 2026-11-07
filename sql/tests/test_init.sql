@@ -46,6 +46,17 @@ BEGIN
     END IF;
 END $$;
 
+\echo '== Test 3 bis : airflow n''a accès qu''à sa propre base'
+DO $$
+BEGIN
+    IF has_database_privilege('airflow', current_database(), 'CONNECT') THEN
+        RAISE EXCEPTION 'airflow ne doit pas pouvoir se connecter à la base des données';
+    END IF;
+    IF NOT has_database_privilege('airflow', 'airflow', 'CONNECT') THEN
+        RAISE EXCEPTION 'airflow doit pouvoir se connecter à sa base de métadonnées';
+    END IF;
+END $$;
+
 \echo '== Test 4 : qa_reader (notebooks) entre dans les 4 schémas, sans pouvoir y créer'
 DO $$
 DECLARE s text;
@@ -98,7 +109,9 @@ BEGIN
         'bronze.insee_population_departement',
         'silver.ref_region', 'silver.ref_departement', 'silver.population_departement',
         'silver.ref_activite', 'silver.ref_certificateur', 'silver.operateur',
-        'silver.certification', 'silver.certification_activite', 'silver.annuaire_prepare'
+        'silver.certification', 'silver.certification_activite', 'silver.annuaire_prepare',
+        'gold.dim_date', 'gold.dim_departement', 'gold.dim_activite', 'gold.dim_certificateur',
+        'gold.fait_certification_activite'
     ] LOOP
         IF to_regclass(t) IS NULL THEN
             RAISE EXCEPTION 'Table % absente', t;
@@ -284,6 +297,36 @@ BEGIN
     EXCEPTION WHEN raise_exception THEN
         IF SQLERRM NOT LIKE 'Copie du %' THEN RAISE; END IF;  -- seul le refus attendu est accepté
     END;
+END $$;
+ROLLBACK;
+
+\echo '== Test 12 : gold ne contient aucune donnée personnelle et se reconstruit'
+DO $$
+BEGIN
+    IF EXISTS (SELECT 1 FROM information_schema.columns
+               WHERE table_schema = 'gold' AND column_name IN ('denomination', 'siret', 'numero_bio')) THEN
+        RAISE EXCEPTION 'gold ne doit contenir ni nom, ni SIRET, ni numéro bio';
+    END IF;
+    IF NOT has_table_privilege('bi_reader', 'gold.fait_certification_activite', 'SELECT')
+       OR NOT has_table_privilege('bi_reader', 'gold.dim_departement', 'SELECT') THEN
+        RAISE EXCEPTION 'bi_reader doit pouvoir lire l''étoile';
+    END IF;
+END $$;
+BEGIN;
+SET ROLE etl_writer;
+CALL gold.reconstruire_etoile();
+DO $$
+BEGIN
+    IF (SELECT count(*) FROM gold.dim_date WHERE date_id = -1) <> 1
+       OR (SELECT count(*) FROM gold.dim_departement WHERE departement_id = -1) <> 1
+       OR (SELECT count(*) FROM gold.dim_activite WHERE activite_id = -1) <> 1
+       OR (SELECT count(*) FROM gold.dim_certificateur WHERE certificateur_id = -1) <> 1 THEN
+        RAISE EXCEPTION 'Chaque dimension doit avoir son membre -1';
+    END IF;
+    IF NOT EXISTS (SELECT 1 FROM gold.dim_date WHERE date = '1994-01-01')
+       OR (SELECT mois_libelle FROM gold.dim_date WHERE date_id = 20260815) <> 'août' THEN
+        RAISE EXCEPTION 'Le calendrier doit commencer en 1994 et nommer les mois en français';
+    END IF;
 END $$;
 ROLLBACK;
 

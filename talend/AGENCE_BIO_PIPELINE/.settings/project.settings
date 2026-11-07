@@ -287,7 +287,7 @@
         "show" : true,
         "field" : "FILE",
         "name" : "IMPLICIT_TCONTEXTLOAD_FILE",
-        "value" : "\"F:/Projets_Data/bio-operators-etl-pipeline/talend/contexte_local.properties\"",
+        "value" : "System.getenv().getOrDefault(\"TALEND_CONTEXTE\", \"F:/Projets_Data/bio-operators-etl-pipeline/talend/contexte_local.properties\")",
         "contextMode" : false
       }, {
         "show" : true,

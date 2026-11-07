@@ -443,3 +443,15 @@ c'est éviter de refaire les jobs quand on découvre une erreur de grain.
 - **« Arrêter en cas d'erreur »** est aussi décoché par défaut sur `tDBRow` : corrigé sur les purges des jobs bronze et sur les appels de ce job. Il reste décoché sur `audit_fermer`, pour que le rollback et la fermeture s'exécutent toujours.
 - **Performance** : premier chargement en 2 min 10. Cause : les statistiques d'une table vide (PostgreSQL relisait 88 000 fois la table en cours de remplissage). Corrigé par `ANALYZE` après chaque remplissage et `enable_nestloop = off` dans la procédure SCD 2 : 9 s.
 - Testé : premier chargement (88 074 opérateurs, 88 141 certifications, 134 260 activités, 2 doublons fusionnés), relance sans aucun changement, échec de la dernière instruction (`ECHEC`, tout annulé y compris le `TRUNCATE`), rechargement qui restaure une valeur altérée.
+
+## Étape 9 — Couche gold (07/11/2026)
+
+- `sql/init/08_gold.sql` : l'étoile (`fait_certification_activite` + `dim_date`, `dim_departement`, `dim_activite`, `dim_certificateur`), un index par clé de dimension, un membre `-1` par dimension.
+- **Procédure `gold.reconstruire_etoile()`** : `TRUNCATE` puis recalcul complet depuis les versions courantes de silver. Dans la transaction du job, Power BI voit l'ancienne étoile ou la nouvelle, jamais un état intermédiaire.
+- **Clés techniques déterministes** (`row_number() over (order by code)`) : les mêmes à chaque reconstruction tant que les référentiels ne changent pas.
+- **Calendrier** généré par `generate_series`, de 1994 à la fin de l'année suivante, mois en français.
+- **Job `gold_etoile`** : un appel de la procédure, puis un comptage dans la transaction (lignes lues en silver, faits écrits en gold) transmis à l'audit par la globalMap. **Contrôle de rapprochement** : 134 260 lues = 134 260 écrites.
+- **Pourquoi ne pas compter dans `audit_fermer`** : en cas d'échec, il s'exécute avant le rollback, sur l'autre connexion ; il attendrait les verrous du `TRUNCATE`, et le rollback ne viendrait jamais.
+- Test 12 : aucune colonne `denomination`, `siret` ou `numero_bio` en gold, lecture par `bi_reader`, membres `-1`.
+- Premiers résultats : 88 074 opérateurs, 61 992 producteurs ; le Gers est le premier département producteur (1 940).
+- Testé : reconstruction (6 s), échec (`ECHEC`, gold intact). Une procédure `LANGUAGE sql` vérifie toutes ses tables avant la première instruction : une table absente échoue avant le `TRUNCATE`.
