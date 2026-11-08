@@ -1,5 +1,7 @@
 # Observatoire territorial de la filière bio
 
+**Auteur : Martial GADJEU** | Data & AI Engineer
+
 Pipeline de données de bout en bout qui transforme l'annuaire public des **88 000 opérateurs bio certifiés en France**
 en tableau de bord de pilotage : où la filière manque-t-elle de transformateurs, comment se développe-t-elle,
 et qui la certifie ?
@@ -139,3 +141,7 @@ Annuaire des opérateurs bio : Agence Bio, sur [data.gouv.fr](https://www.data.g
 (Licence Ouverte). Code officiel géographique et populations légales : INSEE. Contours des départements :
 fichier `departements-version-simplifiee.geojson` du projet france-geojson, converti en TopoJSON
 ([`powerbi/cartes`](powerbi/cartes)).
+
+## Auteur
+
+**Martial GADJEU** | Data & AI Engineer
