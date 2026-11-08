@@ -1,0 +1,43 @@
+table Mesures
+	lineageTag: b5f38e6c-71f7-4d4e-a27c-e5f9db72955c
+
+	measure 'Nb opérateurs' = DISTINCTCOUNT ( Faits[operateur_id] )
+		formatString: #,0
+		lineageTag: cff1ec2d-03fd-4761-9a1f-594fa32b134c
+
+	measure 'Nb producteurs' = CALCULATE ( [Nb opérateurs], 'Activité'[famille] = "production" )
+		formatString: #,0
+		lineageTag: 97a1a402-e948-4415-9a1d-ddaf88619bf7
+
+	measure 'Nb transformateurs' = CALCULATE ( [Nb opérateurs], 'Activité'[famille] = "transformation" )
+		formatString: #,0
+		lineageTag: 8c74c438-aab7-4863-bcf6-d12600f81244
+
+	measure 'Nb distributeurs' = CALCULATE ( [Nb opérateurs], 'Activité'[famille] = "distribution" )
+		formatString: #,0
+		lineageTag: 5481d8af-5100-4f47-bc73-d37b7685d88f
+
+	measure 'Ratio de transformation' = DIVIDE ( [Nb transformateurs], [Nb producteurs] )
+		formatString: 0\ %;-0\ %;0\ %
+		lineageTag: 0fa81437-030e-4f5c-9f0e-a56ce1c547e3
+
+	measure Population = SUM ( 'Département'[population] )
+		formatString: #,0
+		lineageTag: 0023ed5f-7e54-4161-9675-53b14ffa7332
+
+	measure 'Producteurs pour 10 000 habitants' = DIVIDE ( [Nb producteurs], [Population] ) * 10000
+		formatString: 0.0
+		lineageTag: 7fedf7e5-e8c1-48d3-84d6-6076ca38e698
+
+	partition Mesures = m
+		mode: import
+		source =
+				let
+				    Source = Table.FromRows(Json.Document(Binary.Decompress(Binary.FromText("i44FAA==", BinaryEncoding.Base64), Compression.Deflate)), let _t = ((type nullable text) meta [Serialized.Text = true]) in type table [#"Colonne 1" = _t]),
+				    #"Type modifié" = Table.TransformColumnTypes(Source,{{"Colonne 1", type text}}),
+				    #"Colonnes supprimées" = Table.RemoveColumns(#"Type modifié",{"Colonne 1"})
+				in
+				    #"Colonnes supprimées"
+
+	annotation PBI_ResultType = Table
+

@@ -63,10 +63,13 @@ table Faits
 
 	column nb_operateur_activite
 		dataType: int64
+		isHidden
 		formatString: 0
 		lineageTag: 2e4bcadb-391a-4443-898c-b4ecb00d29c5
 		summarizeBy: sum
 		sourceColumn: nb_operateur_activite
+
+		changedProperty = IsHidden
 
 		annotation SummarizationSetBy = Automatic
 

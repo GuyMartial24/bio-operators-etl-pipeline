@@ -18,7 +18,7 @@
             "height": 224,
             "width": 234
           },
-          "zIndex": 1
+          "zIndex": 5
         },
         {
           "location": {
@@ -30,7 +30,7 @@
             "height": 287,
             "width": 235
           },
-          "zIndex": 3
+          "zIndex": 2
         },
         {
           "location": {
@@ -42,7 +42,7 @@
             "height": 176,
             "width": 234
           },
-          "zIndex": 4
+          "zIndex": 3
         },
         {
           "location": {
@@ -54,19 +54,33 @@
             "height": 152,
             "width": 234
           },
-          "zIndex": 5
+          "zIndex": 4
         },
         {
           "location": {
-            "x": 840.80208126043874,
-            "y": 268.88769625698308
+            "x": 396.80208126043874,
+            "y": 484.88769625698308
           },
           "nodeIndex": "Date",
+          "nodeLineageTag": "a3efe74b-9c29-424c-9e60-72c38dd332af",
           "size": {
             "height": 239,
             "width": 234
           },
-          "zIndex": 2
+          "zIndex": 1
+        },
+        {
+          "location": {
+            "x": 764.80208126043863,
+            "y": 262.887696256983
+          },
+          "nodeIndex": "Mesures",
+          "nodeLineageTag": "b5f38e6c-71f7-4d4e-a27c-e5f9db72955c",
+          "size": {
+            "height": 261,
+            "width": 234
+          },
+          "zIndex": 6
         }
       ],
       "name": "Toutes les tables",
