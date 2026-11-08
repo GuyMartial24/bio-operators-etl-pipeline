@@ -487,3 +487,12 @@ c'est éviter de refaire les jobs quand on découvre une erreur de grain.
 - **Page Marché** : parts de marché en certifications (100 % au total), HHI et niveau de concentration, segment des régions, définition du HHI. France 3 782 (très concentré), de 3 297 (Pays de la Loire) à 10 000 (Mayotte).
 - **Pièges** : cliquer sur une icône de visuel transforme le visuel sélectionné ; une sélection (barre, ligne) filtre toute la page ; la nouvelle carte abrège les nombres (mesures `FORMAT` d'affichage) ; trier une mesure texte trie par ordre alphabétique.
 - Chaque chiffre a été vérifié en SQL sur gold.
+
+## Étape 13 — CI étendue (08/11/2026)
+
+- **Second job de CI**, « Code Python et DAG Airflow », en parallèle du job de la base.
+- **ruff** (`ruff.toml`) : PEP 8, erreurs (noms inconnus, imports inutiles), ordre des imports, pièges courants. Il a relevé un vrai risque dans le notebook : `zip()` sans `strict=True` aurait perdu un résultat sans erreur si les deux listes différaient.
+- **Test du DAG** (`airflow/tests/test_dag.py`) : chargé dans l'image officielle d'Airflow 3.3.2, il doit se lire sans erreur, avec ses 7 tâches, ses dépendances exactes, `max_active_runs = 1` et le fuseau de Paris. Vérifié sur deux erreurs volontaires (faute de frappe, dépendance supprimée) : les deux font échouer la CI.
+- **Contrôle du notebook** (`notebooks/qualite/verifier_notebook.py`) : format Jupyter, cellule `parameters` avec `date_copie` pour papermill, syntaxe de chaque cellule, aucune erreur enregistrée.
+- Actions GitHub passées aux versions sous Node.js 24 (`checkout@v7`, `setup-python@v7`).
+- En Airflow 3.3, `DagBag` a changé : import depuis `airflow.dag_processing.dagbag`, et `dags` plutôt que `get_dag()`, qui interroge la base de métadonnées.
