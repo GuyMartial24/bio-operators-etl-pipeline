@@ -218,5 +218,84 @@
       ]
     },
     "drillFilterOtherVisuals": true
+  },
+  "filterConfig": {
+    "filters": [
+      {
+        "name": "c2bb007f6090d231336c",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "Département"
+              }
+            },
+            "Property": "code_departement"
+          }
+        },
+        "type": "Categorical"
+      },
+      {
+        "name": "b0e1c7ccec5b783151c8",
+        "field": {
+          "Aggregation": {
+            "Expression": {
+              "Column": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "Département"
+                  }
+                },
+                "Property": "departement_libelle"
+              }
+            },
+            "Function": 3
+          }
+        },
+        "type": "Advanced"
+      },
+      {
+        "name": "1d1997fe2a25106bc5bc",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "Mesures"
+              }
+            },
+            "Property": "Nb producteurs (affichage)"
+          }
+        },
+        "type": "Advanced"
+      },
+      {
+        "name": "d324154cada7593c8945",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "Mesures"
+              }
+            },
+            "Property": "Ratio de transformation"
+          }
+        },
+        "type": "Advanced"
+      },
+      {
+        "name": "4f64dbef406a0c82292b",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "Mesures"
+              }
+            },
+            "Property": "Producteurs pour 10 000 habitants"
+          }
+        },
+        "type": "Advanced"
+      }
+    ]
   }
 }
