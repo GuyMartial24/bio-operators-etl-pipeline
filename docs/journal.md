@@ -496,3 +496,15 @@ c'est éviter de refaire les jobs quand on découvre une erreur de grain.
 - **Contrôle du notebook** (`notebooks/qualite/verifier_notebook.py`) : format Jupyter, cellule `parameters` avec `date_copie` pour papermill, syntaxe de chaque cellule, aucune erreur enregistrée.
 - Actions GitHub passées aux versions sous Node.js 24 (`checkout@v7`, `setup-python@v7`).
 - En Airflow 3.3, `DagBag` a changé : import depuis `airflow.dag_processing.dagbag`, et `dags` plutôt que `get_dag()`, qui interroge la base de métadonnées.
+
+## Étape 14 — Mise en production sur un serveur Ubuntu (08/11/2026)
+
+- **Serveur** : Ubuntu 24.04, processeur ARM (aarch64), Oracle Cloud, Docker 29 et Compose 5 déjà installés, et d'autres services en place (k3s, Ollama, un agent web sur le port 8080). Projet cloné dans le dossier des projets en production.
+- **Adaptations** : port d'Airflow réglable (`AIRFLOW_PORT=8081`, 8080 étant pris), plafonds de mémoire (`mem_limit`), image Airflow reconstruite pour ARM. Les jobs Talend, en Java, n'ont pas eu besoin d'être réexportés.
+- **Secrets** : générés sur le serveur par `openssl rand`, jamais affichés ; `.env` en `600`. Le fichier de contexte Talend appartient à l'utilisateur 50000 (celui d'Airflow dans le conteneur), seul à pouvoir le lire. Sur Linux, contrairement à Docker Desktop, les droits des fichiers montés comptent.
+- **Fichiers hors Git** copiés par `scp` (jobs exportés, données INSEE, copies de l'annuaire) ; droits corrigés (`chmod go+rX`), `data/raw/agence_bio` donné à l'utilisateur 50000 pour le téléchargement quotidien.
+- **Historique migré** : `pg_dump --data-only` des schémas audit, bronze, silver et gold, `pg_restore --data-only --disable-triggers --single-transaction` ; les compteurs suivent (114 à 119 consommés par des transactions annulées, sans conséquence). Le DAG du poste a été mis en pause avant l'export.
+- **Vérifications** : les 13 séries de tests de la base passent sur le serveur ; `dags test` sur la copie du 8 novembre : 7 tâches en succès en 37 s, aucune version SCD 2 créée, 13 contrôles qualité `OK`. DAG activé : première exécution autonome le 9 novembre à 6 h.
+- **Accès** : tunnels SSH uniquement, `-L 8081` pour Airflow et `-L 5433` pour PostgreSQL (Power BI). Aucun port supplémentaire ouvert sur Internet. Le poste reste l'environnement de développement.
+- **Maintenance découverte** : la mise à jour automatique d'Ubuntu était bloquée depuis 140 jours (`apt-get update` figé, verrou tenu) ; arrêtée proprement par `systemctl stop apt-daily.service`, après quoi les correctifs de sécurité ont pu s'installer. Ne jamais supprimer le fichier de verrou.
+- **Pièges** : `sudo` consomme les lignes collées après lui (une commande `sudo` par bloc) ; les scripts `.sh` venant de Windows sont « sourcés » et non « exécutés » par l'image PostgreSQL (sans conséquence).
