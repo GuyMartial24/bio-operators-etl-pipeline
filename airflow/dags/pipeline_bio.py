@@ -23,7 +23,6 @@ import requests
 from airflow.providers.standard.operators.bash import BashOperator
 from airflow.sdk import DAG, task
 
-
 # Dossier des jobs exportés, côté conteneur (partie droite du volume
 # « ./talend/build:/opt/talend/jobs:ro » dans docker-compose.yml).
 DOSSIER_JOBS = "/opt/talend/jobs"
@@ -176,7 +175,7 @@ with DAG(
 
     # Couche gold : l'étoile, recalculée entièrement.
     gold_etoile = job_talend("gold_etoile")
-    
+
     # Contrôle qualité : le notebook vérifie les données réelles et
     # enregistre ses résultats dans audit.controle_qualite.
     controle_qualite = BashOperator(
