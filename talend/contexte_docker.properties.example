@@ -1,0 +1,6 @@
+# Modèle : copier en contexte_docker.properties (jamais versionné) et mettre le mot de passe de etl_writer.
+# Lu par les jobs exportés dans le conteneur Airflow (variable TALEND_CONTEXTE).
+pg_hote=postgres
+pg_port=5432
+dossier_donnees=/opt/airflow/data
+pg_mot_de_passe=changer_moi
