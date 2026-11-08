@@ -58,7 +58,7 @@ table Département
 		dataType: int64
 		formatString: 0
 		lineageTag: 8080eb2e-3bf7-4402-94ec-9d84a1ec84b4
-		summarizeBy: none
+		summarizeBy: sum
 		sourceColumn: population
 
 		annotation SummarizationSetBy = Automatic
@@ -67,7 +67,7 @@ table Département
 		dataType: int64
 		formatString: 0
 		lineageTag: 7d0180cb-545a-4dd6-8f4d-ad9e1a37849d
-		summarizeBy: none
+		summarizeBy: sum
 		sourceColumn: annee_population
 
 		annotation SummarizationSetBy = Automatic

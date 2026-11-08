@@ -71,6 +71,18 @@ table Mesures
 		formatString: 0
 		lineageTag: 594789a5-3969-4376-b7e1-2e258e887335
 
+	measure Entrées = CALCULATE ( DISTINCTCOUNT ( Mouvements[operateur_id] ), Mouvements[type_mouvement] = "ENTREE" )
+		formatString: 0
+		lineageTag: d42c383e-2186-458f-8b98-73ec44e588d3
+
+	measure Sorties = CALCULATE ( DISTINCTCOUNT ( Mouvements[operateur_id] ), Mouvements[type_mouvement] = "SORTIE" )
+		formatString: 0
+		lineageTag: b46e97be-35d7-4cce-8b9f-64064b77af14
+
+	measure Solde = [Entrées] - [Sorties]
+		formatString: 0
+		lineageTag: 4a4da2ec-37b8-4291-a8bd-789b9de27ff4
+
 	partition Mesures = m
 		mode: import
 		source =

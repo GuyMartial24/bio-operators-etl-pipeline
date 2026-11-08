@@ -14,3 +14,15 @@ relationship eb77da96-c5c8-e62a-0805-00271612008e
 	fromColumn: Faits.date_engagement_id
 	toColumn: Date.date_id
 
+relationship AutoDetected_652bf9df-537c-4d1d-a87a-f5f65ac3a93d
+	fromColumn: Mouvements.certificateur_id
+	toColumn: Organisme.certificateur_id
+
+relationship AutoDetected_ce0fdcc8-ac60-4c4d-9302-f2f78039e072
+	fromColumn: Mouvements.departement_id
+	toColumn: Département.departement_id
+
+relationship 5ea66bec-d1ff-cb32-689b-c48132a82d29
+	fromColumn: Mouvements.date_mouvement_id
+	toColumn: Date.date_id
+

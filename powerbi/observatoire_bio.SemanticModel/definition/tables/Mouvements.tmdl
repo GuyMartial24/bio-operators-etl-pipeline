@@ -1,0 +1,84 @@
+table Mouvements
+	lineageTag: 7e581eb6-8e7a-4f67-96a5-c1e666b89f8b
+
+	column operateur_id
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 73871a14-f68f-46a7-a92b-4ace78bd792f
+		summarizeBy: sum
+		sourceColumn: operateur_id
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column date_mouvement_id
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 3f08511a-3d00-4a63-8914-134f528c0293
+		summarizeBy: none
+		sourceColumn: date_mouvement_id
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column type_mouvement
+		dataType: string
+		lineageTag: 64770d88-7a1b-4de2-9fa8-2757d1e7c315
+		summarizeBy: none
+		sourceColumn: type_mouvement
+
+		annotation SummarizationSetBy = Automatic
+
+	column certificateur_id
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 8c3e58c7-dbd6-48d9-af10-708e9a31bb32
+		summarizeBy: none
+		sourceColumn: certificateur_id
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column departement_id
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 0dc05abb-176c-4d8b-b586-8b60d956720b
+		summarizeBy: none
+		sourceColumn: departement_id
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column nb_mouvement
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 14da19aa-dc2d-4ccc-904c-5c9b31c3cf86
+		summarizeBy: sum
+		sourceColumn: nb_mouvement
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Mouvements = m
+		mode: import
+		source =
+				let
+				    Source = PostgreSQL.Database("127.0.0.1:5432", "bio_observatoire"),
+				    gold_fait_mouvement = Source{[Schema="gold",Item="fait_mouvement"]}[Data]
+				in
+				    gold_fait_mouvement
+
+	changedProperty = Name
+
+	annotation PBI_ResultType = Table
+

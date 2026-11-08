@@ -15,7 +15,7 @@ table Date
 
 	column date
 		dataType: dateTime
-		formatString: Long Date
+		formatString: dd/mm/yyyy
 		lineageTag: 2c2ad929-3f6a-40c5-9ad6-ff6ba579e474
 		summarizeBy: none
 		sourceColumn: date
@@ -23,6 +23,8 @@ table Date
 		annotation SummarizationSetBy = Automatic
 
 		annotation UnderlyingDateTimeDataType = Date
+
+		annotation PBI_FormatHint = {"isDateTimeCustom":true}
 
 	column annee
 		dataType: int64
