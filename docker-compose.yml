@@ -31,9 +31,11 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+    # Plafond de mémoire : le conteneur ne peut pas priver les autres services de la machine
+    mem_limit: ${POSTGRES_MEMOIRE:-1g}
 
   # Orchestrateur : lance chaque jour les jobs Talend exportés (talend/build), dans l'ordre.
-  # Interface web : http://localhost:8080
+  # Interface web : http://localhost:<AIRFLOW_PORT> (8080 par défaut ; tunnel SSH sur un serveur)
   airflow:
     build: ./airflow
     image: bio-airflow:3.3.2
@@ -51,13 +53,15 @@ services:
       TALEND_CONTEXTE: /opt/talend/contexte_docker.properties
       # Mot de passe de l'interface conservé hors du conteneur (sinon régénéré à chaque recréation)
       AIRFLOW__CORE__SIMPLE_AUTH_MANAGER_PASSWORDS_FILE: /opt/airflow/auth/passwords.json
-
       # Notebook de contrôle qualité : connexion à la base avec le rôle qa_reader
       PG_HOTE: postgres
       QA_READER_PASSWORD: ${QA_READER_PASSWORD}
       TZ: Europe/Paris
     ports:
-      - "127.0.0.1:8080:8080"
+      # Port de la machine réglable (AIRFLOW_PORT), toujours limité à 127.0.0.1
+      - "127.0.0.1:${AIRFLOW_PORT:-8080}:8080"
+    # Airflow, ses processus et les jobs Java (jusqu'à 1 Go chacun, deux en parallèle)
+    mem_limit: ${AIRFLOW_MEMOIRE:-4g}
     volumes:
       - ./airflow/dags:/opt/airflow/dags
       - airflow_logs:/opt/airflow/logs
@@ -67,11 +71,7 @@ services:
       - ./notebooks:/opt/airflow/notebooks:ro
       - airflow_auth:/opt/airflow/auth
 
-
-
 volumes:
   pgdata:
   airflow_logs:
   airflow_auth:
-
-
