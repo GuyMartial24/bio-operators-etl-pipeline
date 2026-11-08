@@ -38,6 +38,39 @@ table Mesures
 	measure 'Nb transformateurs (affichage)' = FORMAT ( [Nb transformateurs], "# ##0" )
 		lineageTag: 28d0da55-aeb2-4350-9ab4-e65cb24b6a17
 
+	measure 'Seuil producteurs (quartile haut)' =
+			
+			PERCENTILEX.INC (
+			    FILTER ( ALL ( 'Département' ), 'Département'[population] > 0 ),
+			    [Nb producteurs],
+			    0.75
+			)
+		lineageTag: 172bac60-f943-4941-9270-b233bf77f4a7
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Seuil ratio (quartile bas)' =
+			
+			PERCENTILEX.INC (
+			    FILTER ( ALL ( 'Département' ), 'Département'[population] > 0 ),
+			    [Ratio de transformation],
+			    0.25
+			)
+		lineageTag: cb028a30-edd1-404f-b780-f9efb579447d
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Désert de transformation' =
+			
+			IF (
+			    [Nb producteurs] >= [Seuil producteurs (quartile haut)]
+			        && [Ratio de transformation] <= [Seuil ratio (quartile bas)],
+			    1,
+			    0
+			)
+		formatString: 0
+		lineageTag: 594789a5-3969-4376-b7e1-2e258e887335
+
 	partition Mesures = m
 		mode: import
 		source =

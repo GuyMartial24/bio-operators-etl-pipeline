@@ -70,6 +70,34 @@
               },
               "queryRef": "Mesures.Ratio de transformation",
               "nativeQueryRef": "Ratio de transformation"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Mesures"
+                    }
+                  },
+                  "Property": "Désert de transformation"
+                }
+              },
+              "queryRef": "Mesures.Désert de transformation",
+              "nativeQueryRef": "Désert de transformation"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Mesures"
+                    }
+                  },
+                  "Property": "Producteurs pour 10 000 habitants"
+                }
+              },
+              "queryRef": "Mesures.Producteurs pour 10 000 habitants",
+              "nativeQueryRef": "Producteurs pour 10 000 habitants"
             }
           ]
         }
@@ -148,6 +176,34 @@
               }
             },
             "Property": "Ratio de transformation"
+          }
+        },
+        "type": "Advanced"
+      },
+      {
+        "name": "b7f19221903a5207085d",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "Mesures"
+              }
+            },
+            "Property": "Désert de transformation"
+          }
+        },
+        "type": "Advanced"
+      },
+      {
+        "name": "7786d0d8204008e627c8",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "Mesures"
+              }
+            },
+            "Property": "Producteurs pour 10 000 habitants"
           }
         },
         "type": "Advanced"
