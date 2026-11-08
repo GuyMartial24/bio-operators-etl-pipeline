@@ -76,12 +76,10 @@ table Département
 		mode: import
 		source =
 				let
-				    Source = PostgreSQL.Database("127.0.0.1:5432", "bio_observatoire"),
+				    Source = PostgreSQL.Database("127.0.0.1:5433", "bio_observatoire"),
 				    gold_dim_departement = Source{[Schema="gold",Item="dim_departement"]}[Data]
 				in
 				    gold_dim_departement
-
-	changedProperty = Name
 
 	annotation PBI_ResultType = Table
 
