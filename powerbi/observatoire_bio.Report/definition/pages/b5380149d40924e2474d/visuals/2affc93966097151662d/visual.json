@@ -3,10 +3,10 @@
   "name": "2affc93966097151662d",
   "position": {
     "x": 1352.7648578811368,
-    "y": 4.9612403100775193,
+    "y": 4.961240310077519,
     "z": 3000,
-    "height": 644.96124031007753,
-    "width": 459.74160206718341,
+    "height": 644.9612403100775,
+    "width": 459.7416020671834,
     "tabOrder": 3000
   },
   "visual": {
@@ -37,12 +37,11 @@
                       "Entity": "Mesures"
                     }
                   },
-                  "Property": "HHI (affichage)"
+                  "Property": "HHI"
                 }
               },
-              "queryRef": "Mesures.HHI (affichage)",
-              "nativeQueryRef": "HHI ",
-              "displayName": "HHI "
+              "queryRef": "Mesures.HHI",
+              "nativeQueryRef": "HHI"
             },
             {
               "field": {
@@ -71,7 +70,7 @@
                     "Entity": "Mesures"
                   }
                 },
-                "Property": "HHI (affichage)"
+                "Property": "HHI"
               }
             },
             "direction": "Descending"
@@ -155,7 +154,7 @@
                 "Entity": "Mesures"
               }
             },
-            "Property": "HHI (affichage)"
+            "Property": "HHI"
           }
         },
         "type": "Advanced"
