@@ -34,12 +34,14 @@ et les aides à la structuration des filières bio.
 
 | Indicateur | Définition |
 |---|---|
-| Engagements | Nb d'opérateurs par année d'engagement (historique depuis 1994) |
+| Engagements | Nb d'opérateurs actifs par année d'engagement (historique depuis 1994 ; biais du survivant : les sortis n'y figurent pas) |
 | Croissance | Évolution annuelle des engagements par département et par activité |
 
-Les sorties et les changements de certificateur ne se voient qu'en comparant des copies successives du fichier.
-L'historique SCD 2 de la couche silver les enregistre à partir de la première copie (05/11/2026) :
-ils pourront être ajoutés au tableau de bord quand plusieurs mois de copies seront disponibles.
+| Entrées et sorties | Opérateurs entrés dans la filière ou sortis, jour par jour, depuis le début du suivi |
+
+Les entrées et sorties ne se voient qu'en comparant des copies successives du fichier. L'historique SCD 2 de la
+couche silver les enregistre depuis la première copie (05/11/2026), et gold les expose (`fait_mouvement`) :
+la courbe s'allonge d'un point chaque jour.
 
 ### Axe 3 — Marché : la certification
 
@@ -47,9 +49,9 @@ ils pourront être ajoutés au tableau de bord quand plusieurs mois de copies se
 
 | Indicateur | Définition |
 |---|---|
-| Part de marché | Nb d'opérateurs certifiés par organisme / total, par région |
+| Part de marché | Certifications (opérateur × organisme) de l'organisme / total, hors dispenses, dans la zone choisie |
 | Concentration (HHI) | Somme des carrés des parts de marché (> 2 500 = marché très concentré) |
-| Leader local | Organisme majoritaire par département |
+| Leader local | Organisme majoritaire par département (extension possible, non réalisée) |
 
 ## Sources de données
 
@@ -92,7 +94,7 @@ Elles restent des extensions possibles.
 |---|---|---|
 | **Bronze** | Données brutes, telles que reçues | Aucune transformation, tout en texte, plus 6 colonnes techniques. Relancer une copie la remplace (idempotence) |
 | **Silver** | Données nettoyées, typées et modélisées : opérateurs, certifications, activités, référentiels | Valeurs douteuses qualifiées, activités éclatées, département déduit, historique SCD 2 des certifications, rejets tracés |
-| **Gold** | Modèle en étoile prêt pour Power BI | Une table de faits et 4 dimensions, sans donnée personnelle. Les indicateurs sont calculés dans Power BI |
+| **Gold** | Modèle en constellation prêt pour Power BI | Deux tables de faits (état du jour, entrées et sorties) et 4 dimensions partagées, sans donnée personnelle. Les indicateurs sont calculés dans Power BI |
 
 Flux : `fichiers sources → bronze → silver → gold → Power BI`
 
@@ -104,7 +106,8 @@ Flux : `fichiers sources → bronze → silver → gold → Power BI`
 | Silver | `silver_referentiels`, `silver_annuaire` | Clés uniques, une seule version courante, part des départements inconnus, rejets |
 | Gold | `gold_etoile` | Totaux cohérents avec silver, aucune clé orpheline |
 
-**Airflow** enchaîne chaque jour : jobs bronze → jobs silver → job gold → contrôle qualité.
+**Airflow** enchaîne chaque jour à 6 h : téléchargement de l'annuaire → jobs bronze → jobs silver → job gold
+→ contrôle qualité. Le pipeline tourne en production sur un serveur Ubuntu (voir le README).
 Si un job ou un contrôle échoue, la chaîne s'arrête et Power BI garde les dernières données valides.
 
 Les notebooks sont rangés par usage : `notebooks/exploration/` (comprendre les sources, lancés à la main)
@@ -114,13 +117,15 @@ et `notebooks/qualite/` (contrôle, exécuté par Airflow avec Papermill).
 
 | Couche | Modèle | Pourquoi |
 |---|---|---|
-| Silver | Modèle relationnel normalisé, avec **historique SCD de type 2** sur les certifications | Chaque changement d'une certification (activités, date) ou sa disparition crée une version datée (`date_debut`, `date_fin`, `est_courant`). C'est la base des futurs indicateurs de sorties et de changements de certificateur |
-| Gold | **Modèle en étoile** | Le modèle de référence des entrepôts de données et de Power BI : requêtes simples, filtres rapides |
+| Silver | Modèle relationnel normalisé, avec **historique SCD de type 2** sur les certifications | Chaque changement d'une certification (activités, date) ou sa disparition crée une version datée (`date_debut`, `date_fin`, `est_courant`). Elle alimente les entrées et sorties d'opérateurs exposées en gold |
+| Gold | **Modèle en constellation** (deux étoiles qui partagent leurs dimensions) | Le modèle de référence des entrepôts de données et de Power BI : requêtes simples, filtres rapides, un grain par table de faits |
 
-Étoile de la couche gold :
+Constellation de la couche gold :
 
-- **Fait** `fait_certification_activite` : une ligne par certification en cours × activité
-- **Dimensions** : `dim_departement` (département, région, population), `dim_activite`, `dim_certificateur`, `dim_date` (date d'engagement)
+- **Fait** `fait_certification_activite` : une ligne par certification en cours × activité (l'état du jour)
+- **Fait** `fait_mouvement` : une ligne par entrée ou sortie d'opérateur, à une date
+- **Dimensions conformes**, partagées par les deux faits : `dim_departement` (département, région, population),
+  `dim_activite`, `dim_certificateur`, `dim_date` (date d'engagement ou date du mouvement)
 
 Détails : `docs/modele_donnees.md` et `docs/dictionnaire_donnees.md`.
 
@@ -129,7 +134,7 @@ Détails : `docs/modele_donnees.md` et `docs/dictionnaire_donnees.md`.
 | Thème | Mise en œuvre |
 |---|---|
 | **Responsabilités** | Un propriétaire par table (fiche dans le dictionnaire de données) |
-| **Sécurité** | Rôles PostgreSQL séparés : `etl_writer` (Talend, écriture), `bi_reader` (Power BI, lecture seule sur gold), `qa_reader` (notebook de contrôle, lecture). Mots de passe hors du code (`.env`, `talend/contexte_local.properties`, secrets GitHub) |
+| **Sécurité** | Rôles PostgreSQL séparés : `etl_writer` (Talend, écriture), `bi_reader` (Power BI, lecture seule sur gold), `qa_reader` (notebook de contrôle, lecture), `airflow` (sa base de métadonnées seulement). Mots de passe hors du code (`.env`, fichiers de contexte Talend), propres à chaque environnement, aléatoires en CI. En production, aucun port ouvert : accès par tunnels SSH |
 | **Données personnelles (RGPD)** | Les noms d'entrepreneurs individuels restent en silver, accès restreint. Gold et Power BI n'ont ni nom, ni SIRET, ni numéro bio |
 | **Rétention** | Règles par table (voir *Gestion du stockage*) |
 | **Audit** | `audit.execution` (chaque job : statut, lignes lues et écrites), `audit.rejet` (lignes refusées et motif), `audit.controle_qualite` (résultats des contrôles) |
@@ -145,11 +150,17 @@ Détails : `docs/modele_donnees.md` et `docs/dictionnaire_donnees.md`.
 | Gold | Quelques Mo | Recalculé à chaque exécution |
 | Audit | Faible | 2 ans ; `audit.rejet` 90 jours (peut contenir des noms) |
 
+Ces durées sont des **règles cibles** : leur purge automatique (tâche de rétention dans le DAG) reste à mettre en
+place. Une exécution référencée par une version SCD 2 ou une ligne bronze conservée ne peut pas être supprimée.
+
 ## Livrable final : tableau de bord Power BI
 
-1. **Vue d'ensemble** : chiffres clés, carte des opérateurs par département, engagements par année
-2. **Déserts de transformation** : carte de l'indice de désert, ratios par département
-3. **Marché de la certification** : parts de marché, HHI par région, leaders locaux
+Réalisé (`powerbi/observatoire_bio.pbip`, captures dans le README) :
+
+1. **Structure** : chiffres clés, carte de la densité de producteurs par département, nuage de points des
+   déserts de transformation avec leurs seuils
+2. **Développement** : opérateurs actifs par année d'engagement, entrées et sorties quotidiennes
+3. **Marché** : parts de marché des organismes, HHI et niveau de concentration, par région au choix
 
 ## Rôle de chaque technologie
 
@@ -161,4 +172,5 @@ Détails : `docs/modele_donnees.md` et `docs/dictionnaire_donnees.md`.
 | **Airflow** | Orchestration quotidienne : télécharger l'annuaire → jobs Talend → contrôle qualité |
 | **Docker** | PostgreSQL, Airflow et les jobs Talend dans des conteneurs, identiques en local et sur un serveur |
 | **Power BI Desktop** | Tableau de bord des trois axes, indicateurs en DAX |
-| **GitHub Actions** | CI : tests de la base, des DAG et du notebook. Déploiement sur le VPS en option |
+| **GitHub Actions** | CI : tests de la base, chargement du DAG dans Airflow, validation du notebook, style Python (ruff) |
+| **Serveur Ubuntu (VPS)** | Production : PostgreSQL et Airflow en conteneurs, exécution quotidienne autonome, accès par tunnels SSH |

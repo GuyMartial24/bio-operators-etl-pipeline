@@ -6,6 +6,7 @@ Les choix de modélisation sont justifiés dans le [modèle de données](modele_
 Chaque table a une fiche : **grain** (ce que représente une ligne), **alimentation** (job et fréquence), **rétention**,
 **sensibilité** (`Publique`, `Interne` = dérivée sans donnée personnelle, `Personnelle` = RGPD) et **accès** (rôles PostgreSQL).
 Propriétaire de toutes les tables : le data engineer du projet. Colonne **Null** : `non` si la valeur est obligatoire.
+Les durées de **rétention** sont des règles cibles : leur purge automatique reste à mettre en place.
 
 ---
 
