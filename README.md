@@ -31,38 +31,37 @@ avec ses données (`observatoire_bio.pbix`) dans la [dernière version publiée]
 
 ```mermaid
 flowchart LR
-    subgraph Sources["Sources ouvertes"]
-        A["Annuaire Agence Bio<br/>(data.gouv.fr, quotidien)"]
-        I["INSEE : départements,<br/>régions, populations"]
+    subgraph sources [Sources ouvertes]
+        annuaire["Annuaire Agence Bio, quotidien"]
+        insee["INSEE : départements, régions, populations"]
     end
-    subgraph Airflow["Airflow : DAG pipeline_bio, chaque jour à 6 h"]
-        T["telecharger_annuaire"]
-        subgraph Talend["Jobs Talend exportés"]
-            B1["bronze_agence_bio"]
-            B2["bronze_insee"]
-            S1["silver_referentiels"]
-            S2["silver_annuaire"]
-            G["gold_etoile"]
-        end
-        Q["controle_qualite<br/>(notebook, papermill)"]
+    subgraph orchestration [Airflow, chaque jour à 6 h]
+        telechargement["telecharger_annuaire"]
+        jobs["5 jobs Talend : bronze, silver, gold"]
+        qualite["controle_qualite (notebook)"]
     end
-    subgraph PG["PostgreSQL 17"]
-        BR[("bronze<br/>copie brute")]
-        SI[("silver<br/>nettoyé, historisé")]
-        GO[("gold<br/>modèle en étoile")]
-        AU[("audit")]
+    subgraph base [PostgreSQL 17]
+        bronze[("bronze : copie brute")]
+        silver[("silver : nettoyé, historisé")]
+        gold[("gold : constellation")]
+        audit[("audit")]
     end
-    PBI["Power BI<br/>3 pages, mesures DAX"]
+    powerbi["Power BI : 3 pages, mesures DAX"]
 
-    A --> T --> B1
-    I --> B2
-    B1 & B2 --> BR
-    S1 & S2 --> SI
-    G --> GO
-    GO --> Q
-    GO --> PBI
-    B1 & B2 & S1 & S2 & G & Q -.-> AU
+    annuaire --> telechargement
+    telechargement --> jobs
+    insee --> jobs
+    jobs --> bronze
+    bronze --> silver
+    silver --> gold
+    gold --> qualite
+    gold --> powerbi
+    jobs -.-> audit
+    qualite -.-> audit
 ```
+
+Les cinq jobs Talend, dans l'ordre de leurs dépendances : `bronze_agence_bio` et `bronze_insee` (en parallèle),
+`silver_referentiels`, `silver_annuaire`, puis `gold_etoile`.
 
 | Couche | Contenu | Points clés |
 |---|---|---|
@@ -137,17 +136,17 @@ mettre au point jobs et mesures sans toucher à la production.
 
 ```mermaid
 flowchart LR
-    subgraph PC["Poste de développement"]
-        N["Navigateur"]
-        P["Power BI Desktop"]
+    subgraph poste [Poste de développement]
+        navigateur["Navigateur"]
+        pbi["Power BI Desktop"]
     end
-    subgraph VPS["Serveur Ubuntu (ARM)"]
-        AF["Airflow<br/>127.0.0.1:8081"]
-        DB[("PostgreSQL<br/>127.0.0.1:5432")]
+    subgraph serveur [Serveur Ubuntu ARM]
+        airflow["Airflow sur 127.0.0.1:8081"]
+        postgres[("PostgreSQL sur 127.0.0.1:5432")]
     end
-    N -- "tunnel SSH<br/>-L 8081" --> AF
-    P -- "tunnel SSH<br/>-L 5433" --> DB
-    AF --> DB
+    navigateur -->|tunnel SSH, port 8081| airflow
+    pbi -->|tunnel SSH, port 5433| postgres
+    airflow --> postgres
 ```
 
 - **Aucun port ouvert sur Internet** : Airflow et PostgreSQL ne sont publiés que sur `127.0.0.1` du serveur. On y
