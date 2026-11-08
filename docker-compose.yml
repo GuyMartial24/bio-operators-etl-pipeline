@@ -49,6 +49,9 @@ services:
       AIRFLOW__CORE__LOAD_EXAMPLES: "False"
       AIRFLOW__CORE__DEFAULT_TIMEZONE: Europe/Paris
       TALEND_CONTEXTE: /opt/talend/contexte_docker.properties
+      # Mot de passe de l'interface conservé hors du conteneur (sinon régénéré à chaque recréation)
+      AIRFLOW__CORE__SIMPLE_AUTH_MANAGER_PASSWORDS_FILE: /opt/airflow/auth/passwords.json
+
       # Notebook de contrôle qualité : connexion à la base avec le rôle qa_reader
       PG_HOTE: postgres
       QA_READER_PASSWORD: ${QA_READER_PASSWORD}
@@ -62,9 +65,13 @@ services:
       - ./talend/contexte_docker.properties:/opt/talend/contexte_docker.properties:ro
       - ./data:/opt/airflow/data
       - ./notebooks:/opt/airflow/notebooks:ro
+      - airflow_auth:/opt/airflow/auth
+
 
 
 volumes:
   pgdata:
   airflow_logs:
+  airflow_auth:
+
 

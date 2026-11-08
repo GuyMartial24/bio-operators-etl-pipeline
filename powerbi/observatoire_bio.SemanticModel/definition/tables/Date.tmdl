@@ -1,0 +1,78 @@
+table Date
+	lineageTag: a3efe74b-9c29-424c-9e60-72c38dd332af
+
+	column date_id
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: a581af32-092f-4cc4-9015-794220df3b17
+		summarizeBy: none
+		sourceColumn: date_id
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column date
+		dataType: dateTime
+		formatString: dd/mm/yyyy
+		lineageTag: 2c2ad929-3f6a-40c5-9ad6-ff6ba579e474
+		summarizeBy: none
+		sourceColumn: date
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+		annotation PBI_FormatHint = {"isDateTimeCustom":true}
+
+	column annee
+		dataType: int64
+		formatString: 0
+		lineageTag: 0c180bed-34ee-4830-9505-398b5e405294
+		summarizeBy: none
+		sourceColumn: annee
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = User
+
+	column trimestre
+		dataType: int64
+		formatString: 0
+		lineageTag: fff7b0ac-e1ad-4e66-a673-b14d731e2fef
+		summarizeBy: none
+		sourceColumn: trimestre
+
+		annotation SummarizationSetBy = User
+
+	column mois
+		dataType: int64
+		formatString: 0
+		lineageTag: 22daa03c-2b72-4b0b-9895-c8be90556f3f
+		summarizeBy: none
+		sourceColumn: mois
+
+		annotation SummarizationSetBy = User
+
+	column mois_libelle
+		dataType: string
+		lineageTag: f0d629db-a230-4cc7-9e7b-83a334adb2a1
+		summarizeBy: none
+		sourceColumn: mois_libelle
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Date = m
+		mode: import
+		source =
+				let
+				    Source = PostgreSQL.Database("127.0.0.1:5432", "bio_observatoire"),
+				    gold_dim_date = Source{[Schema="gold",Item="dim_date"]}[Data]
+				in
+				    gold_dim_date
+
+	changedProperty = Name
+
+	annotation PBI_ResultType = Table
+

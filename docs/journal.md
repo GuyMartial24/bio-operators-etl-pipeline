@@ -475,3 +475,15 @@ c'est éviter de refaire les jobs quand on découvre une erreur de grain.
 - **Piège Windows** : `localhost` passe d'abord par IPv6 (`::1`), où PostgreSQL n'écoute pas ; sans délai maximal, la connexion attendait indéfiniment. Connexion par `127.0.0.1` et `connect_timeout`.
 - Première exécution automatique (08/11) : les 6 tâches en succès, lancée au réveil du PC ; 13 contrôles `OK`.
 - Piste d'évolution : passer les millésimes INSEE depuis Airflow (`--context_param`) pour éviter de reconstruire `bronze_insee` chaque année.
+
+## Étape 12 — Restitution Power BI (08/11/2026)
+
+- **Connexion** à gold avec `bi_reader` (127.0.0.1, mode Importer) : le navigateur ne montre que gold, la preuve que les noms ne quittent pas silver. Avertissement de connexion non chiffrée accepté en local ; sur le VPS, TLS ou tunnel SSH.
+- **Format projet `.pbip`** : rapport en JSON, modèle en TMDL (texte) ; Git montre chaque mesure et chaque relation modifiée. Cache des données et réglages locaux exclus de Git.
+- **Modèle** : relations détectées depuis les clés étrangères, relation de date créée à la main (noms différents : dimension jouant plusieurs rôles), date/heure automatique désactivée, clés masquées, table de faits entièrement masquée. Seconde table de faits `Mouvements` sur les mêmes dimensions : une constellation.
+- **DAX** : contexte de filtre, `CALCULATE`, `DIVIDE`, `ALL`, itérateurs (`PERCENTILEX.INC`, `SUMX`), `SWITCH(TRUE(), …)`. Les noms de tables accentués s'écrivent entre apostrophes. La ligne Total recalcule la mesure, elle n'additionne pas les lignes.
+- **Page Structure** : chiffres clés, carte de formes des départements (TopoJSON produit par `powerbi/cartes/geojson_vers_topojson.py`, échelle verte séquentielle), nuage de points des déserts de transformation avec seuils dynamiques. 7 déserts, dont 6 en Occitanie.
+- **Page Développement** : opérateurs actifs par année d'engagement (biais du survivant indiqué), entrées et sorties quotidiennes (`gold.fait_mouvement`, ajoutée à la reconstruction de l'étoile). Interactions coupées entre la date d'engagement et la date de mouvement.
+- **Page Marché** : parts de marché en certifications (100 % au total), HHI et niveau de concentration, segment des régions, définition du HHI. France 3 782 (très concentré), de 3 297 (Pays de la Loire) à 10 000 (Mayotte).
+- **Pièges** : cliquer sur une icône de visuel transforme le visuel sélectionné ; une sélection (barre, ligne) filtre toute la page ; la nouvelle carte abrège les nombres (mesures `FORMAT` d'affichage) ; trier une mesure texte trie par ordre alphabétique.
+- Chaque chiffre a été vérifié en SQL sur gold.

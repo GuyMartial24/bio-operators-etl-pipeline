@@ -1,0 +1,4180 @@
+cultureInfo fr-FR
+
+	linguisticMetadata =
+			{
+			  "Version": "4.1.0",
+			  "Language": "en-US",
+			  "Entities": {
+			    "mesure.nb_opérateurs_affichage": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "Mesures",
+			          "ConceptualProperty": "Nb opérateurs (affichage)"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "nb opérateurs (affichage)": {
+			            "State": "Generated"
+			          }
+			        },
+			        {
+			          "Nb opérateurs": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "mesure.nb_producteurs_affichage": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "Mesures",
+			          "ConceptualProperty": "Nb producteurs (affichage)"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "nb producteurs (affichage)": {
+			            "State": "Generated"
+			          }
+			        },
+			        {
+			          "Nb producteurs": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "mesure.nb_transformateurs_affichage": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "Mesures",
+			          "ConceptualProperty": "Nb transformateurs (affichage)"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "nb transformateurs (affichage)": {
+			            "State": "Generated"
+			          }
+			        },
+			        {
+			          "Nb transformateurs": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "activité": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "Activité"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "activité": {
+			            "State": "Generated"
+			          }
+			        }
+			      ]
+			    },
+			    "activité.activite_id": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "Activité",
+			          "ConceptualProperty": "activite_id"
+			        }
+			      },
+			      "State": "Generated",
+			      "Visibility": {
+			        "Value": "Hidden"
+			      },
+			      "Terms": [
+			        {
+			          "activite id": {
+			            "State": "Generated"
+			          }
+			        },
+			        {
+			          "activite_id": {
+			            "Type": "Noun",
+			            "State": "Generated",
+			            "Weight": 0.99
+			          }
+			        },
+			        {
+			          "activite identification": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.75
+			          }
+			        },
+			        {
+			          "activite identity": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.75
+			          }
+			        },
+			        {
+			          "activite identifier": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.75
+			          }
+			        },
+			        {
+			          "activite credential": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.727
+			          }
+			        }
+			      ]
+			    },
+			    "activité.activite_code": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "Activité",
+			          "ConceptualProperty": "activite_code"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "activite code": {
+			            "State": "Generated"
+			          }
+			        },
+			        {
+			          "activite_code": {
+			            "Type": "Noun",
+			            "State": "Generated",
+			            "Weight": 0.99
+			          }
+			        },
+			        {
+			          "activite key": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.727
+			          }
+			        }
+			      ]
+			    },
+			    "activité.activite_libelle": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "Activité",
+			          "ConceptualProperty": "activite_libelle"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "activite libelle": {
+			            "State": "Generated"
+			          }
+			        },
+			        {
+			          "activite_libelle": {
+			            "Type": "Noun",
+			            "State": "Generated",
+			            "Weight": 0.99
+			          }
+			        }
+			      ]
+			    },
+			    "activité.famille": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "Activité",
+			          "ConceptualProperty": "famille"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "famille": {
+			            "State": "Generated"
+			          }
+			        }
+			      ]
+			    },
+			    "organisme": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "Organisme"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "organisme": {
+			            "State": "Generated"
+			          }
+			        }
+			      ]
+			    },
+			    "organisme.certificateur_id": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "Organisme",
+			          "ConceptualProperty": "certificateur_id"
+			        }
+			      },
+			      "State": "Generated",
+			      "Visibility": {
+			        "Value": "Hidden"
+			      },
+			      "Terms": [
+			        {
+			          "certificateur id": {
+			            "State": "Generated"
+			          }
+			        },
+			        {
+			          "certificateur_id": {
+			            "Type": "Noun",
+			            "State": "Generated",
+			            "Weight": 0.99
+			          }
+			        },
+			        {
+			          "certificateur identification": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.75
+			          }
+			        },
+			        {
+			          "certificateur identity": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.75
+			          }
+			        },
+			        {
+			          "certificateur identifier": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.75
+			          }
+			        },
+			        {
+			          "certificateur credential": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.727
+			          }
+			        }
+			      ]
+			    },
+			    "organisme.certificateur_libelle": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "Organisme",
+			          "ConceptualProperty": "certificateur_libelle"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "certificateur libelle": {
+			            "State": "Generated"
+			          }
+			        },
+			        {
+			          "certificateur_libelle": {
+			            "Type": "Noun",
+			            "State": "Generated",
+			            "Weight": 0.99
+			          }
+			        }
+			      ]
+			    },
+			    "organisme.est_dispense": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "Organisme",
+			          "ConceptualProperty": "est_dispense"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "est dispense": {
+			            "State": "Generated"
+			          }
+			        },
+			        {
+			          "est_dispense": {
+			            "Type": "Noun",
+			            "State": "Generated",
+			            "Weight": 0.99
+			          }
+			        }
+			      ]
+			    },
+			    "date": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "Date"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "date": {
+			            "State": "Generated",
+			            "Weight": 0.87
+			          }
+			        },
+			        {
+			          "moment": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.736
+			          }
+			        },
+			        {
+			          "period": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.714
+			          }
+			        }
+			      ]
+			    },
+			    "date.date_id": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "Date",
+			          "ConceptualProperty": "date_id"
+			        }
+			      },
+			      "State": "Generated",
+			      "Visibility": {
+			        "Value": "Hidden"
+			      },
+			      "Terms": [
+			        {
+			          "date id": {
+			            "State": "Generated"
+			          }
+			        },
+			        {
+			          "date_id": {
+			            "Type": "Noun",
+			            "State": "Generated",
+			            "Weight": 0.99
+			          }
+			        },
+			        {
+			          "date identification": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.75
+			          }
+			        },
+			        {
+			          "date identity": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.75
+			          }
+			        },
+			        {
+			          "date identifier": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.75
+			          }
+			        },
+			        {
+			          "date credential": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.727
+			          }
+			        },
+			        {
+			          "moment id": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.6
+			          }
+			        },
+			        {
+			          "period id": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.582
+			          }
+			        }
+			      ]
+			    },
+			    "date.date": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "Date",
+			          "ConceptualProperty": "date"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "date": {
+			            "State": "Generated"
+			          }
+			        },
+			        {
+			          "moment": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.736
+			          }
+			        },
+			        {
+			          "period": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.714
+			          }
+			        }
+			      ],
+			      "SemanticType": "Time"
+			    },
+			    "date.annee": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "Date",
+			          "ConceptualProperty": "annee"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "annee": {
+			            "State": "Generated"
+			          }
+			        }
+			      ]
+			    },
+			    "date.trimestre": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "Date",
+			          "ConceptualProperty": "trimestre"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "trimestre": {
+			            "State": "Generated"
+			          }
+			        }
+			      ]
+			    },
+			    "date.mois": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "Date",
+			          "ConceptualProperty": "mois"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "mois": {
+			            "State": "Generated"
+			          }
+			        }
+			      ]
+			    },
+			    "date.mois_libelle": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "Date",
+			          "ConceptualProperty": "mois_libelle"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "mois libelle": {
+			            "State": "Generated"
+			          }
+			        },
+			        {
+			          "mois_libelle": {
+			            "Type": "Noun",
+			            "State": "Generated",
+			            "Weight": 0.99
+			          }
+			        }
+			      ]
+			    },
+			    "département": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "Département"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "département": {
+			            "State": "Generated"
+			          }
+			        }
+			      ]
+			    },
+			    "département.departement_id": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "Département",
+			          "ConceptualProperty": "departement_id"
+			        }
+			      },
+			      "State": "Generated",
+			      "Visibility": {
+			        "Value": "Hidden"
+			      },
+			      "Terms": [
+			        {
+			          "departement id": {
+			            "State": "Generated"
+			          }
+			        },
+			        {
+			          "departement_id": {
+			            "Type": "Noun",
+			            "State": "Generated",
+			            "Weight": 0.99
+			          }
+			        },
+			        {
+			          "departement identification": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.75
+			          }
+			        },
+			        {
+			          "departement identity": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.75
+			          }
+			        },
+			        {
+			          "departement identifier": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.75
+			          }
+			        },
+			        {
+			          "departement credential": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.727
+			          }
+			        }
+			      ]
+			    },
+			    "département.code_departement": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "Département",
+			          "ConceptualProperty": "code_departement"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "code departement": {
+			            "State": "Generated"
+			          }
+			        },
+			        {
+			          "code_departement": {
+			            "Type": "Noun",
+			            "State": "Generated",
+			            "Weight": 0.99
+			          }
+			        },
+			        {
+			          "id departement": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.6
+			          }
+			        },
+			        {
+			          "key departement": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.582
+			          }
+			        }
+			      ]
+			    },
+			    "département.departement_libelle": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "Département",
+			          "ConceptualProperty": "departement_libelle"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "departement libelle": {
+			            "State": "Generated"
+			          }
+			        },
+			        {
+			          "departement_libelle": {
+			            "Type": "Noun",
+			            "State": "Generated",
+			            "Weight": 0.99
+			          }
+			        }
+			      ]
+			    },
+			    "département.code_region": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "Département",
+			          "ConceptualProperty": "code_region"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "code region": {
+			            "State": "Generated"
+			          }
+			        },
+			        {
+			          "code_region": {
+			            "Type": "Noun",
+			            "State": "Generated",
+			            "Weight": 0.99
+			          }
+			        },
+			        {
+			          "region": {
+			            "State": "Generated",
+			            "Weight": 0.97
+			          }
+			        },
+			        {
+			          "code location": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.833
+			          }
+			        },
+			        {
+			          "location": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.818
+			          }
+			        },
+			        {
+			          "code province": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.75
+			          }
+			        },
+			        {
+			          "province": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.736
+			          }
+			        },
+			        {
+			          "code area": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.727
+			          }
+			        },
+			        {
+			          "code district": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.727
+			          }
+			        },
+			        {
+			          "code section": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.727
+			          }
+			        },
+			        {
+			          "code zone": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.727
+			          }
+			        },
+			        {
+			          "code continent": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.727
+			          }
+			        },
+			        {
+			          "area": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.714
+			          }
+			        }
+			      ]
+			    },
+			    "département.region_libelle": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "Département",
+			          "ConceptualProperty": "region_libelle"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "region libelle": {
+			            "State": "Generated"
+			          }
+			        },
+			        {
+			          "region_libelle": {
+			            "Type": "Noun",
+			            "State": "Generated",
+			            "Weight": 0.99
+			          }
+			        },
+			        {
+			          "location libelle": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.667
+			          }
+			        },
+			        {
+			          "province libelle": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.6
+			          }
+			        },
+			        {
+			          "area libelle": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.582
+			          }
+			        },
+			        {
+			          "district libelle": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.582
+			          }
+			        },
+			        {
+			          "section libelle": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.582
+			          }
+			        },
+			        {
+			          "zone libelle": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.582
+			          }
+			        },
+			        {
+			          "continent libelle": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.582
+			          }
+			        }
+			      ]
+			    },
+			    "département.est_outre_mer": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "Département",
+			          "ConceptualProperty": "est_outre_mer"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "est outre mer": {
+			            "State": "Generated"
+			          }
+			        },
+			        {
+			          "est_outre_mer": {
+			            "Type": "Noun",
+			            "State": "Generated",
+			            "Weight": 0.99
+			          }
+			        }
+			      ]
+			    },
+			    "département.population": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "Département",
+			          "ConceptualProperty": "population"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "population": {
+			            "State": "Generated"
+			          }
+			        },
+			        {
+			          "populace": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.491
+			          }
+			        },
+			        {
+			          "person": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.491
+			          }
+			        }
+			      ]
+			    },
+			    "département.annee_population": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "Département",
+			          "ConceptualProperty": "annee_population"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "annee population": {
+			            "State": "Generated"
+			          }
+			        },
+			        {
+			          "annee_population": {
+			            "Type": "Noun",
+			            "State": "Generated",
+			            "Weight": 0.99
+			          }
+			        },
+			        {
+			          "annee populace": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.5
+			          }
+			        },
+			        {
+			          "annee person": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.5
+			          }
+			        }
+			      ]
+			    },
+			    "fait": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "Faits"
+			        }
+			      },
+			      "State": "Generated",
+			      "Visibility": {
+			        "Value": "Hidden"
+			      },
+			      "Terms": [
+			        {
+			          "fait": {
+			            "State": "Generated"
+			          }
+			        }
+			      ]
+			    },
+			    "fait.operateur_id": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "Faits",
+			          "ConceptualProperty": "operateur_id"
+			        }
+			      },
+			      "State": "Generated",
+			      "Visibility": {
+			        "Value": "Hidden"
+			      },
+			      "Terms": [
+			        {
+			          "operateur id": {
+			            "State": "Generated"
+			          }
+			        },
+			        {
+			          "operateur_id": {
+			            "Type": "Noun",
+			            "State": "Generated",
+			            "Weight": 0.99
+			          }
+			        },
+			        {
+			          "operateur identification": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.75
+			          }
+			        },
+			        {
+			          "operateur identity": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.75
+			          }
+			        },
+			        {
+			          "operateur identifier": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.75
+			          }
+			        },
+			        {
+			          "operateur credential": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.727
+			          }
+			        }
+			      ]
+			    },
+			    "fait.certificateur_id": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "Faits",
+			          "ConceptualProperty": "certificateur_id"
+			        }
+			      },
+			      "State": "Generated",
+			      "Visibility": {
+			        "Value": "Hidden"
+			      },
+			      "Terms": [
+			        {
+			          "certificateur id": {
+			            "State": "Generated"
+			          }
+			        },
+			        {
+			          "certificateur_id": {
+			            "Type": "Noun",
+			            "State": "Generated",
+			            "Weight": 0.99
+			          }
+			        },
+			        {
+			          "certificateur identification": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.75
+			          }
+			        },
+			        {
+			          "certificateur identity": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.75
+			          }
+			        },
+			        {
+			          "certificateur identifier": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.75
+			          }
+			        },
+			        {
+			          "certificateur credential": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.727
+			          }
+			        }
+			      ]
+			    },
+			    "fait.activite_id": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "Faits",
+			          "ConceptualProperty": "activite_id"
+			        }
+			      },
+			      "State": "Generated",
+			      "Visibility": {
+			        "Value": "Hidden"
+			      },
+			      "Terms": [
+			        {
+			          "activite id": {
+			            "State": "Generated"
+			          }
+			        },
+			        {
+			          "activite_id": {
+			            "Type": "Noun",
+			            "State": "Generated",
+			            "Weight": 0.99
+			          }
+			        },
+			        {
+			          "activite identification": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.75
+			          }
+			        },
+			        {
+			          "activite identity": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.75
+			          }
+			        },
+			        {
+			          "activite identifier": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.75
+			          }
+			        },
+			        {
+			          "activite credential": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.727
+			          }
+			        }
+			      ]
+			    },
+			    "fait.departement_id": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "Faits",
+			          "ConceptualProperty": "departement_id"
+			        }
+			      },
+			      "State": "Generated",
+			      "Visibility": {
+			        "Value": "Hidden"
+			      },
+			      "Terms": [
+			        {
+			          "departement id": {
+			            "State": "Generated"
+			          }
+			        },
+			        {
+			          "departement_id": {
+			            "Type": "Noun",
+			            "State": "Generated",
+			            "Weight": 0.99
+			          }
+			        },
+			        {
+			          "departement identification": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.75
+			          }
+			        },
+			        {
+			          "departement identity": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.75
+			          }
+			        },
+			        {
+			          "departement identifier": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.75
+			          }
+			        },
+			        {
+			          "departement credential": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.727
+			          }
+			        }
+			      ]
+			    },
+			    "fait.date_engagement_id": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "Faits",
+			          "ConceptualProperty": "date_engagement_id"
+			        }
+			      },
+			      "State": "Generated",
+			      "Visibility": {
+			        "Value": "Hidden"
+			      },
+			      "Terms": [
+			        {
+			          "date engagement id": {
+			            "State": "Generated"
+			          }
+			        },
+			        {
+			          "date_engagement_id": {
+			            "Type": "Noun",
+			            "State": "Generated",
+			            "Weight": 0.99
+			          }
+			        },
+			        {
+			          "engagement": {
+			            "State": "Generated",
+			            "Weight": 0.97
+			          }
+			        },
+			        {
+			          "date engagement": {
+			            "State": "Generated",
+			            "Weight": 0.97
+			          }
+			        },
+			        {
+			          "engagement id": {
+			            "State": "Generated",
+			            "Weight": 0.97
+			          }
+			        },
+			        {
+			          "date engagement identification": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.762
+			          }
+			        },
+			        {
+			          "date engagement identity": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.762
+			          }
+			        },
+			        {
+			          "date engagement identifier": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.762
+			          }
+			        },
+			        {
+			          "engagement identification": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.75
+			          }
+			        },
+			        {
+			          "engagement identity": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.75
+			          }
+			        },
+			        {
+			          "engagement identifier": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.75
+			          }
+			        },
+			        {
+			          "date engagement credential": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.739
+			          }
+			        },
+			        {
+			          "engagement credential": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.727
+			          }
+			        },
+			        {
+			          "moment engagement id": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.609
+			          }
+			        },
+			        {
+			          "moment engagement": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.6
+			          }
+			        }
+			      ]
+			    },
+			    "fait.nb_operateur_activite": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "Faits",
+			          "ConceptualProperty": "nb_operateur_activite"
+			        }
+			      },
+			      "State": "Generated",
+			      "Visibility": {
+			        "Value": "Hidden"
+			      },
+			      "Terms": [
+			        {
+			          "nb operateur activite": {
+			            "State": "Generated"
+			          }
+			        },
+			        {
+			          "nb_operateur_activite": {
+			            "Type": "Noun",
+			            "State": "Generated",
+			            "Weight": 0.99
+			          }
+			        }
+			      ]
+			    },
+			    "mesure": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "Mesures"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "mesure": {
+			            "State": "Generated"
+			          }
+			        }
+			      ]
+			    },
+			    "mesure.nb_opérateurs": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "Mesures",
+			          "ConceptualProperty": "Nb opérateurs"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "nb opérateurs": {
+			            "State": "Generated"
+			          }
+			        }
+			      ]
+			    },
+			    "mesure.nb_producteurs": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "Mesures",
+			          "ConceptualProperty": "Nb producteurs"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "nb producteurs": {
+			            "State": "Generated"
+			          }
+			        }
+			      ]
+			    },
+			    "mesure.nb_transformateurs": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "Mesures",
+			          "ConceptualProperty": "Nb transformateurs"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "nb transformateurs": {
+			            "State": "Generated"
+			          }
+			        }
+			      ]
+			    },
+			    "mesure.nb_distributeurs": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "Mesures",
+			          "ConceptualProperty": "Nb distributeurs"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "nb distributeurs": {
+			            "State": "Generated"
+			          }
+			        }
+			      ]
+			    },
+			    "mesure.ratio_de_transformation": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "Mesures",
+			          "ConceptualProperty": "Ratio de transformation"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "ratio de transformation": {
+			            "State": "Generated"
+			          }
+			        },
+			        {
+			          "ratio de alteration": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.508
+			          }
+			        },
+			        {
+			          "ratio de conversion": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.508
+			          }
+			        },
+			        {
+			          "ratio de revolution": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.508
+			          }
+			        },
+			        {
+			          "ratio de renovation": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.508
+			          }
+			        },
+			        {
+			          "ratio de makeover": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.508
+			          }
+			        },
+			        {
+			          "ratio de change": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.492
+			          }
+			        }
+			      ]
+			    },
+			    "mesure.population": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "Mesures",
+			          "ConceptualProperty": "Population"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "population": {
+			            "State": "Generated"
+			          }
+			        },
+			        {
+			          "populace": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.491
+			          }
+			        },
+			        {
+			          "person": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.491
+			          }
+			        }
+			      ]
+			    },
+			    "mesure.producteurs_pour_10_000_habitants": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "Mesures",
+			          "ConceptualProperty": "Producteurs pour 10 000 habitants"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "producteurs pour 10 000 habitants": {
+			            "State": "Generated"
+			          }
+			        }
+			      ]
+			    },
+			    "mesure.seuil_producteurs_quartile_haut": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "Mesures",
+			          "ConceptualProperty": "Seuil producteurs (quartile haut)"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "seuil producteurs (quartile haut)": {
+			            "State": "Generated"
+			          }
+			        },
+			        {
+			          "seuil producteurs": {
+			            "State": "Generated",
+			            "Weight": 0.75
+			          }
+			        }
+			      ]
+			    },
+			    "mesure.seuil_ratio_quartile_bas": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "Mesures",
+			          "ConceptualProperty": "Seuil ratio (quartile bas)"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "seuil ratio (quartile bas)": {
+			            "State": "Generated"
+			          }
+			        },
+			        {
+			          "seuil ratio": {
+			            "State": "Generated",
+			            "Weight": 0.75
+			          }
+			        }
+			      ]
+			    },
+			    "mesure.désert_de_transformation": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "Mesures",
+			          "ConceptualProperty": "Désert de transformation"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "désert de transformation": {
+			            "State": "Generated"
+			          }
+			        },
+			        {
+			          "désert de alteration": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.508
+			          }
+			        },
+			        {
+			          "désert de conversion": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.508
+			          }
+			        },
+			        {
+			          "désert de revolution": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.508
+			          }
+			        },
+			        {
+			          "désert de renovation": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.508
+			          }
+			        },
+			        {
+			          "désert de makeover": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.508
+			          }
+			        },
+			        {
+			          "désert de change": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.492
+			          }
+			        }
+			      ]
+			    },
+			    "mesure.entrées": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "Mesures",
+			          "ConceptualProperty": "Entrées"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "entrées": {
+			            "State": "Generated"
+			          }
+			        }
+			      ]
+			    },
+			    "mesure.sorties": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "Mesures",
+			          "ConceptualProperty": "Sorties"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "sorties": {
+			            "State": "Generated"
+			          }
+			        }
+			      ]
+			    },
+			    "mesure.solde": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "Mesures",
+			          "ConceptualProperty": "Solde"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "solde": {
+			            "State": "Generated"
+			          }
+			        }
+			      ]
+			    },
+			    "mesure.certifications": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "Mesures",
+			          "ConceptualProperty": "Certifications"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "certifications": {
+			            "State": "Generated"
+			          }
+			        },
+			        {
+			          "documentation": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.491
+			          }
+			        },
+			        {
+			          "authorization": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.491
+			          }
+			        },
+			        {
+			          "accreditation": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.491
+			          }
+			        },
+			        {
+			          "endorsement": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.491
+			          }
+			        },
+			        {
+			          "qualification": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.491
+			          }
+			        },
+			        {
+			          "guarantee": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.476
+			          }
+			        },
+			        {
+			          "warranty": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.476
+			          }
+			        }
+			      ]
+			    },
+			    "mesure.certifications_hors_dispense": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "Mesures",
+			          "ConceptualProperty": "Certifications hors dispense"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "certifications hors dispense": {
+			            "State": "Generated"
+			          }
+			        }
+			      ]
+			    },
+			    "mesure.part_de_marché": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "Mesures",
+			          "ConceptualProperty": "Part de marché"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "part de marché": {
+			            "State": "Generated"
+			          }
+			        }
+			      ]
+			    },
+			    "mesure.hhi": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "Mesures",
+			          "ConceptualProperty": "HHI"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "hhi": {
+			            "State": "Generated"
+			          }
+			        }
+			      ]
+			    },
+			    "mesure.niveau_de_concentration": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "Mesures",
+			          "ConceptualProperty": "Niveau de concentration"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "niveau de concentration": {
+			            "State": "Generated"
+			          }
+			        },
+			        {
+			          "niveau de attentiveness": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.508
+			          }
+			        },
+			        {
+			          "niveau de attention": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.508
+			          }
+			        },
+			        {
+			          "niveau de absorption": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.508
+			          }
+			        },
+			        {
+			          "niveau de meditation": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.508
+			          }
+			        },
+			        {
+			          "niveau de awareness": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.508
+			          }
+			        },
+			        {
+			          "niveau de deliberation": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.508
+			          }
+			        },
+			        {
+			          "niveau de focus": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.492
+			          }
+			        },
+			        {
+			          "niveau de application": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.492
+			          }
+			        },
+			        {
+			          "niveau de strength": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.482
+			          }
+			        },
+			        {
+			          "niveau de intensity": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.482
+			          }
+			        }
+			      ]
+			    },
+			    "mesure.HHI_affichage": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "Mesures",
+			          "ConceptualProperty": "HHI (affichage)"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "HHI (affichage)": {
+			            "State": "Generated"
+			          }
+			        },
+			        {
+			          "HHI": {
+			            "State": "Generated",
+			            "Weight": 0.75
+			          }
+			        }
+			      ]
+			    },
+			    "mouvement": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "Mouvements"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "mouvement": {
+			            "State": "Generated"
+			          }
+			        }
+			      ]
+			    },
+			    "mouvement.operateur_id": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "Mouvements",
+			          "ConceptualProperty": "operateur_id"
+			        }
+			      },
+			      "State": "Generated",
+			      "Visibility": {
+			        "Value": "Hidden"
+			      },
+			      "Terms": [
+			        {
+			          "operateur id": {
+			            "State": "Generated"
+			          }
+			        },
+			        {
+			          "operateur_id": {
+			            "Type": "Noun",
+			            "State": "Generated",
+			            "Weight": 0.99
+			          }
+			        },
+			        {
+			          "operateur identification": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.75
+			          }
+			        },
+			        {
+			          "operateur identity": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.75
+			          }
+			        },
+			        {
+			          "operateur identifier": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.75
+			          }
+			        },
+			        {
+			          "operateur credential": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.727
+			          }
+			        }
+			      ]
+			    },
+			    "mouvement.date_mouvement_id": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "Mouvements",
+			          "ConceptualProperty": "date_mouvement_id"
+			        }
+			      },
+			      "State": "Generated",
+			      "Visibility": {
+			        "Value": "Hidden"
+			      },
+			      "Terms": [
+			        {
+			          "date mouvement id": {
+			            "State": "Generated"
+			          }
+			        },
+			        {
+			          "date_mouvement_id": {
+			            "Type": "Noun",
+			            "State": "Generated",
+			            "Weight": 0.99
+			          }
+			        },
+			        {
+			          "date mouvement identification": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.762
+			          }
+			        },
+			        {
+			          "date mouvement identity": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.762
+			          }
+			        },
+			        {
+			          "date mouvement identifier": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.762
+			          }
+			        },
+			        {
+			          "date mouvement credential": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.739
+			          }
+			        },
+			        {
+			          "moment mouvement id": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.609
+			          }
+			        },
+			        {
+			          "period mouvement id": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.591
+			          }
+			        }
+			      ]
+			    },
+			    "mouvement.type_mouvement": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "Mouvements",
+			          "ConceptualProperty": "type_mouvement"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "type mouvement": {
+			            "State": "Generated"
+			          }
+			        },
+			        {
+			          "type_mouvement": {
+			            "Type": "Noun",
+			            "State": "Generated",
+			            "Weight": 0.99
+			          }
+			        },
+			        {
+			          "category mouvement": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.6
+			          }
+			        },
+			        {
+			          "genre mouvement": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.6
+			          }
+			        },
+			        {
+			          "manner mouvement": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.6
+			          }
+			        },
+			        {
+			          "variety mouvement": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.6
+			          }
+			        },
+			        {
+			          "brand mouvement": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.582
+			          }
+			        },
+			        {
+			          "class mouvement": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.582
+			          }
+			        },
+			        {
+			          "kind mouvement": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.582
+			          }
+			        },
+			        {
+			          "style mouvement": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.582
+			          }
+			        },
+			        {
+			          "form mouvement": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.582
+			          }
+			        },
+			        {
+			          "grouping mouvement": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.582
+			          }
+			        }
+			      ]
+			    },
+			    "mouvement.certificateur_id": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "Mouvements",
+			          "ConceptualProperty": "certificateur_id"
+			        }
+			      },
+			      "State": "Generated",
+			      "Visibility": {
+			        "Value": "Hidden"
+			      },
+			      "Terms": [
+			        {
+			          "certificateur id": {
+			            "State": "Generated"
+			          }
+			        },
+			        {
+			          "certificateur_id": {
+			            "Type": "Noun",
+			            "State": "Generated",
+			            "Weight": 0.99
+			          }
+			        },
+			        {
+			          "certificateur identification": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.75
+			          }
+			        },
+			        {
+			          "certificateur identity": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.75
+			          }
+			        },
+			        {
+			          "certificateur identifier": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.75
+			          }
+			        },
+			        {
+			          "certificateur credential": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.727
+			          }
+			        }
+			      ]
+			    },
+			    "mouvement.departement_id": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "Mouvements",
+			          "ConceptualProperty": "departement_id"
+			        }
+			      },
+			      "State": "Generated",
+			      "Visibility": {
+			        "Value": "Hidden"
+			      },
+			      "Terms": [
+			        {
+			          "departement id": {
+			            "State": "Generated"
+			          }
+			        },
+			        {
+			          "departement_id": {
+			            "Type": "Noun",
+			            "State": "Generated",
+			            "Weight": 0.99
+			          }
+			        },
+			        {
+			          "departement identification": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.75
+			          }
+			        },
+			        {
+			          "departement identity": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.75
+			          }
+			        },
+			        {
+			          "departement identifier": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.75
+			          }
+			        },
+			        {
+			          "departement credential": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.727
+			          }
+			        }
+			      ]
+			    },
+			    "mouvement.nb_mouvement": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "Mouvements",
+			          "ConceptualProperty": "nb_mouvement"
+			        }
+			      },
+			      "State": "Generated",
+			      "Visibility": {
+			        "Value": "Hidden"
+			      },
+			      "Terms": [
+			        {
+			          "nb mouvement": {
+			            "State": "Generated"
+			          }
+			        },
+			        {
+			          "nb_mouvement": {
+			            "Type": "Noun",
+			            "State": "Generated",
+			            "Weight": 0.99
+			          }
+			        }
+			      ]
+			    }
+			  },
+			  "Relationships": {
+			    "mouvement_has_organisme": {
+			      "Binding": {
+			        "ConceptualEntity": "Mouvements"
+			      },
+			      "State": "Generated",
+			      "Roles": {
+			        "mouvement": {
+			          "Target": {
+			            "Entity": "mouvement"
+			          }
+			        },
+			        "organisme": {
+			          "Target": {
+			            "Entity": "organisme"
+			          }
+			        }
+			      },
+			      "Phrasings": [
+			        {
+			          "Attribute": {
+			            "Subject": {
+			              "Role": "mouvement"
+			            },
+			            "Object": {
+			              "Role": "organisme"
+			            }
+			          },
+			          "State": "Generated",
+			          "Weight": 0.99,
+			          "ID": "mouvements_have_organismes"
+			        },
+			        {
+			          "Attribute": {
+			            "Subject": {
+			              "Role": "organisme"
+			            },
+			            "Object": {
+			              "Role": "mouvement"
+			            }
+			          },
+			          "State": "Generated",
+			          "Weight": 0.99,
+			          "ID": "organismes_have_mouvements"
+			        }
+			      ]
+			    },
+			    "fait_has_date": {
+			      "Binding": {
+			        "ConceptualEntity": "Faits"
+			      },
+			      "State": "Generated",
+			      "Roles": {
+			        "fait": {
+			          "Target": {
+			            "Entity": "fait"
+			          }
+			        },
+			        "date": {
+			          "Target": {
+			            "Entity": "date"
+			          }
+			        }
+			      }
+			    },
+			    "fait_has_département": {
+			      "Binding": {
+			        "ConceptualEntity": "Faits"
+			      },
+			      "State": "Generated",
+			      "Roles": {
+			        "fait": {
+			          "Target": {
+			            "Entity": "fait"
+			          }
+			        },
+			        "département": {
+			          "Target": {
+			            "Entity": "département"
+			          }
+			        }
+			      }
+			    },
+			    "fait_has_organisme": {
+			      "Binding": {
+			        "ConceptualEntity": "Faits"
+			      },
+			      "State": "Generated",
+			      "Roles": {
+			        "fait": {
+			          "Target": {
+			            "Entity": "fait"
+			          }
+			        },
+			        "organisme": {
+			          "Target": {
+			            "Entity": "organisme"
+			          }
+			        }
+			      }
+			    },
+			    "fait_has_activité": {
+			      "Binding": {
+			        "ConceptualEntity": "Faits"
+			      },
+			      "State": "Generated",
+			      "Roles": {
+			        "fait": {
+			          "Target": {
+			            "Entity": "fait"
+			          }
+			        },
+			        "activité": {
+			          "Target": {
+			            "Entity": "activité"
+			          }
+			        }
+			      }
+			    },
+			    "mouvement_has_type_mouvement": {
+			      "Binding": {
+			        "ConceptualEntity": "Mouvements"
+			      },
+			      "State": "Generated",
+			      "Roles": {
+			        "mouvement": {
+			          "Target": {
+			            "Entity": "mouvement"
+			          }
+			        },
+			        "mouvement.type_mouvement": {
+			          "Target": {
+			            "Entity": "mouvement.type_mouvement"
+			          }
+			        }
+			      },
+			      "Phrasings": [
+			        {
+			          "Attribute": {
+			            "Subject": {
+			              "Role": "mouvement"
+			            },
+			            "Object": {
+			              "Role": "mouvement.type_mouvement"
+			            }
+			          },
+			          "State": "Generated",
+			          "Weight": 0.99,
+			          "ID": "mouvements_have_type_mouvements"
+			        }
+			      ]
+			    },
+			    "organisme_has_mesure_HHI_affichage": {
+			      "Binding": {
+			        "ConceptualEntity": "Organisme"
+			      },
+			      "State": "Generated",
+			      "Roles": {
+			        "organisme": {
+			          "Target": {
+			            "Entity": "organisme"
+			          }
+			        },
+			        "mesure.HHI_affichage": {
+			          "Target": {
+			            "Entity": "mesure.HHI_affichage"
+			          }
+			        }
+			      },
+			      "Phrasings": [
+			        {
+			          "Attribute": {
+			            "Subject": {
+			              "Role": "organisme"
+			            },
+			            "Object": {
+			              "Role": "mesure.HHI_affichage"
+			            }
+			          },
+			          "State": "Generated",
+			          "Weight": 0.99,
+			          "ID": "organismes_have_HHI_affichage"
+			        }
+			      ]
+			    },
+			    "fait_has_mesure_HHI_affichage": {
+			      "Binding": {
+			        "ConceptualEntity": "Faits"
+			      },
+			      "State": "Generated",
+			      "Roles": {
+			        "fait": {
+			          "Target": {
+			            "Entity": "fait"
+			          }
+			        },
+			        "mesure.HHI_affichage": {
+			          "Target": {
+			            "Entity": "mesure.HHI_affichage"
+			          }
+			        }
+			      }
+			    },
+			    "organisme_has_mesure_niveau_de_concentration": {
+			      "Binding": {
+			        "ConceptualEntity": "Organisme"
+			      },
+			      "State": "Generated",
+			      "Roles": {
+			        "organisme": {
+			          "Target": {
+			            "Entity": "organisme"
+			          }
+			        },
+			        "mesure.niveau_de_concentration": {
+			          "Target": {
+			            "Entity": "mesure.niveau_de_concentration"
+			          }
+			        }
+			      },
+			      "Phrasings": [
+			        {
+			          "Attribute": {
+			            "Subject": {
+			              "Role": "organisme"
+			            },
+			            "Object": {
+			              "Role": "mesure.niveau_de_concentration"
+			            }
+			          },
+			          "State": "Generated",
+			          "Weight": 0.99,
+			          "ID": "organismes_have_niveau_de_concentration"
+			        }
+			      ]
+			    },
+			    "fait_has_mesure_niveau_de_concentration": {
+			      "Binding": {
+			        "ConceptualEntity": "Faits"
+			      },
+			      "State": "Generated",
+			      "Roles": {
+			        "fait": {
+			          "Target": {
+			            "Entity": "fait"
+			          }
+			        },
+			        "mesure.niveau_de_concentration": {
+			          "Target": {
+			            "Entity": "mesure.niveau_de_concentration"
+			          }
+			        }
+			      }
+			    },
+			    "organisme_has_mesure_hhi": {
+			      "Binding": {
+			        "ConceptualEntity": "Organisme"
+			      },
+			      "State": "Generated",
+			      "Roles": {
+			        "organisme": {
+			          "Target": {
+			            "Entity": "organisme"
+			          }
+			        },
+			        "mesure.hhi": {
+			          "Target": {
+			            "Entity": "mesure.hhi"
+			          }
+			        }
+			      },
+			      "Phrasings": [
+			        {
+			          "Attribute": {
+			            "Subject": {
+			              "Role": "organisme"
+			            },
+			            "Object": {
+			              "Role": "mesure.hhi"
+			            }
+			          },
+			          "State": "Generated",
+			          "Weight": 0.99,
+			          "ID": "organismes_have_hhi"
+			        }
+			      ]
+			    },
+			    "fait_has_mesure_hhi": {
+			      "Binding": {
+			        "ConceptualEntity": "Faits"
+			      },
+			      "State": "Generated",
+			      "Roles": {
+			        "fait": {
+			          "Target": {
+			            "Entity": "fait"
+			          }
+			        },
+			        "mesure.hhi": {
+			          "Target": {
+			            "Entity": "mesure.hhi"
+			          }
+			        }
+			      }
+			    },
+			    "fait_has_mesure_part_de_marché": {
+			      "Binding": {
+			        "ConceptualEntity": "Faits"
+			      },
+			      "State": "Generated",
+			      "Roles": {
+			        "fait": {
+			          "Target": {
+			            "Entity": "fait"
+			          }
+			        },
+			        "mesure.part_de_marché": {
+			          "Target": {
+			            "Entity": "mesure.part_de_marché"
+			          }
+			        }
+			      }
+			    },
+			    "fait_has_mesure_certifications_hors_dispense": {
+			      "Binding": {
+			        "ConceptualEntity": "Faits"
+			      },
+			      "State": "Generated",
+			      "Roles": {
+			        "fait": {
+			          "Target": {
+			            "Entity": "fait"
+			          }
+			        },
+			        "mesure.certifications_hors_dispense": {
+			          "Target": {
+			            "Entity": "mesure.certifications_hors_dispense"
+			          }
+			        }
+			      }
+			    },
+			    "fait_has_mesure_certifications": {
+			      "Binding": {
+			        "ConceptualEntity": "Faits"
+			      },
+			      "State": "Generated",
+			      "Roles": {
+			        "fait": {
+			          "Target": {
+			            "Entity": "fait"
+			          }
+			        },
+			        "mesure.certifications": {
+			          "Target": {
+			            "Entity": "mesure.certifications"
+			          }
+			        }
+			      }
+			    },
+			    "mouvement_has_mesure_solde": {
+			      "Binding": {
+			        "ConceptualEntity": "Mouvements"
+			      },
+			      "State": "Generated",
+			      "Roles": {
+			        "mouvement": {
+			          "Target": {
+			            "Entity": "mouvement"
+			          }
+			        },
+			        "mesure.solde": {
+			          "Target": {
+			            "Entity": "mesure.solde"
+			          }
+			        }
+			      },
+			      "Phrasings": [
+			        {
+			          "Attribute": {
+			            "Subject": {
+			              "Role": "mouvement"
+			            },
+			            "Object": {
+			              "Role": "mesure.solde"
+			            }
+			          },
+			          "State": "Generated",
+			          "Weight": 0.99,
+			          "ID": "mouvements_have_solde"
+			        }
+			      ]
+			    },
+			    "mouvement_has_mesure_sorties": {
+			      "Binding": {
+			        "ConceptualEntity": "Mouvements"
+			      },
+			      "State": "Generated",
+			      "Roles": {
+			        "mouvement": {
+			          "Target": {
+			            "Entity": "mouvement"
+			          }
+			        },
+			        "mesure.sorties": {
+			          "Target": {
+			            "Entity": "mesure.sorties"
+			          }
+			        }
+			      },
+			      "Phrasings": [
+			        {
+			          "Attribute": {
+			            "Subject": {
+			              "Role": "mouvement"
+			            },
+			            "Object": {
+			              "Role": "mesure.sorties"
+			            }
+			          },
+			          "State": "Generated",
+			          "Weight": 0.99,
+			          "ID": "mouvements_have_sorties"
+			        }
+			      ]
+			    },
+			    "mouvement_has_mesure_entrées": {
+			      "Binding": {
+			        "ConceptualEntity": "Mouvements"
+			      },
+			      "State": "Generated",
+			      "Roles": {
+			        "mouvement": {
+			          "Target": {
+			            "Entity": "mouvement"
+			          }
+			        },
+			        "mesure.entrées": {
+			          "Target": {
+			            "Entity": "mesure.entrées"
+			          }
+			        }
+			      },
+			      "Phrasings": [
+			        {
+			          "Attribute": {
+			            "Subject": {
+			              "Role": "mouvement"
+			            },
+			            "Object": {
+			              "Role": "mesure.entrées"
+			            }
+			          },
+			          "State": "Generated",
+			          "Weight": 0.99,
+			          "ID": "mouvements_have_entrées"
+			        }
+			      ]
+			    },
+			    "fait_has_mesure_désert_de_transformation": {
+			      "Binding": {
+			        "ConceptualEntity": "Faits"
+			      },
+			      "State": "Generated",
+			      "Roles": {
+			        "fait": {
+			          "Target": {
+			            "Entity": "fait"
+			          }
+			        },
+			        "mesure.désert_de_transformation": {
+			          "Target": {
+			            "Entity": "mesure.désert_de_transformation"
+			          }
+			        }
+			      }
+			    },
+			    "fait_has_mesure_seuil_ratio_quartile_bas": {
+			      "Binding": {
+			        "ConceptualEntity": "Faits"
+			      },
+			      "State": "Generated",
+			      "Roles": {
+			        "fait": {
+			          "Target": {
+			            "Entity": "fait"
+			          }
+			        },
+			        "mesure.seuil_ratio_quartile_bas": {
+			          "Target": {
+			            "Entity": "mesure.seuil_ratio_quartile_bas"
+			          }
+			        }
+			      }
+			    },
+			    "fait_has_mesure_seuil_producteurs_quartile_haut": {
+			      "Binding": {
+			        "ConceptualEntity": "Faits"
+			      },
+			      "State": "Generated",
+			      "Roles": {
+			        "fait": {
+			          "Target": {
+			            "Entity": "fait"
+			          }
+			        },
+			        "mesure.seuil_producteurs_quartile_haut": {
+			          "Target": {
+			            "Entity": "mesure.seuil_producteurs_quartile_haut"
+			          }
+			        }
+			      }
+			    },
+			    "fait_has_mesure_producteurs_pour_10_000_habitants": {
+			      "Binding": {
+			        "ConceptualEntity": "Faits"
+			      },
+			      "State": "Generated",
+			      "Roles": {
+			        "fait": {
+			          "Target": {
+			            "Entity": "fait"
+			          }
+			        },
+			        "mesure.producteurs_pour_10_000_habitants": {
+			          "Target": {
+			            "Entity": "mesure.producteurs_pour_10_000_habitants"
+			          }
+			        }
+			      }
+			    },
+			    "département_has_mesure_producteurs_pour_10_000_habitants": {
+			      "Binding": {
+			        "ConceptualEntity": "Département"
+			      },
+			      "State": "Generated",
+			      "Roles": {
+			        "département": {
+			          "Target": {
+			            "Entity": "département"
+			          }
+			        },
+			        "mesure.producteurs_pour_10_000_habitants": {
+			          "Target": {
+			            "Entity": "mesure.producteurs_pour_10_000_habitants"
+			          }
+			        }
+			      },
+			      "Phrasings": [
+			        {
+			          "Attribute": {
+			            "Subject": {
+			              "Role": "département"
+			            },
+			            "Object": {
+			              "Role": "mesure.producteurs_pour_10_000_habitants"
+			            }
+			          },
+			          "State": "Generated",
+			          "Weight": 0.99,
+			          "ID": "départements_have_producteurs_pour_10_000_habitants"
+			        }
+			      ]
+			    },
+			    "département_has_mesure_population": {
+			      "Binding": {
+			        "ConceptualEntity": "Département"
+			      },
+			      "State": "Generated",
+			      "Roles": {
+			        "département": {
+			          "Target": {
+			            "Entity": "département"
+			          }
+			        },
+			        "mesure.population": {
+			          "Target": {
+			            "Entity": "mesure.population"
+			          }
+			        }
+			      },
+			      "Phrasings": [
+			        {
+			          "Attribute": {
+			            "Subject": {
+			              "Role": "département"
+			            },
+			            "Object": {
+			              "Role": "mesure.population"
+			            }
+			          },
+			          "State": "Generated",
+			          "Weight": 0.99,
+			          "ID": "départements_have_population"
+			        },
+			        {
+			          "Adjective": {
+			            "Subject": {
+			              "Role": "département"
+			            },
+			            "Adjectives": [
+			              {
+			                "large": {
+			                  "State": "Generated"
+			                }
+			              },
+			              {
+			                "big": {
+			                  "State": "Generated"
+			                }
+			              },
+			              {
+			                "populated": {
+			                  "State": "Generated"
+			                }
+			              }
+			            ],
+			            "Antonyms": [
+			              {
+			                "small": {
+			                  "State": "Generated"
+			                }
+			              }
+			            ],
+			            "Measurement": {
+			              "Role": "mesure.population"
+			            }
+			          },
+			          "State": "Generated",
+			          "Weight": 0.99,
+			          "ID": "population_indicates_how_large_départements_are"
+			        }
+			      ]
+			    },
+			    "fait_has_mesure_ratio_de_transformation": {
+			      "Binding": {
+			        "ConceptualEntity": "Faits"
+			      },
+			      "State": "Generated",
+			      "Roles": {
+			        "fait": {
+			          "Target": {
+			            "Entity": "fait"
+			          }
+			        },
+			        "mesure.ratio_de_transformation": {
+			          "Target": {
+			            "Entity": "mesure.ratio_de_transformation"
+			          }
+			        }
+			      }
+			    },
+			    "fait_has_mesure_nb_distributeurs": {
+			      "Binding": {
+			        "ConceptualEntity": "Faits"
+			      },
+			      "State": "Generated",
+			      "Roles": {
+			        "fait": {
+			          "Target": {
+			            "Entity": "fait"
+			          }
+			        },
+			        "mesure.nb_distributeurs": {
+			          "Target": {
+			            "Entity": "mesure.nb_distributeurs"
+			          }
+			        }
+			      }
+			    },
+			    "fait_has_mesure_nb_transformateurs": {
+			      "Binding": {
+			        "ConceptualEntity": "Faits"
+			      },
+			      "State": "Generated",
+			      "Roles": {
+			        "fait": {
+			          "Target": {
+			            "Entity": "fait"
+			          }
+			        },
+			        "mesure.nb_transformateurs": {
+			          "Target": {
+			            "Entity": "mesure.nb_transformateurs"
+			          }
+			        }
+			      }
+			    },
+			    "fait_has_mesure_nb_producteurs": {
+			      "Binding": {
+			        "ConceptualEntity": "Faits"
+			      },
+			      "State": "Generated",
+			      "Roles": {
+			        "fait": {
+			          "Target": {
+			            "Entity": "fait"
+			          }
+			        },
+			        "mesure.nb_producteurs": {
+			          "Target": {
+			            "Entity": "mesure.nb_producteurs"
+			          }
+			        }
+			      }
+			    },
+			    "fait_has_mesure_nb_opérateurs": {
+			      "Binding": {
+			        "ConceptualEntity": "Faits"
+			      },
+			      "State": "Generated",
+			      "Roles": {
+			        "fait": {
+			          "Target": {
+			            "Entity": "fait"
+			          }
+			        },
+			        "mesure.nb_opérateurs": {
+			          "Target": {
+			            "Entity": "mesure.nb_opérateurs"
+			          }
+			        }
+			      }
+			    },
+			    "département_has_annee_population": {
+			      "Binding": {
+			        "ConceptualEntity": "Département"
+			      },
+			      "State": "Generated",
+			      "Roles": {
+			        "département": {
+			          "Target": {
+			            "Entity": "département"
+			          }
+			        },
+			        "département.annee_population": {
+			          "Target": {
+			            "Entity": "département.annee_population"
+			          }
+			        }
+			      },
+			      "Phrasings": [
+			        {
+			          "Attribute": {
+			            "Subject": {
+			              "Role": "département"
+			            },
+			            "Object": {
+			              "Role": "département.annee_population"
+			            }
+			          },
+			          "State": "Generated",
+			          "Weight": 0.99,
+			          "ID": "départements_have_annee_populations"
+			        }
+			      ]
+			    },
+			    "département_has_population": {
+			      "Binding": {
+			        "ConceptualEntity": "Département"
+			      },
+			      "State": "Generated",
+			      "Roles": {
+			        "département": {
+			          "Target": {
+			            "Entity": "département"
+			          }
+			        },
+			        "département.population": {
+			          "Target": {
+			            "Entity": "département.population"
+			          }
+			        }
+			      },
+			      "Phrasings": [
+			        {
+			          "Attribute": {
+			            "Subject": {
+			              "Role": "département"
+			            },
+			            "Object": {
+			              "Role": "département.population"
+			            }
+			          },
+			          "State": "Generated",
+			          "Weight": 0.99,
+			          "ID": "départements_have_populations"
+			        },
+			        {
+			          "Adjective": {
+			            "Subject": {
+			              "Role": "département"
+			            },
+			            "Adjectives": [
+			              {
+			                "large": {
+			                  "State": "Generated"
+			                }
+			              },
+			              {
+			                "big": {
+			                  "State": "Generated"
+			                }
+			              },
+			              {
+			                "populated": {
+			                  "State": "Generated"
+			                }
+			              }
+			            ],
+			            "Antonyms": [
+			              {
+			                "small": {
+			                  "State": "Generated"
+			                }
+			              }
+			            ],
+			            "Measurement": {
+			              "Role": "département.population"
+			            }
+			          },
+			          "State": "Generated",
+			          "Weight": 0.99,
+			          "ID": "population_indicates_how_large_départements_are1"
+			        }
+			      ]
+			    },
+			    "département_has_est_outre_mer": {
+			      "Binding": {
+			        "ConceptualEntity": "Département"
+			      },
+			      "State": "Generated",
+			      "Roles": {
+			        "département": {
+			          "Target": {
+			            "Entity": "département"
+			          }
+			        },
+			        "département.est_outre_mer": {
+			          "Target": {
+			            "Entity": "département.est_outre_mer"
+			          }
+			        }
+			      },
+			      "Phrasings": [
+			        {
+			          "Attribute": {
+			            "Subject": {
+			              "Role": "département"
+			            },
+			            "Object": {
+			              "Role": "département.est_outre_mer"
+			            }
+			          },
+			          "State": "Generated",
+			          "Weight": 0.99,
+			          "ID": "départements_have_est_outre_mers"
+			        }
+			      ]
+			    },
+			    "département_has_region_libelle": {
+			      "Binding": {
+			        "ConceptualEntity": "Département"
+			      },
+			      "State": "Generated",
+			      "Roles": {
+			        "département": {
+			          "Target": {
+			            "Entity": "département"
+			          }
+			        },
+			        "département.region_libelle": {
+			          "Target": {
+			            "Entity": "département.region_libelle"
+			          }
+			        }
+			      },
+			      "Phrasings": [
+			        {
+			          "Attribute": {
+			            "Subject": {
+			              "Role": "département"
+			            },
+			            "Object": {
+			              "Role": "département.region_libelle"
+			            }
+			          },
+			          "State": "Generated",
+			          "Weight": 0.99,
+			          "ID": "départements_have_region_libelles"
+			        }
+			      ]
+			    },
+			    "département_has_code_region": {
+			      "Binding": {
+			        "ConceptualEntity": "Département"
+			      },
+			      "State": "Generated",
+			      "Roles": {
+			        "département": {
+			          "Target": {
+			            "Entity": "département"
+			          }
+			        },
+			        "département.code_region": {
+			          "Target": {
+			            "Entity": "département.code_region"
+			          }
+			        }
+			      },
+			      "Phrasings": [
+			        {
+			          "Attribute": {
+			            "Subject": {
+			              "Role": "département"
+			            },
+			            "Object": {
+			              "Role": "département.code_region"
+			            }
+			          },
+			          "State": "Generated",
+			          "Weight": 0.99,
+			          "ID": "départements_have_code_regions"
+			        }
+			      ]
+			    },
+			    "département_has_departement_libelle": {
+			      "Binding": {
+			        "ConceptualEntity": "Département"
+			      },
+			      "State": "Generated",
+			      "Roles": {
+			        "département": {
+			          "Target": {
+			            "Entity": "département"
+			          }
+			        },
+			        "département.departement_libelle": {
+			          "Target": {
+			            "Entity": "département.departement_libelle"
+			          }
+			        }
+			      },
+			      "Phrasings": [
+			        {
+			          "Attribute": {
+			            "Subject": {
+			              "Role": "département"
+			            },
+			            "Object": {
+			              "Role": "département.departement_libelle"
+			            }
+			          },
+			          "State": "Generated",
+			          "Weight": 0.99,
+			          "ID": "départements_have_departement_libelles"
+			        }
+			      ]
+			    },
+			    "département_has_code_departement": {
+			      "Binding": {
+			        "ConceptualEntity": "Département"
+			      },
+			      "State": "Generated",
+			      "Roles": {
+			        "département": {
+			          "Target": {
+			            "Entity": "département"
+			          }
+			        },
+			        "département.code_departement": {
+			          "Target": {
+			            "Entity": "département.code_departement"
+			          }
+			        }
+			      },
+			      "Phrasings": [
+			        {
+			          "Attribute": {
+			            "Subject": {
+			              "Role": "département"
+			            },
+			            "Object": {
+			              "Role": "département.code_departement"
+			            }
+			          },
+			          "State": "Generated",
+			          "Weight": 0.99,
+			          "ID": "départements_have_code_departements"
+			        }
+			      ]
+			    },
+			    "date_has_mois_libelle": {
+			      "Binding": {
+			        "ConceptualEntity": "Date"
+			      },
+			      "State": "Generated",
+			      "Roles": {
+			        "date": {
+			          "Target": {
+			            "Entity": "date"
+			          }
+			        },
+			        "date.mois_libelle": {
+			          "Target": {
+			            "Entity": "date.mois_libelle"
+			          }
+			        }
+			      },
+			      "Phrasings": [
+			        {
+			          "Attribute": {
+			            "Subject": {
+			              "Role": "date"
+			            },
+			            "Object": {
+			              "Role": "date.mois_libelle"
+			            }
+			          },
+			          "State": "Generated",
+			          "Weight": 0.99,
+			          "ID": "dates_have_mois_libelles"
+			        }
+			      ]
+			    },
+			    "date_has_mois": {
+			      "Binding": {
+			        "ConceptualEntity": "Date"
+			      },
+			      "State": "Generated",
+			      "Roles": {
+			        "date": {
+			          "Target": {
+			            "Entity": "date"
+			          }
+			        },
+			        "date.mois": {
+			          "Target": {
+			            "Entity": "date.mois"
+			          }
+			        }
+			      },
+			      "Phrasings": [
+			        {
+			          "Attribute": {
+			            "Subject": {
+			              "Role": "date"
+			            },
+			            "Object": {
+			              "Role": "date.mois"
+			            }
+			          },
+			          "State": "Generated",
+			          "Weight": 0.99,
+			          "ID": "dates_have_moises"
+			        }
+			      ]
+			    },
+			    "date_has_trimestre": {
+			      "Binding": {
+			        "ConceptualEntity": "Date"
+			      },
+			      "State": "Generated",
+			      "Roles": {
+			        "date": {
+			          "Target": {
+			            "Entity": "date"
+			          }
+			        },
+			        "date.trimestre": {
+			          "Target": {
+			            "Entity": "date.trimestre"
+			          }
+			        }
+			      },
+			      "Phrasings": [
+			        {
+			          "Attribute": {
+			            "Subject": {
+			              "Role": "date"
+			            },
+			            "Object": {
+			              "Role": "date.trimestre"
+			            }
+			          },
+			          "State": "Generated",
+			          "Weight": 0.99,
+			          "ID": "dates_have_trimestres"
+			        }
+			      ]
+			    },
+			    "date_has_annee": {
+			      "Binding": {
+			        "ConceptualEntity": "Date"
+			      },
+			      "State": "Generated",
+			      "Roles": {
+			        "date": {
+			          "Target": {
+			            "Entity": "date"
+			          }
+			        },
+			        "date.annee": {
+			          "Target": {
+			            "Entity": "date.annee"
+			          }
+			        }
+			      },
+			      "Phrasings": [
+			        {
+			          "Attribute": {
+			            "Subject": {
+			              "Role": "date"
+			            },
+			            "Object": {
+			              "Role": "date.annee"
+			            }
+			          },
+			          "State": "Generated",
+			          "Weight": 0.99,
+			          "ID": "dates_have_annees"
+			        }
+			      ]
+			    },
+			    "date_has_date": {
+			      "Binding": {
+			        "ConceptualEntity": "Date"
+			      },
+			      "State": "Generated",
+			      "Roles": {
+			        "date": {
+			          "Target": {
+			            "Entity": "date"
+			          }
+			        },
+			        "date.date": {
+			          "Target": {
+			            "Entity": "date.date"
+			          }
+			        }
+			      },
+			      "Phrasings": [
+			        {
+			          "Attribute": {
+			            "Subject": {
+			              "Role": "date"
+			            },
+			            "Object": {
+			              "Role": "date.date"
+			            }
+			          },
+			          "State": "Generated",
+			          "Weight": 0.99,
+			          "ID": "dates_have_dates"
+			        }
+			      ]
+			    },
+			    "organisme_has_est_dispense": {
+			      "Binding": {
+			        "ConceptualEntity": "Organisme"
+			      },
+			      "State": "Generated",
+			      "Roles": {
+			        "organisme": {
+			          "Target": {
+			            "Entity": "organisme"
+			          }
+			        },
+			        "organisme.est_dispense": {
+			          "Target": {
+			            "Entity": "organisme.est_dispense"
+			          }
+			        }
+			      },
+			      "Phrasings": [
+			        {
+			          "Attribute": {
+			            "Subject": {
+			              "Role": "organisme"
+			            },
+			            "Object": {
+			              "Role": "organisme.est_dispense"
+			            }
+			          },
+			          "State": "Generated",
+			          "Weight": 0.99,
+			          "ID": "organismes_have_est_dispense"
+			        }
+			      ]
+			    },
+			    "organisme_has_certificateur_libelle": {
+			      "Binding": {
+			        "ConceptualEntity": "Organisme"
+			      },
+			      "State": "Generated",
+			      "Roles": {
+			        "organisme": {
+			          "Target": {
+			            "Entity": "organisme"
+			          }
+			        },
+			        "organisme.certificateur_libelle": {
+			          "Target": {
+			            "Entity": "organisme.certificateur_libelle"
+			          }
+			        }
+			      },
+			      "Phrasings": [
+			        {
+			          "Attribute": {
+			            "Subject": {
+			              "Role": "organisme"
+			            },
+			            "Object": {
+			              "Role": "organisme.certificateur_libelle"
+			            }
+			          },
+			          "State": "Generated",
+			          "Weight": 0.99,
+			          "ID": "organismes_have_certificateur_libelles"
+			        }
+			      ]
+			    },
+			    "activité_has_famille": {
+			      "Binding": {
+			        "ConceptualEntity": "Activité"
+			      },
+			      "State": "Generated",
+			      "Roles": {
+			        "activité": {
+			          "Target": {
+			            "Entity": "activité"
+			          }
+			        },
+			        "activité.famille": {
+			          "Target": {
+			            "Entity": "activité.famille"
+			          }
+			        }
+			      },
+			      "Phrasings": [
+			        {
+			          "Attribute": {
+			            "Subject": {
+			              "Role": "activité"
+			            },
+			            "Object": {
+			              "Role": "activité.famille"
+			            }
+			          },
+			          "State": "Generated",
+			          "Weight": 0.99,
+			          "ID": "activité_have_familles"
+			        }
+			      ]
+			    },
+			    "activité_has_activite_libelle": {
+			      "Binding": {
+			        "ConceptualEntity": "Activité"
+			      },
+			      "State": "Generated",
+			      "Roles": {
+			        "activité": {
+			          "Target": {
+			            "Entity": "activité"
+			          }
+			        },
+			        "activité.activite_libelle": {
+			          "Target": {
+			            "Entity": "activité.activite_libelle"
+			          }
+			        }
+			      },
+			      "Phrasings": [
+			        {
+			          "Attribute": {
+			            "Subject": {
+			              "Role": "activité"
+			            },
+			            "Object": {
+			              "Role": "activité.activite_libelle"
+			            }
+			          },
+			          "State": "Generated",
+			          "Weight": 0.99,
+			          "ID": "activité_have_activite_libelles"
+			        }
+			      ]
+			    },
+			    "activité_has_activite_code": {
+			      "Binding": {
+			        "ConceptualEntity": "Activité"
+			      },
+			      "State": "Generated",
+			      "Roles": {
+			        "activité": {
+			          "Target": {
+			            "Entity": "activité"
+			          }
+			        },
+			        "activité.activite_code": {
+			          "Target": {
+			            "Entity": "activité.activite_code"
+			          }
+			        }
+			      },
+			      "Phrasings": [
+			        {
+			          "Attribute": {
+			            "Subject": {
+			              "Role": "activité"
+			            },
+			            "Object": {
+			              "Role": "activité.activite_code"
+			            }
+			          },
+			          "State": "Generated",
+			          "Weight": 0.99,
+			          "ID": "activité_have_activite_codes"
+			        }
+			      ]
+			    },
+			    "fait_has_mesure_nb_transformateurs_affichage": {
+			      "Binding": {
+			        "ConceptualEntity": "Faits"
+			      },
+			      "State": "Generated",
+			      "Roles": {
+			        "fait": {
+			          "Target": {
+			            "Entity": "fait"
+			          }
+			        },
+			        "mesure.nb_transformateurs_affichage": {
+			          "Target": {
+			            "Entity": "mesure.nb_transformateurs_affichage"
+			          }
+			        }
+			      }
+			    },
+			    "fait_has_mesure_nb_producteurs_affichage": {
+			      "Binding": {
+			        "ConceptualEntity": "Faits"
+			      },
+			      "State": "Generated",
+			      "Roles": {
+			        "fait": {
+			          "Target": {
+			            "Entity": "fait"
+			          }
+			        },
+			        "mesure.nb_producteurs_affichage": {
+			          "Target": {
+			            "Entity": "mesure.nb_producteurs_affichage"
+			          }
+			        }
+			      }
+			    },
+			    "fait_has_mesure_nb_opérateurs_affichage": {
+			      "Binding": {
+			        "ConceptualEntity": "Faits"
+			      },
+			      "State": "Generated",
+			      "Roles": {
+			        "fait": {
+			          "Target": {
+			            "Entity": "fait"
+			          }
+			        },
+			        "mesure.nb_opérateurs_affichage": {
+			          "Target": {
+			            "Entity": "mesure.nb_opérateurs_affichage"
+			          }
+			        }
+			      }
+			    },
+			    "département_in_region_libelle": {
+			      "Binding": {
+			        "ConceptualEntity": "Département"
+			      },
+			      "State": "Generated",
+			      "Roles": {
+			        "département": {
+			          "Target": {
+			            "Entity": "département"
+			          }
+			        },
+			        "département.region_libelle": {
+			          "Target": {
+			            "Entity": "département.region_libelle"
+			          }
+			        }
+			      },
+			      "SemanticSlots": {
+			        "Where": {
+			          "Role": "département.region_libelle"
+			        }
+			      },
+			      "Phrasings": [
+			        {
+			          "Preposition": {
+			            "Subject": {
+			              "Role": "département"
+			            },
+			            "Prepositions": [
+			              {
+			                "in": {
+			                  "State": "Generated"
+			                }
+			              }
+			            ],
+			            "Object": {
+			              "Role": "département.region_libelle"
+			            }
+			          },
+			          "State": "Generated",
+			          "Weight": 0.99,
+			          "ID": "départements_are_in_region_libelles"
+			        }
+			      ]
+			    },
+			    "département_in_code_region": {
+			      "Binding": {
+			        "ConceptualEntity": "Département"
+			      },
+			      "State": "Generated",
+			      "Roles": {
+			        "département": {
+			          "Target": {
+			            "Entity": "département"
+			          }
+			        },
+			        "département.code_region": {
+			          "Target": {
+			            "Entity": "département.code_region"
+			          }
+			        }
+			      },
+			      "SemanticSlots": {
+			        "Where": {
+			          "Role": "département.code_region"
+			        }
+			      },
+			      "Phrasings": [
+			        {
+			          "Preposition": {
+			            "Subject": {
+			              "Role": "département"
+			            },
+			            "Prepositions": [
+			              {
+			                "in": {
+			                  "State": "Generated"
+			                }
+			              }
+			            ],
+			            "Object": {
+			              "Role": "département.code_region"
+			            }
+			          },
+			          "State": "Generated",
+			          "Weight": 0.99,
+			          "ID": "départements_are_in_code_regions"
+			        }
+			      ]
+			    },
+			    "mouvement_has_département": {
+			      "Binding": {
+			        "ConceptualEntity": "Mouvements"
+			      },
+			      "State": "Generated",
+			      "Roles": {
+			        "mouvement": {
+			          "Target": {
+			            "Entity": "mouvement"
+			          }
+			        },
+			        "département": {
+			          "Target": {
+			            "Entity": "département"
+			          }
+			        }
+			      },
+			      "Phrasings": [
+			        {
+			          "Attribute": {
+			            "Subject": {
+			              "Role": "mouvement"
+			            },
+			            "Object": {
+			              "Role": "département"
+			            }
+			          },
+			          "State": "Generated",
+			          "Weight": 0.99,
+			          "ID": "mouvements_have_départements"
+			        },
+			        {
+			          "Attribute": {
+			            "Subject": {
+			              "Role": "département"
+			            },
+			            "Object": {
+			              "Role": "mouvement"
+			            }
+			          },
+			          "State": "Generated",
+			          "Weight": 0.99,
+			          "ID": "départements_have_mouvements"
+			        }
+			      ]
+			    },
+			    "mouvement_has_date": {
+			      "Binding": {
+			        "ConceptualEntity": "Mouvements"
+			      },
+			      "State": "Generated",
+			      "Roles": {
+			        "mouvement": {
+			          "Target": {
+			            "Entity": "mouvement"
+			          }
+			        },
+			        "date": {
+			          "Target": {
+			            "Entity": "date"
+			          }
+			        }
+			      },
+			      "Phrasings": [
+			        {
+			          "Attribute": {
+			            "Subject": {
+			              "Role": "mouvement"
+			            },
+			            "Object": {
+			              "Role": "date"
+			            }
+			          },
+			          "State": "Generated",
+			          "Weight": 0.99,
+			          "ID": "mouvements_have_dates"
+			        },
+			        {
+			          "Attribute": {
+			            "Subject": {
+			              "Role": "date"
+			            },
+			            "Object": {
+			              "Role": "mouvement"
+			            }
+			          },
+			          "State": "Generated",
+			          "Weight": 0.99,
+			          "ID": "dates_have_mouvements"
+			        }
+			      ]
+			    }
+			  },
+			  "Agents": {
+			    "Internal": {
+			      "Version": "1.1.0"
+			    }
+			  }
+			}
+		contentType: json
+

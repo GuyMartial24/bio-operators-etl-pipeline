@@ -1,0 +1,137 @@
+table Mesures
+	lineageTag: b5f38e6c-71f7-4d4e-a27c-e5f9db72955c
+
+	measure 'Nb opérateurs' = DISTINCTCOUNT ( Faits[operateur_id] )
+		formatString: #,0
+		lineageTag: cff1ec2d-03fd-4761-9a1f-594fa32b134c
+
+	measure 'Nb producteurs' = CALCULATE ( [Nb opérateurs], 'Activité'[famille] = "production" )
+		formatString: #,0
+		lineageTag: 97a1a402-e948-4415-9a1d-ddaf88619bf7
+
+	measure 'Nb transformateurs' = CALCULATE ( [Nb opérateurs], 'Activité'[famille] = "transformation" )
+		formatString: #,0
+		lineageTag: 8c74c438-aab7-4863-bcf6-d12600f81244
+
+	measure 'Nb distributeurs' = CALCULATE ( [Nb opérateurs], 'Activité'[famille] = "distribution" )
+		formatString: #,0
+		lineageTag: 5481d8af-5100-4f47-bc73-d37b7685d88f
+
+	measure 'Ratio de transformation' = DIVIDE ( [Nb transformateurs], [Nb producteurs] )
+		formatString: 0\ %;-0\ %;0\ %
+		lineageTag: 0fa81437-030e-4f5c-9f0e-a56ce1c547e3
+
+	measure Population = SUM ( 'Département'[population] )
+		formatString: #,0
+		lineageTag: 0023ed5f-7e54-4161-9675-53b14ffa7332
+
+	measure 'Producteurs pour 10 000 habitants' = DIVIDE ( [Nb producteurs], [Population] ) * 10000
+		formatString: 0.0
+		lineageTag: 7fedf7e5-e8c1-48d3-84d6-6076ca38e698
+
+	measure 'Nb opérateurs (affichage)' = FORMAT ( [Nb opérateurs], "# ##0" )
+		lineageTag: 4edf7d74-b4c8-42aa-8dd6-38335d2a15eb
+
+	measure 'Nb producteurs (affichage)' = FORMAT ( [Nb producteurs], "# ##0" )
+		lineageTag: 54761c50-e586-4f53-bbce-ade7b68b7360
+
+	measure 'Nb transformateurs (affichage)' = FORMAT ( [Nb transformateurs], "# ##0" )
+		lineageTag: 28d0da55-aeb2-4350-9ab4-e65cb24b6a17
+
+	measure 'Seuil producteurs (quartile haut)' =
+			
+			PERCENTILEX.INC (
+			    FILTER ( ALL ( 'Département' ), 'Département'[population] > 0 ),
+			    [Nb producteurs],
+			    0.75
+			)
+		lineageTag: 172bac60-f943-4941-9270-b233bf77f4a7
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Seuil ratio (quartile bas)' =
+			
+			PERCENTILEX.INC (
+			    FILTER ( ALL ( 'Département' ), 'Département'[population] > 0 ),
+			    [Ratio de transformation],
+			    0.25
+			)
+		lineageTag: cb028a30-edd1-404f-b780-f9efb579447d
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Désert de transformation' =
+			
+			IF (
+			    [Nb producteurs] >= [Seuil producteurs (quartile haut)]
+			        && [Ratio de transformation] <= [Seuil ratio (quartile bas)],
+			    1,
+			    0
+			)
+		formatString: 0
+		lineageTag: 594789a5-3969-4376-b7e1-2e258e887335
+
+	measure Entrées = CALCULATE ( DISTINCTCOUNT ( Mouvements[operateur_id] ), Mouvements[type_mouvement] = "ENTREE" )
+		formatString: 0
+		lineageTag: d42c383e-2186-458f-8b98-73ec44e588d3
+
+	measure Sorties = CALCULATE ( DISTINCTCOUNT ( Mouvements[operateur_id] ), Mouvements[type_mouvement] = "SORTIE" )
+		formatString: 0
+		lineageTag: b46e97be-35d7-4cce-8b9f-64064b77af14
+
+	measure Solde = [Entrées] - [Sorties]
+		formatString: 0
+		lineageTag: 4a4da2ec-37b8-4291-a8bd-789b9de27ff4
+
+	measure Certifications = COUNTROWS ( SUMMARIZE ( Faits, Faits[operateur_id], Faits[certificateur_id] ) )
+		formatString: 0
+		lineageTag: ee1f3add-eb2e-46ea-a89f-d91126ed7c50
+
+	measure 'Certifications hors dispense' = CALCULATE ( [Certifications], Organisme[est_dispense] = FALSE () )
+		formatString: 0
+		lineageTag: 008a5136-4c3e-4e25-a991-0695ba39f43b
+
+	measure 'Part de marché' =
+			
+			DIVIDE (
+			    [Certifications hors dispense],
+			    CALCULATE ( [Certifications hors dispense], ALL ( Organisme ) )
+			)
+		formatString: 0.0\ %;-0.0\ %;0.0\ %
+		lineageTag: e73ac7d0-48a5-47e9-8cf0-47ea273c7259
+
+	measure HHI =
+			
+			SUMX (
+			    VALUES ( Organisme[certificateur_libelle] ),
+			    ( [Part de marché] * 100 ) ^ 2
+			)
+		formatString: #,0
+		lineageTag: a424c373-e23d-4ea5-8440-a523dcac61b4
+
+	measure 'Niveau de concentration' =
+			
+			SWITCH (
+			    TRUE (),
+			    ISBLANK ( [HHI] ), BLANK (),
+			    [HHI] > 2500, "Très concentré",
+			    [HHI] > 1500, "Modérément concentré",
+			    "Peu concentré"
+			)
+		lineageTag: 6ee7578f-b68c-4157-9f3c-e78422f982e9
+
+	measure 'HHI (affichage)' = FORMAT ( [HHI], "# ##0" )
+		lineageTag: ff0aeb30-f8bc-4cfe-bda4-a139da877c7e
+
+	partition Mesures = m
+		mode: import
+		source =
+				let
+				    Source = Table.FromRows(Json.Document(Binary.Decompress(Binary.FromText("i44FAA==", BinaryEncoding.Base64), Compression.Deflate)), let _t = ((type nullable text) meta [Serialized.Text = true]) in type table [#"Colonne 1" = _t]),
+				    #"Type modifié" = Table.TransformColumnTypes(Source,{{"Colonne 1", type text}}),
+				    #"Colonnes supprimées" = Table.RemoveColumns(#"Type modifié",{"Colonne 1"})
+				in
+				    #"Colonnes supprimées"
+
+	annotation PBI_ResultType = Table
+

@@ -1,0 +1,101 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
+  "name": "9e863a5a20291170e25c",
+  "position": {
+    "x": 0,
+    "y": 0,
+    "z": 0,
+    "height": 147.05679862306368,
+    "width": 1910.0860585197934,
+    "tabOrder": 0
+  },
+  "visual": {
+    "visualType": "cardVisual",
+    "query": {
+      "queryState": {
+        "Data": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Mesures"
+                    }
+                  },
+                  "Property": "Nb opérateurs (affichage)"
+                }
+              },
+              "queryRef": "Mesures.Nb opérateurs (affichage)",
+              "nativeQueryRef": "Nb opérateurs ",
+              "displayName": "Nb opérateurs "
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Mesures"
+                    }
+                  },
+                  "Property": "Nb producteurs (affichage)"
+                }
+              },
+              "queryRef": "Mesures.Nb producteurs (affichage)",
+              "nativeQueryRef": "Nb producteurs ",
+              "displayName": "Nb producteurs "
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Mesures"
+                    }
+                  },
+                  "Property": "Nb transformateurs (affichage)"
+                }
+              },
+              "queryRef": "Mesures.Nb transformateurs (affichage)",
+              "nativeQueryRef": "Nb transformateurs",
+              "displayName": "Nb transformateurs"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Mesures"
+                    }
+                  },
+                  "Property": "Ratio de transformation"
+                }
+              },
+              "queryRef": "Mesures.Ratio de transformation",
+              "nativeQueryRef": "Ratio de transformation"
+            }
+          ]
+        }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Measure": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "Mesures"
+                  }
+                },
+                "Property": "Nb opérateurs (affichage)"
+              }
+            },
+            "direction": "Ascending"
+          }
+        ],
+        "isDefaultSort": true
+      }
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

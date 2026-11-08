@@ -90,13 +90,34 @@ COMMENT ON COLUMN gold.fait_certification_activite.departement_id        IS 'Dé
 COMMENT ON COLUMN gold.fait_certification_activite.date_engagement_id    IS 'Date d''engagement (dim_date), -1 si vide';
 COMMENT ON COLUMN gold.fait_certification_activite.nb_operateur_activite IS 'Toujours 1';
 
--- 3. Reconstruction complète de l'étoile, dans la transaction du job
+-- 3. Faits de mouvement : entrées et sorties d'opérateurs, tirées de l'historique SCD 2 de silver
+CREATE TABLE gold.fait_mouvement (
+    operateur_id        integer  NOT NULL,
+    date_mouvement_id   integer  NOT NULL REFERENCES gold.dim_date (date_id),
+    type_mouvement      text     NOT NULL CHECK (type_mouvement IN ('ENTREE', 'SORTIE')),
+    certificateur_id    integer  NOT NULL REFERENCES gold.dim_certificateur (certificateur_id),
+    departement_id      smallint NOT NULL REFERENCES gold.dim_departement (departement_id),
+    nb_mouvement        smallint NOT NULL DEFAULT 1 CHECK (nb_mouvement = 1),
+    PRIMARY KEY (operateur_id, date_mouvement_id, type_mouvement)
+);
+CREATE INDEX fait_mouvement_date_idx ON gold.fait_mouvement (date_mouvement_id);
+COMMENT ON TABLE  gold.fait_mouvement IS
+    'Entrées et sorties d''opérateurs dans la filière, une ligne par opérateur, date et type. '
+    'Le chargement initial (première copie) n''est pas une entrée';
+COMMENT ON COLUMN gold.fait_mouvement.operateur_id      IS 'Pseudonyme de l''opérateur';
+COMMENT ON COLUMN gold.fait_mouvement.date_mouvement_id IS 'Date de la copie où le mouvement est constaté (dim_date)';
+COMMENT ON COLUMN gold.fait_mouvement.type_mouvement    IS 'ENTREE : aucune certification en cours la veille, une ce jour-là ; SORTIE : l''inverse';
+COMMENT ON COLUMN gold.fait_mouvement.certificateur_id  IS 'Organisme de la certification ouverte (entrée) ou fermée (sortie)';
+COMMENT ON COLUMN gold.fait_mouvement.departement_id    IS 'Département de l''opérateur (état courant)';
+COMMENT ON COLUMN gold.fait_mouvement.nb_mouvement      IS 'Toujours 1';
+
+-- 4. Reconstruction complète de l'étoile, dans la transaction du job
 -- TRUNCATE verrouille les tables jusqu'au commit : Power BI attend quelques secondes,
 -- puis voit la nouvelle étoile d'un coup, jamais une étoile à moitié remplie.
-CREATE PROCEDURE gold.reconstruire_etoile()
+CREATE OR REPLACE PROCEDURE gold.reconstruire_etoile()
 LANGUAGE sql AS $$
-    TRUNCATE gold.fait_certification_activite, gold.dim_date, gold.dim_departement,
-             gold.dim_activite, gold.dim_certificateur;
+    TRUNCATE gold.fait_certification_activite, gold.fait_mouvement, gold.dim_date,
+             gold.dim_departement, gold.dim_activite, gold.dim_certificateur;
 
     -- Calendrier
     INSERT INTO gold.dim_date VALUES (-1, NULL, NULL, NULL, NULL, 'Inconnue');
@@ -151,6 +172,48 @@ LANGUAGE sql AS $$
     WHERE c.est_courant;
 
     ANALYZE gold.fait_certification_activite;
+
+    -- Mouvements. Entrée : une version ouverte un jour où l'opérateur n'avait aucune version
+    -- en cours la veille (hors chargement initial). Sortie : une version fermée un jour où
+    -- l'opérateur n'en garde aucune en cours. Un changement d'activité ou d'organisme n'est
+    -- ni l'un ni l'autre. DISTINCT ON : un seul mouvement par opérateur, date et type.
+    INSERT INTO gold.fait_mouvement
+        (operateur_id, date_mouvement_id, type_mouvement, certificateur_id, departement_id)
+    SELECT o.operateur_id, coalesce(dt.date_id, -1), m.type_mouvement,
+           coalesce(dc.certificateur_id, -1), coalesce(dd.departement_id, -1)
+    FROM (
+        SELECT DISTINCT ON (v.numero_bio, v.date_debut)
+               v.numero_bio, v.date_debut AS date_mouvement, 'ENTREE' AS type_mouvement, v.certificateur_id
+        FROM silver.certification v
+        WHERE NOT v.est_chargement_initial
+          AND NOT EXISTS (SELECT 1 FROM silver.certification w
+                          WHERE w.numero_bio = v.numero_bio AND w.date_debut < v.date_debut
+                            AND (w.date_fin IS NULL OR w.date_fin >= v.date_debut))
+        ORDER BY v.numero_bio, v.date_debut, v.certificateur_id
+    ) m
+    JOIN silver.operateur o              ON o.numero_bio = m.numero_bio
+    LEFT JOIN gold.dim_date dt           ON dt.date = m.date_mouvement
+    LEFT JOIN gold.dim_certificateur dc  ON dc.certificateur_id = m.certificateur_id
+    LEFT JOIN gold.dim_departement dd    ON dd.code_departement = o.code_departement
+    UNION ALL
+    SELECT o.operateur_id, coalesce(dt.date_id, -1), m.type_mouvement,
+           coalesce(dc.certificateur_id, -1), coalesce(dd.departement_id, -1)
+    FROM (
+        SELECT DISTINCT ON (v.numero_bio, v.date_fin)
+               v.numero_bio, v.date_fin AS date_mouvement, 'SORTIE' AS type_mouvement, v.certificateur_id
+        FROM silver.certification v
+        WHERE v.date_fin IS NOT NULL
+          AND NOT EXISTS (SELECT 1 FROM silver.certification w
+                          WHERE w.numero_bio = v.numero_bio AND w.date_debut <= v.date_fin
+                            AND (w.date_fin IS NULL OR w.date_fin > v.date_fin))
+        ORDER BY v.numero_bio, v.date_fin, v.certificateur_id
+    ) m
+    JOIN silver.operateur o              ON o.numero_bio = m.numero_bio
+    LEFT JOIN gold.dim_date dt           ON dt.date = m.date_mouvement
+    LEFT JOIN gold.dim_certificateur dc  ON dc.certificateur_id = m.certificateur_id
+    LEFT JOIN gold.dim_departement dd    ON dd.code_departement = o.code_departement;
+
+    ANALYZE gold.fait_mouvement;
 $$;
 
 RESET ROLE;

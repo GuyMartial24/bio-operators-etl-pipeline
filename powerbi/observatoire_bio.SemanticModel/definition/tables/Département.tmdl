@@ -1,0 +1,87 @@
+table Département
+	lineageTag: 6e2ccb51-75f1-4136-ab26-0e34591d3fac
+
+	column departement_id
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 14c4b42d-169f-4273-84b4-67c53be70b9c
+		summarizeBy: none
+		sourceColumn: departement_id
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column code_departement
+		dataType: string
+		lineageTag: 05a6abff-0504-472a-9886-97dd685a6560
+		summarizeBy: none
+		sourceColumn: code_departement
+
+		annotation SummarizationSetBy = Automatic
+
+	column departement_libelle
+		dataType: string
+		lineageTag: 9381850f-25aa-4236-90c9-ab62459125df
+		summarizeBy: none
+		sourceColumn: departement_libelle
+
+		annotation SummarizationSetBy = Automatic
+
+	column code_region
+		dataType: string
+		lineageTag: 63c4ed49-1cdf-4d12-a925-9546c9d35301
+		summarizeBy: none
+		sourceColumn: code_region
+
+		annotation SummarizationSetBy = Automatic
+
+	column region_libelle
+		dataType: string
+		lineageTag: 6be377af-8eee-47d9-883f-229a25987858
+		summarizeBy: none
+		sourceColumn: region_libelle
+
+		annotation SummarizationSetBy = Automatic
+
+	column est_outre_mer
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: fd566fcf-b503-44a7-a020-aaa68bba3cfa
+		summarizeBy: none
+		sourceColumn: est_outre_mer
+
+		annotation SummarizationSetBy = Automatic
+
+	column population
+		dataType: int64
+		formatString: 0
+		lineageTag: 8080eb2e-3bf7-4402-94ec-9d84a1ec84b4
+		summarizeBy: sum
+		sourceColumn: population
+
+		annotation SummarizationSetBy = Automatic
+
+	column annee_population
+		dataType: int64
+		formatString: 0
+		lineageTag: 7d0180cb-545a-4dd6-8f4d-ad9e1a37849d
+		summarizeBy: sum
+		sourceColumn: annee_population
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Département = m
+		mode: import
+		source =
+				let
+				    Source = PostgreSQL.Database("127.0.0.1:5432", "bio_observatoire"),
+				    gold_dim_departement = Source{[Schema="gold",Item="dim_departement"]}[Data]
+				in
+				    gold_dim_departement
+
+	changedProperty = Name
+
+	annotation PBI_ResultType = Table
+

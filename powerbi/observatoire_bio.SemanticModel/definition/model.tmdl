@@ -1,0 +1,25 @@
+model Model
+	culture: fr-FR
+	defaultPowerBIDataSourceVersion: powerBI_V3
+	sourceQueryCulture: fr-FR
+	valueFilterBehavior: independent
+	dataAccessOptions
+		legacyRedirects
+		returnErrorValuesAsNull
+
+annotation __PBI_TimeIntelligenceEnabled = 0
+
+annotation PBI_QueryOrder = ["Activité","Organisme","Date","Département","Faits","Mesures","Mouvements"]
+
+annotation PBI_ProTooling = ["DevMode"]
+
+ref table Activité
+ref table Organisme
+ref table Date
+ref table Département
+ref table Faits
+ref table Mesures
+ref table Mouvements
+
+ref cultureInfo fr-FR
+

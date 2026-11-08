@@ -8,6 +8,10 @@ RUN apt-get update \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
+# Dossier du fichier des mots de passe de l'interface (volume airflow_auth),
+# créé à l'avance pour que l'utilisateur airflow puisse y écrire
+RUN mkdir -p /opt/airflow/auth && chown airflow:root /opt/airflow/auth
+
 # Retour à l'utilisateur non privilégié prévu par l'image officielle
 USER airflow
 

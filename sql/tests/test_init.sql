@@ -111,7 +111,7 @@ BEGIN
         'silver.ref_activite', 'silver.ref_certificateur', 'silver.operateur',
         'silver.certification', 'silver.certification_activite', 'silver.annuaire_prepare',
         'gold.dim_date', 'gold.dim_departement', 'gold.dim_activite', 'gold.dim_certificateur',
-        'gold.fait_certification_activite'
+        'gold.fait_certification_activite', 'gold.fait_mouvement'
     ] LOOP
         IF to_regclass(t) IS NULL THEN
             RAISE EXCEPTION 'Table % absente', t;

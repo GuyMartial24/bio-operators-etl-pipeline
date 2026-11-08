@@ -26,3 +26,7 @@ talend/contexte_docker.properties
 
 # Jobs exportés par Build Job (régénérables)
 talend/build/
+
+# Power BI (projet .pbip) : données importées et réglages propres au poste
+powerbi/**/.pbi/cache.abf
+powerbi/**/.pbi/localSettings.json

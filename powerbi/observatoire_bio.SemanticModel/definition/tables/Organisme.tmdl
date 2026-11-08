@@ -1,0 +1,45 @@
+table Organisme
+	lineageTag: c090af14-ff71-4b57-8de6-7a292ed5a2cf
+
+	column certificateur_id
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 5dca45d0-a915-4262-95d4-73f85190b6b2
+		summarizeBy: none
+		sourceColumn: certificateur_id
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column certificateur_libelle
+		dataType: string
+		lineageTag: 14061f06-f703-4700-8f2a-5050d4105042
+		summarizeBy: none
+		sourceColumn: certificateur_libelle
+
+		annotation SummarizationSetBy = Automatic
+
+	column est_dispense
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 63f2a434-01c5-4695-b71d-5dd6433ec727
+		summarizeBy: none
+		sourceColumn: est_dispense
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Organisme = m
+		mode: import
+		source =
+				let
+				    Source = PostgreSQL.Database("127.0.0.1:5432", "bio_observatoire"),
+				    gold_dim_certificateur = Source{[Schema="gold",Item="dim_certificateur"]}[Data]
+				in
+				    gold_dim_certificateur
+
+	changedProperty = Name
+
+	annotation PBI_ResultType = Table
+

@@ -1,0 +1,52 @@
+table Activité
+	lineageTag: 771bcf39-5628-4598-935f-83ed595bab1e
+
+	column activite_id
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: b6507ffc-199b-4257-aadd-60fa57efdd04
+		summarizeBy: none
+		sourceColumn: activite_id
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column activite_code
+		dataType: string
+		lineageTag: a843e899-e1ef-42d9-bc36-ae34f351cef9
+		summarizeBy: none
+		sourceColumn: activite_code
+
+		annotation SummarizationSetBy = Automatic
+
+	column activite_libelle
+		dataType: string
+		lineageTag: 3b6de103-8f89-4ff3-aefb-86fe994e4b6a
+		summarizeBy: none
+		sourceColumn: activite_libelle
+
+		annotation SummarizationSetBy = Automatic
+
+	column famille
+		dataType: string
+		lineageTag: 77a62682-97bf-4fc6-97d4-a1b4cae0156d
+		summarizeBy: none
+		sourceColumn: famille
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Activité = m
+		mode: import
+		source =
+				let
+				    Source = PostgreSQL.Database("127.0.0.1:5432", "bio_observatoire"),
+				    gold_dim_activite = Source{[Schema="gold",Item="dim_activite"]}[Data]
+				in
+				    gold_dim_activite
+
+	changedProperty = Name
+
+	annotation PBI_ResultType = Table
+
