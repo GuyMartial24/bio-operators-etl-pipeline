@@ -223,7 +223,13 @@ erDiagram
 | `dim_departement` | Un département, plus « étranger » et « inconnu » | Région, population du dernier millésime |
 | `dim_activite` | Une activité | Libellé, famille |
 | `dim_certificateur` | Un organisme | `est_dispense` exclut la dispense des parts de marché et du HHI |
-| `dim_date` | Un jour, de 1994 à fin d'année suivante | Clé `AAAAMMJJ`. Sert à la date d'engagement |
+| `dim_date` | Un jour, de 1994 à fin d'année suivante | Clé `AAAAMMJJ`. Sert à la date d'engagement et à la date des mouvements |
+| `fait_mouvement` | Une entrée ou une sortie d'opérateur, à une date | Tirée de l'historique SCD 2 de silver, hors chargement initial. Un changement d'activité ou d'organisme n'est ni une entrée ni une sortie |
+
+**Constellation :** `fait_certification_activite` (l'état du jour) et `fait_mouvement` (les événements) n'ont pas le
+même grain, d'où deux tables de faits ; elles partagent les mêmes dimensions (**dimensions conformes**), si bien
+qu'un filtre sur un département s'applique aux deux. `dim_date` y joue deux rôles : date d'engagement et date du
+mouvement.
 
 **Membres « inconnu » :** chaque dimension a une ligne de clé `-1`. Un fait dont la dimension manque pointe vers `-1` au lieu de disparaître dans une jointure.
 
@@ -280,6 +286,7 @@ On ne crée un index que pour une requête connue : il accélère les lectures m
 | `silver.certification` | Unique partiel `where est_courant` | Comparer la copie du jour aux versions courantes |
 | `silver.operateur` | Unique sur `numero_bio` | Mise à jour de l'état courant |
 | `gold.fait_certification_activite` | Une par colonne de dimension | Filtres |
+| `gold.fait_mouvement` | `(date_mouvement_id)` | Courbe des entrées et sorties |
 | `audit.execution` | `(job_nom, date_copie)` | Dernière exécution d'un job |
 
 ### 4.4 Droits
