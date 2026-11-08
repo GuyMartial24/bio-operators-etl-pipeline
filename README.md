@@ -71,6 +71,35 @@ flowchart LR
 | **gold** | Modèle en **constellation** : deux tables de faits (état du jour, entrées et sorties) et quatre dimensions conformes | Aucune donnée personnelle : l'opérateur n'y est qu'un pseudonyme ; Power BI n'a accès qu'à ce schéma |
 | **audit** | Exécutions, rejets, contrôles qualité | Chaque job ouvre et ferme sa ligne d'audit, même en cas d'échec |
 
+## Orchestration et jobs
+
+Airflow lance chaque matin le téléchargement de la copie du jour, les cinq jobs Talend dans l'ordre de leurs
+dépendances (les deux jobs bronze en parallèle), puis le contrôle qualité. Les jobs sont des exports autonomes
+de Talend exécutés dans le conteneur Airflow, avec la date de copie passée en paramètre.
+
+![DAG pipeline_bio dans Airflow](docs/images/airflow_interface.png)
+
+Chaque job Talend suit le même squelette : un **prejob** ouvre la ligne d'audit et une connexion transactionnelle,
+le **traitement** écrit dans cette transaction, un **commit** valide le tout, et un **postjob**, toujours exécuté,
+ferme l'audit, annule ce qui n'a pas été validé et libère les connexions.
+
+![Job Talend silver_annuaire](docs/images/talend_silver_annuaire.png)
+
+*`silver_annuaire` : lecture de la copie en bronze, nettoyage dans le tMap (routine `Nettoyage`, jointure sur le
+référentiel des départements), écriture dans une table de travail, puis appels des procédures de fusion
+(rejets, organismes, opérateurs, SCD 2).*
+
+<details>
+<summary>Les quatre autres jobs</summary>
+
+| `bronze_agence_bio` | `bronze_insee` |
+|---|---|
+| ![Job bronze_agence_bio](docs/images/talend_bronze_agence_bio.png) | ![Job bronze_insee](docs/images/talend_bronze_insee.png) |
+| **`silver_referentiels`** | **`gold_etoile`** |
+| ![Job silver_referentiels](docs/images/talend_silver_referentiels.png) | ![Job gold_etoile](docs/images/talend_gold_etoile.png) |
+
+</details>
+
 ## Choix techniques
 
 - **Talend pour le nettoyage ligne par ligne**, **SQL pour les fusions par ensembles** : la routine Java `Nettoyage`
