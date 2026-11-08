@@ -1,0 +1,165 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
+  "name": "2affc93966097151662d",
+  "position": {
+    "x": 1352.7648578811368,
+    "y": 4.9612403100775193,
+    "z": 3000,
+    "height": 644.96124031007753,
+    "width": 459.74160206718341,
+    "tabOrder": 3000
+  },
+  "visual": {
+    "visualType": "tableEx",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Département"
+                    }
+                  },
+                  "Property": "region_libelle"
+                }
+              },
+              "queryRef": "Département.region_libelle",
+              "nativeQueryRef": "region_libelle"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Mesures"
+                    }
+                  },
+                  "Property": "HHI (affichage)"
+                }
+              },
+              "queryRef": "Mesures.HHI (affichage)",
+              "nativeQueryRef": "HHI ",
+              "displayName": "HHI "
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Mesures"
+                    }
+                  },
+                  "Property": "Niveau de concentration"
+                }
+              },
+              "queryRef": "Mesures.Niveau de concentration",
+              "nativeQueryRef": "Niveau de concentration"
+            }
+          ]
+        }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Measure": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "Mesures"
+                  }
+                },
+                "Property": "HHI (affichage)"
+              }
+            },
+            "direction": "Descending"
+          }
+        ]
+      }
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Concentration du marché par région'"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "subTitle": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  },
+  "filterConfig": {
+    "filters": [
+      {
+        "name": "bf80bc9ee3deb0846265",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "Département"
+              }
+            },
+            "Property": "region_libelle"
+          }
+        },
+        "type": "Categorical"
+      },
+      {
+        "name": "04ad704fe8db4610cba4",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "Mesures"
+              }
+            },
+            "Property": "Niveau de concentration"
+          }
+        },
+        "type": "Advanced"
+      },
+      {
+        "name": "0c9dbfb8ede66414a87a",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "Mesures"
+              }
+            },
+            "Property": "HHI (affichage)"
+          }
+        },
+        "type": "Advanced"
+      }
+    ]
+  }
+}

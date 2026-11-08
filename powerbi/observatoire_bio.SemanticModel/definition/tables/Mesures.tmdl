@@ -109,6 +109,20 @@ table Mesures
 		formatString: #,0
 		lineageTag: a424c373-e23d-4ea5-8440-a523dcac61b4
 
+	measure 'Niveau de concentration' =
+			
+			SWITCH (
+			    TRUE (),
+			    ISBLANK ( [HHI] ), BLANK (),
+			    [HHI] > 2500, "Très concentré",
+			    [HHI] > 1500, "Modérément concentré",
+			    "Peu concentré"
+			)
+		lineageTag: 6ee7578f-b68c-4157-9f3c-e78422f982e9
+
+	measure 'HHI (affichage)' = FORMAT ( [HHI], "# ##0" )
+		lineageTag: ff0aeb30-f8bc-4cfe-bda4-a139da877c7e
+
 	partition Mesures = m
 		mode: import
 		source =

@@ -1,0 +1,64 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
+  "name": "070bbae9039006ea7c17",
+  "position": {
+    "x": 10.06113537117904,
+    "y": 0,
+    "z": 0,
+    "height": 650.62008733624464,
+    "width": 323.63318777292579,
+    "tabOrder": 0
+  },
+  "visual": {
+    "visualType": "listSlicer",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Département"
+                    }
+                  },
+                  "Property": "region_libelle"
+                }
+              },
+              "queryRef": "Département.region_libelle",
+              "nativeQueryRef": "region_libelle",
+              "active": true
+            }
+          ]
+        }
+      }
+    },
+    "objects": {
+      "general": [
+        {
+          "properties": {}
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  },
+  "filterConfig": {
+    "filters": [
+      {
+        "name": "041dfe830998ae01691a",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "Département"
+              }
+            },
+            "Property": "region_libelle"
+          }
+        },
+        "type": "Categorical"
+      }
+    ]
+  }
+}

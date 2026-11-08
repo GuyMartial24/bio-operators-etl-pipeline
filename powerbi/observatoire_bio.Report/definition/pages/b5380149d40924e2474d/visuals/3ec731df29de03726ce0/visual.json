@@ -1,0 +1,55 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
+  "name": "3ec731df29de03726ce0",
+  "position": {
+    "x": 1.6537467700258397,
+    "y": 1046.8217054263564,
+    "z": 3002,
+    "height": 33.074935400516793,
+    "width": 1721.5503875968991,
+    "tabOrder": 3002
+  },
+  "visual": {
+    "visualType": "textbox",
+    "objects": {
+      "general": [
+        {
+          "properties": {
+            "paragraphs": [
+              {
+                "textRuns": [
+                  {
+                    "value": "HHI (indice de Herfindahl-Hirschman) : somme des carrés des parts de marché, en %. Il va de 0 (marché très éclaté) à 10 000 (un seul organisme). Au-delà de 2 500, le marché est très concentré ; de 1 500 à 2 500, modérément concentré. Calculé hors « Dispense de certification »."
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": ""
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "visualContainerObjects": {
+      "general": [
+        {
+          "properties": {
+            "altText": {
+              "expr": {
+                "Literal": {
+                  "Value": "''"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

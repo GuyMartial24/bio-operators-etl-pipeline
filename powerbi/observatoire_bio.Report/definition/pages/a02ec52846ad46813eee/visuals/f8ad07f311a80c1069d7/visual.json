@@ -4,10 +4,10 @@
   "position": {
     "x": 715.55121951219519,
     "y": 74.926829268292693,
-    "z": 1,
+    "z": 1000,
     "height": 597.54146341463422,
     "width": 955.31707317073176,
-    "tabOrder": 1
+    "tabOrder": 1000
   },
   "visual": {
     "visualType": "tableEx",
@@ -65,37 +65,5 @@
       }
     },
     "drillFilterOtherVisuals": true
-  },
-  "filterConfig": {
-    "filters": [
-      {
-        "name": "0272135c000670b920cc",
-        "field": {
-          "Column": {
-            "Expression": {
-              "SourceRef": {
-                "Entity": "Organisme"
-              }
-            },
-            "Property": "certificateur_libelle"
-          }
-        },
-        "type": "Categorical"
-      },
-      {
-        "name": "90781a80881a7aa29323",
-        "field": {
-          "Measure": {
-            "Expression": {
-              "SourceRef": {
-                "Entity": "Mesures"
-              }
-            },
-            "Property": "Part de marché"
-          }
-        },
-        "type": "Advanced"
-      }
-    ]
   }
 }

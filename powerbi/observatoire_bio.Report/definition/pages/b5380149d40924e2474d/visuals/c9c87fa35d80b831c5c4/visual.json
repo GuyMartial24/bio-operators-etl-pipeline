@@ -1,0 +1,88 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
+  "name": "c9c87fa35d80b831c5c4",
+  "position": {
+    "x": 479.58656330749352,
+    "y": 26.459948320413435,
+    "z": 1000,
+    "height": 103.31838565022422,
+    "width": 678.4573991031391,
+    "tabOrder": 1000
+  },
+  "visual": {
+    "visualType": "cardVisual",
+    "query": {
+      "queryState": {
+        "Data": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Mesures"
+                    }
+                  },
+                  "Property": "HHI (affichage)"
+                }
+              },
+              "queryRef": "Mesures.HHI (affichage)",
+              "nativeQueryRef": "HHI ",
+              "displayName": "HHI "
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Mesures"
+                    }
+                  },
+                  "Property": "Niveau de concentration"
+                }
+              },
+              "queryRef": "Mesures.Niveau de concentration",
+              "nativeQueryRef": "Niveau de concentration"
+            }
+          ]
+        }
+      },
+      "sortDefinition": {
+        "isDefaultSort": true
+      }
+    },
+    "drillFilterOtherVisuals": true
+  },
+  "filterConfig": {
+    "filters": [
+      {
+        "name": "88df66a2bb7b01b05773",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "Mesures"
+              }
+            },
+            "Property": "Niveau de concentration"
+          }
+        },
+        "type": "Advanced"
+      },
+      {
+        "name": "6418f261614069b2999c",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "Mesures"
+              }
+            },
+            "Property": "HHI (affichage)"
+          }
+        },
+        "type": "Advanced"
+      }
+    ]
+  }
+}
