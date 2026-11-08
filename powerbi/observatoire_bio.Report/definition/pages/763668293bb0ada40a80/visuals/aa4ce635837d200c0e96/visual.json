@@ -4,10 +4,10 @@
   "position": {
     "x": 0,
     "y": 147.05679862306368,
-    "z": 1,
+    "z": 1000,
     "height": 933.56282271944917,
     "width": 955.04302925989668,
-    "tabOrder": 1
+    "tabOrder": 1000
   },
   "visual": {
     "visualType": "shapeMap",
@@ -218,84 +218,5 @@
       ]
     },
     "drillFilterOtherVisuals": true
-  },
-  "filterConfig": {
-    "filters": [
-      {
-        "name": "7222329ca32688750b23",
-        "field": {
-          "Column": {
-            "Expression": {
-              "SourceRef": {
-                "Entity": "Département"
-              }
-            },
-            "Property": "code_departement"
-          }
-        },
-        "type": "Categorical"
-      },
-      {
-        "name": "fd145f7f90805702e00b",
-        "field": {
-          "Measure": {
-            "Expression": {
-              "SourceRef": {
-                "Entity": "Mesures"
-              }
-            },
-            "Property": "Producteurs pour 10 000 habitants"
-          }
-        },
-        "type": "Advanced"
-      },
-      {
-        "name": "fb76a1213eb73ea90078",
-        "field": {
-          "Aggregation": {
-            "Expression": {
-              "Column": {
-                "Expression": {
-                  "SourceRef": {
-                    "Entity": "Département"
-                  }
-                },
-                "Property": "departement_libelle"
-              }
-            },
-            "Function": 3
-          }
-        },
-        "type": "Advanced"
-      },
-      {
-        "name": "211a99de0052d4dcc9a0",
-        "field": {
-          "Measure": {
-            "Expression": {
-              "SourceRef": {
-                "Entity": "Mesures"
-              }
-            },
-            "Property": "Nb producteurs (affichage)"
-          }
-        },
-        "type": "Advanced"
-      },
-      {
-        "name": "49ee6f007ecca0ae0e2b",
-        "field": {
-          "Measure": {
-            "Expression": {
-              "SourceRef": {
-                "Entity": "Mesures"
-              }
-            },
-            "Property": "Ratio de transformation"
-          }
-        },
-        "type": "Advanced"
-      }
-    ]
   }
 }

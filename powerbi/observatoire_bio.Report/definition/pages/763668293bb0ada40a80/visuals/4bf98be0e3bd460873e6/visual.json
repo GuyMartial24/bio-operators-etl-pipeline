@@ -4,10 +4,10 @@
   "position": {
     "x": 955,
     "y": 147,
-    "z": 3,
+    "z": 3000,
     "height": 933,
     "width": 955,
-    "tabOrder": 3
+    "tabOrder": 3000
   },
   "visual": {
     "visualType": "scatterChart",
@@ -342,51 +342,5 @@
       ]
     },
     "drillFilterOtherVisuals": true
-  },
-  "filterConfig": {
-    "filters": [
-      {
-        "name": "e485cb99b70dd5064d45",
-        "field": {
-          "Column": {
-            "Expression": {
-              "SourceRef": {
-                "Entity": "Département"
-              }
-            },
-            "Property": "departement_libelle"
-          }
-        },
-        "type": "Categorical"
-      },
-      {
-        "name": "c1a0b70cd5a244e58126",
-        "field": {
-          "Measure": {
-            "Expression": {
-              "SourceRef": {
-                "Entity": "Mesures"
-              }
-            },
-            "Property": "Ratio de transformation"
-          }
-        },
-        "type": "Advanced"
-      },
-      {
-        "name": "6b50906e9926a8cd1b0a",
-        "field": {
-          "Measure": {
-            "Expression": {
-              "SourceRef": {
-                "Entity": "Mesures"
-              }
-            },
-            "Property": "Nb producteurs"
-          }
-        },
-        "type": "Advanced"
-      }
-    ]
   }
 }

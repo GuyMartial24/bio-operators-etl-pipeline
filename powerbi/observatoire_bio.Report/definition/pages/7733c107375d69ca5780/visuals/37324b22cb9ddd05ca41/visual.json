@@ -167,20 +167,6 @@
             }
           ]
         }
-      },
-      {
-        "name": "074470593021b720b761",
-        "field": {
-          "Measure": {
-            "Expression": {
-              "SourceRef": {
-                "Entity": "Mesures"
-              }
-            },
-            "Property": "Nb opérateurs"
-          }
-        },
-        "type": "Advanced"
       }
     ]
   }

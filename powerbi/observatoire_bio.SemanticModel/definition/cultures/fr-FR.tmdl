@@ -1,2 +1,74 @@
 cultureInfo fr-FR
 
+	linguisticMetadata =
+			{
+			  "Version": "2.0.0",
+			  "Language": "en-US",
+			  "Entities": {
+			    "mesures.nb_opérateurs_affichage": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "Mesures",
+			          "ConceptualProperty": "Nb opérateurs (affichage)"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Nb opérateurs": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "mesures.nb_producteurs_affichage": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "Mesures",
+			          "ConceptualProperty": "Nb producteurs (affichage)"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Nb producteurs": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "mesures.nb_transformateurs_affichage": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "Mesures",
+			          "ConceptualProperty": "Nb transformateurs (affichage)"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Nb transformateurs": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    }
+			  }
+			}
+		contentType: json
+

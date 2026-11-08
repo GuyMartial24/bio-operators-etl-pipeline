@@ -4,10 +4,10 @@
   "position": {
     "x": 9.5712861415752748,
     "y": 390.50847457627123,
-    "z": 1,
+    "z": 1000,
     "height": 391,
     "width": 1910,
-    "tabOrder": 1
+    "tabOrder": 1000
   },
   "visual": {
     "visualType": "clusteredColumnChart",
@@ -194,51 +194,5 @@
       ]
     },
     "drillFilterOtherVisuals": true
-  },
-  "filterConfig": {
-    "filters": [
-      {
-        "name": "99fb18da86ee40192480",
-        "field": {
-          "Column": {
-            "Expression": {
-              "SourceRef": {
-                "Entity": "Date"
-              }
-            },
-            "Property": "date"
-          }
-        },
-        "type": "Categorical"
-      },
-      {
-        "name": "5f725a4ea290bd64108e",
-        "field": {
-          "Measure": {
-            "Expression": {
-              "SourceRef": {
-                "Entity": "Mesures"
-              }
-            },
-            "Property": "Entrées"
-          }
-        },
-        "type": "Advanced"
-      },
-      {
-        "name": "82fedd9de04b62c5148a",
-        "field": {
-          "Measure": {
-            "Expression": {
-              "SourceRef": {
-                "Entity": "Mesures"
-              }
-            },
-            "Property": "Sorties"
-          }
-        },
-        "type": "Advanced"
-      }
-    ]
   }
 }

@@ -4,10 +4,10 @@
   "position": {
     "x": 10.201912858660998,
     "y": 781.46652497343246,
-    "z": 2,
+    "z": 2000,
     "height": 297.89585547290119,
     "width": 1909.798087141339,
-    "tabOrder": 2
+    "tabOrder": 2000
   },
   "visual": {
     "visualType": "cardVisual",
@@ -80,51 +80,5 @@
       }
     },
     "drillFilterOtherVisuals": true
-  },
-  "filterConfig": {
-    "filters": [
-      {
-        "name": "033549dfe4a3aac08d51",
-        "field": {
-          "Measure": {
-            "Expression": {
-              "SourceRef": {
-                "Entity": "Mesures"
-              }
-            },
-            "Property": "Entrées"
-          }
-        },
-        "type": "Advanced"
-      },
-      {
-        "name": "2b2247c50cac3715375e",
-        "field": {
-          "Measure": {
-            "Expression": {
-              "SourceRef": {
-                "Entity": "Mesures"
-              }
-            },
-            "Property": "Sorties"
-          }
-        },
-        "type": "Advanced"
-      },
-      {
-        "name": "2d710cb29eae0d030813",
-        "field": {
-          "Measure": {
-            "Expression": {
-              "SourceRef": {
-                "Entity": "Mesures"
-              }
-            },
-            "Property": "Solde"
-          }
-        },
-        "type": "Advanced"
-      }
-    ]
   }
 }

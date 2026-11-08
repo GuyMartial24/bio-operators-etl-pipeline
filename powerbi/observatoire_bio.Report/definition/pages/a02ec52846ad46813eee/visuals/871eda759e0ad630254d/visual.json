@@ -2,11 +2,11 @@
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
   "name": "871eda759e0ad630254d",
   "position": {
-    "x": 10,
+    "x": 9.3658536585365866,
     "y": 0,
     "z": 0,
-    "height": 280,
-    "width": 280,
+    "height": 636.8780487804878,
+    "width": 582.55609756097567,
     "tabOrder": 0
   },
   "visual": {
@@ -101,23 +101,6 @@
             }
           ]
         }
-      },
-      "sortDefinition": {
-        "sort": [
-          {
-            "field": {
-              "Measure": {
-                "Expression": {
-                  "SourceRef": {
-                    "Entity": "Mesures"
-                  }
-                },
-                "Property": "Nb producteurs"
-              }
-            },
-            "direction": "Descending"
-          }
-        ]
       }
     },
     "drillFilterOtherVisuals": true
@@ -125,7 +108,7 @@
   "filterConfig": {
     "filters": [
       {
-        "name": "4130d3333632a07508e2",
+        "name": "4929b999e9e0dbcca02b",
         "field": {
           "Column": {
             "Expression": {
@@ -139,7 +122,7 @@
         "type": "Categorical"
       },
       {
-        "name": "f4b91b298c8b62abc24c",
+        "name": "2f2287bac08e71b8d5de",
         "field": {
           "Measure": {
             "Expression": {
@@ -153,7 +136,7 @@
         "type": "Advanced"
       },
       {
-        "name": "fc7c9f02691c7e132dca",
+        "name": "2b5d25c68533acad940d",
         "field": {
           "Measure": {
             "Expression": {
@@ -167,7 +150,7 @@
         "type": "Advanced"
       },
       {
-        "name": "ef75cbd77c1002b5d462",
+        "name": "a952119fdd3d0a00020c",
         "field": {
           "Measure": {
             "Expression": {
@@ -181,7 +164,7 @@
         "type": "Advanced"
       },
       {
-        "name": "b7f19221903a5207085d",
+        "name": "fb4b242c028888442369",
         "field": {
           "Measure": {
             "Expression": {
@@ -195,7 +178,7 @@
         "type": "Advanced"
       },
       {
-        "name": "7786d0d8204008e627c8",
+        "name": "e31a0ed975279d547792",
         "field": {
           "Measure": {
             "Expression": {

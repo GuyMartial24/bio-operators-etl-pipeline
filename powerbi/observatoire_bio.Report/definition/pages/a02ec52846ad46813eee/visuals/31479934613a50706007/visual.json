@@ -1,0 +1,56 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
+  "name": "31479934613a50706007",
+  "position": {
+    "x": 9,
+    "y": 647,
+    "z": 2,
+    "height": 433,
+    "width": 583,
+    "tabOrder": 2
+  },
+  "visual": {
+    "visualType": "tableEx",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Mesures"
+                    }
+                  },
+                  "Property": "HHI"
+                }
+              },
+              "queryRef": "Mesures.HHI",
+              "nativeQueryRef": "HHI"
+            }
+          ]
+        }
+      }
+    },
+    "drillFilterOtherVisuals": true
+  },
+  "filterConfig": {
+    "filters": [
+      {
+        "name": "1b5ade41bd4e9761b750",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "Mesures"
+              }
+            },
+            "Property": "HHI"
+          }
+        },
+        "type": "Advanced"
+      }
+    ]
+  }
+}
