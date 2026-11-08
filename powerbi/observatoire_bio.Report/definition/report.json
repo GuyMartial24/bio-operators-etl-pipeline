@@ -37,6 +37,17 @@
           "type": "BaseTheme"
         }
       ]
+    },
+    {
+      "name": "RegisteredResources",
+      "type": "RegisteredResources",
+      "items": [
+        {
+          "name": "departements1440446244866822.topojson",
+          "path": "departements1440446244866822.topojson",
+          "type": "ShapeMap"
+        }
+      ]
     }
   ],
   "settings": {

@@ -29,6 +29,15 @@ table Mesures
 		formatString: 0.0
 		lineageTag: 7fedf7e5-e8c1-48d3-84d6-6076ca38e698
 
+	measure 'Nb opérateurs (affichage)' = FORMAT ( [Nb opérateurs], "# ##0" )
+		lineageTag: 4edf7d74-b4c8-42aa-8dd6-38335d2a15eb
+
+	measure 'Nb producteurs (affichage)' = FORMAT ( [Nb producteurs], "# ##0" )
+		lineageTag: 54761c50-e586-4f53-bbce-ade7b68b7360
+
+	measure 'Nb transformateurs (affichage)' = FORMAT ( [Nb transformateurs], "# ##0" )
+		lineageTag: 28d0da55-aeb2-4350-9ab4-e65cb24b6a17
+
 	partition Mesures = m
 		mode: import
 		source =
