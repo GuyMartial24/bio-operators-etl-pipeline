@@ -229,10 +229,43 @@ Grain : une certification en cours × une activité. Clé primaire : (`operateur
 
 Nombre d'opérateurs = `DISTINCTCOUNT(operateur_id)`, pas `SUM(nb_operateur_activite)`.
 
+### `gold.fait_mouvement`
+
+Grain : une entrée ou une sortie d'opérateur, par date de copie. Clé primaire : (`operateur_id`, `date_mouvement_id`, `type_mouvement`).
+Tirée de l'historique SCD 2 de silver, hors chargement initial.
+
+| Colonne | Type | Null | Description |
+|---|---|---|---|
+| `operateur_id` | `integer` | non | Pseudonyme de l'opérateur |
+| `date_mouvement_id` | `integer` FK | non | Date de la copie où le mouvement est constaté (`dim_date`) |
+| `type_mouvement` | `text` | non | `ENTREE` : aucune certification en cours la veille, une ce jour-là ; `SORTIE` : l'inverse |
+| `certificateur_id` | `integer` FK | non | Organisme de la certification ouverte ou fermée |
+| `departement_id` | `smallint` FK | non | Département de l'opérateur |
+| `nb_mouvement` | `smallint` | non | Toujours 1 |
+
+Un changement d'activité ou d'organisme n'est ni une entrée ni une sortie.
+
 ### Mesures Power BI (calculées en DAX sur l'étoile)
 
-| Mesure | Règle |
+Rapport : `powerbi/observatoire_bio.pbip` (format projet, modèle en TMDL). Connexion avec `bi_reader`, mode Importer.
+Les mesures sont rangées dans la table `Mesures` ; les mesures « (affichage) » formatent en texte les grands nombres des cartes.
+
+| Mesure | Règle DAX |
 |---|---|
+| Nb opérateurs | `DISTINCTCOUNT(Faits[operateur_id])` : un opérateur à plusieurs activités compte une fois |
+| Nb producteurs / transformateurs / distributeurs | `CALCULATE([Nb opérateurs], 'Activité'[famille] = …)` |
+| Ratio de transformation | `DIVIDE([Nb transformateurs], [Nb producteurs])` |
+| Population | `SUM('Département'[population])` |
+| Producteurs pour 10 000 habitants | `DIVIDE([Nb producteurs], [Population]) * 10000` |
+| Seuils (quartiles) | `PERCENTILEX.INC(FILTER(ALL('Département'), population > 0), mesure, 0.75 ou 0.25)` |
+| Désert de transformation | 1 si producteurs ≥ quartile haut et ratio ≤ quartile bas, sinon 0 |
+| Certifications | `COUNTROWS(SUMMARIZE(Faits, operateur_id, certificateur_id))` : couples opérateur × organisme |
+| Part de marché | certifications hors dispense / les mêmes avec `ALL(Organisme)` : 100 % au total, dans tout contexte (région, département) |
+| HHI | `SUMX(VALUES(Organisme[certificateur_libelle]), ([Part de marché] * 100) ^ 2)` ; de 0 à 10 000 |
+| Niveau de concentration | > 2 500 très concentré ; > 1 500 modérément concentré ; sinon peu concentré |
+| Entrées / Sorties / Solde | `DISTINCTCOUNT(Mouvements[operateur_id])` par type ; solde = entrées − sorties |
+
+---|---|
 | Nb opérateurs | `DISTINCTCOUNT(operateur_id)` |
 | Nb producteurs / préparateurs / distributeurs | Nb opérateurs filtré sur la famille `production` / `transformation` / `distribution` |
 | Ratio de transformation | Préparateurs / producteurs |
