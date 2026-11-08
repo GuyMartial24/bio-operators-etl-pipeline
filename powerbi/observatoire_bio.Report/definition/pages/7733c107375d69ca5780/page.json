@@ -15,12 +15,29 @@
           "width": {
             "expr": {
               "Literal": {
-                "Value": "258L"
+                "Value": "320L"
               }
             }
           }
         }
       }
     ]
-  }
+  },
+  "visualInteractions": [
+    {
+      "source": "37324b22cb9ddd05ca41",
+      "target": "4bdf41e5a3568403c990",
+      "type": "NoFilter"
+    },
+    {
+      "source": "4bdf41e5a3568403c990",
+      "target": "f16247f71dc39ab00036",
+      "type": "NoFilter"
+    },
+    {
+      "source": "37324b22cb9ddd05ca41",
+      "target": "f16247f71dc39ab00036",
+      "type": "NoFilter"
+    }
+  ]
 }
