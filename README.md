@@ -7,7 +7,7 @@ en tableau de bord de pilotage : où la filière manque-t-elle de transformateur
 et qui la certifie ?
 
 **Talend** (ETL) · **PostgreSQL** (architecture médaillon, SCD 2) · **Airflow** (orchestration quotidienne) ·
-**Power BI** (DAX) · **Docker** · **GitHub Actions** (CI)
+**Power BI** (DAX) · **Docker** · **GitHub Actions** (CI) · en production sur un serveur **Linux Ubuntu**
 
 ![Page Structure du rapport Power BI](docs/images/powerbi_structure.png)
 
@@ -129,7 +129,61 @@ référentiel des départements), écriture dans une table de travail, puis appe
   (volume de la copie, SIRET valides, unicité des versions SCD 2, rapprochements silver / gold…) et les enregistre ;
   un échec fait passer la tâche en rouge ([`notebooks/qualite`](notebooks/qualite)).
 
-## Lancer le projet
+## Déploiement en production
+
+Le pipeline tourne chaque matin sur un **serveur Ubuntu 24.04 (processeur ARM, Oracle Cloud)**, avec Docker Compose,
+à côté d'autres services hébergés sur la même machine. Le poste de développement garde sa propre base pour
+mettre au point jobs et mesures sans toucher à la production.
+
+```mermaid
+flowchart LR
+    subgraph PC["Poste de développement"]
+        N["Navigateur"]
+        P["Power BI Desktop"]
+    end
+    subgraph VPS["Serveur Ubuntu (ARM)"]
+        AF["Airflow<br/>127.0.0.1:8081"]
+        DB[("PostgreSQL<br/>127.0.0.1:5432")]
+    end
+    N -- "tunnel SSH<br/>-L 8081" --> AF
+    P -- "tunnel SSH<br/>-L 5433" --> DB
+    AF --> DB
+```
+
+- **Aucun port ouvert sur Internet** : Airflow et PostgreSQL ne sont publiés que sur `127.0.0.1` du serveur. On y
+  accède par des tunnels SSH, protégés par la clé SSH et chiffrés de bout en bout.
+- **Secrets propres à la production**, générés sur le serveur (`openssl rand`) sans jamais être affichés ; fichiers
+  lisibles par leur seul propriétaire, dont l'utilisateur 50000 qui exécute Airflow dans le conteneur.
+- **Ressources plafonnées** (`mem_limit`) pour ne pas pénaliser les autres services, et port d'Airflow réglable
+  (`AIRFLOW_PORT`) en cas de conflit.
+- **Image reconstruite pour ARM** sur le serveur ; les jobs Talend, en Java, tournent sans modification.
+- **Migration de l'historique** : données de bronze, silver, gold et audit transférées depuis la base de
+  développement (`pg_dump --data-only`, `pg_restore --single-transaction`), puis rejeu d'une copie déjà traitée
+  pour vérifier l'idempotence en production (aucune version SCD 2 créée).
+- **Mise en production vérifiée** : tests de la base exécutés sur le serveur, DAG testé avant d'être activé.
+
+<details>
+<summary>Procédure de déploiement</summary>
+
+```bash
+git clone https://github.com/GuyMartial24/bio-operators-etl-pipeline.git && cd bio-operators-etl-pipeline
+cp .env.example .env                                 # mots de passe générés par openssl rand, AIRFLOW_PORT si besoin
+cp talend/contexte_docker.properties.example talend/contexte_docker.properties   # mot de passe d'etl_writer
+sudo chown 50000 talend/contexte_docker.properties && sudo chmod 600 talend/contexte_docker.properties
+# copier talend/build (jobs exportés) et data/raw (INSEE) depuis le poste, par scp
+sudo chown -R 50000 data/raw/agence_bio              # Airflow y écrit la copie du jour
+docker compose up -d postgres                        # base créée par sql/init
+docker compose exec -T postgres sh -c 'psql -U "$POSTGRES_USER" -d "$POSTGRES_DB" -v ON_ERROR_STOP=1' < sql/tests/test_init.sql
+docker compose build airflow && docker compose up -d airflow
+docker compose exec airflow airflow dags test pipeline_bio AAAA-MM-JJ   # puis activer le DAG
+```
+
+Accès depuis le poste : `ssh -L 8081:127.0.0.1:8081 serveur` (Airflow sur http://localhost:8081) et
+`ssh -L 5433:127.0.0.1:5432 serveur` (Power BI sur `127.0.0.1:5433`).
+
+</details>
+
+## Lancer le projet en local
 
 Prérequis : Docker Desktop, et Talaxie Open Studio 8.9 pour modifier ou réexporter les jobs.
 
@@ -158,8 +212,8 @@ docker compose up -d                       # PostgreSQL (schémas, rôles, table
 
 ## Limites connues
 
-- La source ne conserve que la dernière version de l'annuaire : un jour sans exécution est une copie perdue.
-  L'historique commence le 5 novembre 2026.
+- La source ne conserve que la dernière version de l'annuaire : un jour sans exécution est une copie perdue
+  (d'où l'exécution sur un serveur toujours allumé). L'historique commence le 5 novembre 2026.
 - Le graphique par année d'engagement ne montre que les opérateurs encore actifs (biais du survivant) ; les
   vraies entrées et sorties ne sont connues que depuis le début du suivi.
 - Mayotte est absente des populations légales 2023 : pas d'indicateur par habitant pour ce département.

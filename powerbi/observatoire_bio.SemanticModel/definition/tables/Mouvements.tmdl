@@ -73,12 +73,10 @@ table Mouvements
 		mode: import
 		source =
 				let
-				    Source = PostgreSQL.Database("127.0.0.1:5432", "bio_observatoire"),
+				    Source = PostgreSQL.Database("127.0.0.1:5433", "bio_observatoire"),
 				    gold_fait_mouvement = Source{[Schema="gold",Item="fait_mouvement"]}[Data]
 				in
 				    gold_fait_mouvement
-
-	changedProperty = Name
 
 	annotation PBI_ResultType = Table
 
