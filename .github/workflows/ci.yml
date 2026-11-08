@@ -21,7 +21,7 @@ jobs:
 
     steps:
       - name: Récupérer le code du dépôt
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: Créer un .env de test (mots de passe aléatoires, jetables)
         run: |
@@ -51,3 +51,33 @@ jobs:
       - name: Arrêter et supprimer les conteneurs
         if: always()
         run: docker compose down -v
+
+  python:
+    name: Code Python et DAG Airflow
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Récupérer le code du dépôt
+        uses: actions/checkout@v7
+
+      - name: Installer Python 3.12 (la version de l'image Airflow)
+        uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+
+      - name: Installer les outils de vérification (versions figées)
+        run: pip install ruff==0.17.2 nbformat==5.11.1
+
+      - name: Vérifier les règles de style et les erreurs Python (ruff, ruff.toml)
+        run: ruff check airflow powerbi/cartes notebooks/qualite
+
+      - name: Vérifier le notebook de contrôle qualité
+        run: python notebooks/qualite/verifier_notebook.py notebooks/qualite/controle_qualite.ipynb
+
+      - name: Charger le DAG dans Airflow 3.3.2 et vérifier ses tâches et dépendances
+        # Image officielle, même version que l'image du projet ; le DAG est lu, pas exécuté.
+        run: |
+          docker run --rm -e AIRFLOW__CORE__LOAD_EXAMPLES=False \
+            -v "$PWD/airflow:/opt/projet:ro" apache/airflow:3.3.2-python3.12 \
+            python /opt/projet/tests/test_dag.py /opt/projet/dags

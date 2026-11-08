@@ -1,12 +1,13 @@
-"""Convertit les contours des départements (GeoJSON) en TopoJSON pour Power BI.
+"""Convertit les contours des départements (GeoJSON) en TopoJSON.
 
 Le visuel « Carte de formes » de Power BI n'accepte que le format TopoJSON.
 Conversion minimale, sans dépendance : chaque contour (anneau) devient un
-« arc » TopoJSON. Les frontières communes ne sont pas fusionnées : le fichier
-est un peu plus gros qu'avec un outil spécialisé, mais le tracé est identique.
+« arc » TopoJSON. Les frontières communes ne sont pas fusionnées : le
+fichier est un peu plus gros qu'avec un outil spécialisé, mais le tracé est
+identique.
 
-Usage :
-    python powerbi/cartes/geojson_vers_topojson.py ENTREE.geojson SORTIE.topojson
+Usage (depuis la racine du projet) :
+    python powerbi/cartes/geojson_vers_topojson.py ENTREE SORTIE
 """
 
 import json
@@ -19,7 +20,9 @@ def convertir(geojson, nom_couche="departements", decimales=4):
 
     def ajouter_anneau(anneau):
         # 4 décimales ≈ 10 m : largement suffisant pour une carte de France.
-        arcs.append([[round(x, decimales), round(y, decimales)] for x, y in anneau])
+        arcs.append(
+            [[round(x, decimales), round(y, decimales)] for x, y in anneau]
+        )
         return len(arcs) - 1
 
     geometries = []
@@ -33,7 +36,9 @@ def convertir(geojson, nom_couche="departements", decimales=4):
                 for polygone in geometrie["coordinates"]
             ]
         else:
-            raise ValueError(f"Géométrie non prise en charge : {geometrie['type']}")
+            raise ValueError(
+                f"Géométrie non prise en charge : {geometrie['type']}"
+            )
         geometries.append({
             "type": geometrie["type"],
             "arcs": arcs_geo,
@@ -42,7 +47,12 @@ def convertir(geojson, nom_couche="departements", decimales=4):
 
     return {
         "type": "Topology",
-        "objects": {nom_couche: {"type": "GeometryCollection", "geometries": geometries}},
+        "objects": {
+            nom_couche: {
+                "type": "GeometryCollection",
+                "geometries": geometries,
+            }
+        },
         "arcs": arcs,
     }
 

@@ -1,0 +1,12 @@
+# Règles de style du code Python du projet (vérifiées par la CI avec ruff).
+line-length = 79          # PEP 8
+target-version = "py312"  # version de Python de l'image Airflow
+
+[lint]
+# E, W : PEP 8 (pycodestyle) ; F : erreurs (pyflakes : nom inconnu, import inutile…) ;
+# I : ordre des imports (standard, externes, projet) ; B : pièges courants (bugbear).
+select = ["E", "W", "F", "I", "B"]
+
+[lint.per-file-ignores]
+# Notebooks : cellules de présentation (requêtes SQL, tableaux), lignes longues tolérées.
+"*.ipynb" = ["E501"]

@@ -122,7 +122,9 @@ référentiel des départements), écriture dans une table de travail, puis appe
 
 - **CI GitHub Actions** : à chaque push, la base est créée sur un PostgreSQL vierge et 13 séries de tests vérifient
   schémas, rôles, droits, contraintes, la SCD 2 et l'absence de données personnelles en gold
-  ([`sql/tests/test_init.sql`](sql/tests/test_init.sql)).
+  ([`sql/tests/test_init.sql`](sql/tests/test_init.sql)). Un second job vérifie le code Python avec ruff
+  (PEP 8, erreurs), charge le DAG dans Airflow 3.3.2 pour contrôler ses tâches et ses dépendances
+  ([`airflow/tests/test_dag.py`](airflow/tests/test_dag.py)), et valide le notebook de contrôle qualité.
 - **Contrôle qualité quotidien** : un notebook exécuté par Airflow mesure 13 indicateurs sur les données réelles
   (volume de la copie, SIRET valides, unicité des versions SCD 2, rapprochements silver / gold…) et les enregistre ;
   un échec fait passer la tâche en rouge ([`notebooks/qualite`](notebooks/qualite)).
