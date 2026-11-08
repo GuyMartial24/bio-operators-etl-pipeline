@@ -1,0 +1,82 @@
+{
+  "version": "1.1.0",
+  "diagrams": [
+    {
+      "ordinal": 0,
+      "scrollPosition": {
+        "x": 0,
+        "y": 0
+      },
+      "nodes": [
+        {
+          "location": {
+            "x": 50,
+            "y": 285.57137534163246
+          },
+          "nodeIndex": "Faits",
+          "size": {
+            "height": 224,
+            "width": 234
+          },
+          "zIndex": 1
+        },
+        {
+          "location": {
+            "x": 322.43887286512916,
+            "y": 0
+          },
+          "nodeIndex": "Département",
+          "size": {
+            "height": 287,
+            "width": 235
+          },
+          "zIndex": 3
+        },
+        {
+          "location": {
+            "x": 609.80208126043863,
+            "y": 0
+          },
+          "nodeIndex": "Activité",
+          "size": {
+            "height": 176,
+            "width": 234
+          },
+          "zIndex": 4
+        },
+        {
+          "location": {
+            "x": 109.57070447606753,
+            "y": 559.775392513966
+          },
+          "nodeIndex": "Organisme",
+          "size": {
+            "height": 152,
+            "width": 234
+          },
+          "zIndex": 5
+        },
+        {
+          "location": {
+            "x": 840.80208126043874,
+            "y": 268.88769625698308
+          },
+          "nodeIndex": "Date",
+          "size": {
+            "height": 239,
+            "width": 234
+          },
+          "zIndex": 2
+        }
+      ],
+      "name": "Toutes les tables",
+      "zoomValue": 100,
+      "pinKeyFieldsToTop": false,
+      "showExtraHeaderInfo": false,
+      "hideKeyFieldsWhenCollapsed": false,
+      "tablesLocked": false
+    }
+  ],
+  "selectedDiagram": "Toutes les tables",
+  "defaultDiagram": "Toutes les tables"
+}

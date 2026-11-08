@@ -1,0 +1,16 @@
+relationship AutoDetected_155826c1-8283-4d01-ba61-381a14790e6e
+	fromColumn: Faits.activite_id
+	toColumn: Activité.activite_id
+
+relationship AutoDetected_7304a35c-1d14-41d4-ab2e-33986297cf8b
+	fromColumn: Faits.certificateur_id
+	toColumn: Organisme.certificateur_id
+
+relationship AutoDetected_fbd5a475-fb16-433a-a33e-4b4e5fcf8cb9
+	fromColumn: Faits.departement_id
+	toColumn: Département.departement_id
+
+relationship eb77da96-c5c8-e62a-0805-00271612008e
+	fromColumn: Faits.date_engagement_id
+	toColumn: Date.date_id
+

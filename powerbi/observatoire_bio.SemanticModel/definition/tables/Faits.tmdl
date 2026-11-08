@@ -1,0 +1,85 @@
+table Faits
+	lineageTag: d4b22513-ec4b-40e0-9599-07c662663dee
+
+	column operateur_id
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 54ee70cb-c2ba-4a87-b403-a937f161d02c
+		summarizeBy: none
+		sourceColumn: operateur_id
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = User
+
+	column certificateur_id
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: d602ddb5-f9c9-4c1b-ac75-0da34e1f1f4d
+		summarizeBy: none
+		sourceColumn: certificateur_id
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column activite_id
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: d9c19ca7-d94b-47e0-91d1-988ec5d3d649
+		summarizeBy: none
+		sourceColumn: activite_id
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column departement_id
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 17a9b661-383b-40d5-9b48-ba88f0f1c4e8
+		summarizeBy: none
+		sourceColumn: departement_id
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column date_engagement_id
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 77f54327-5faa-4ab4-98ca-8caca9bd8db7
+		summarizeBy: none
+		sourceColumn: date_engagement_id
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column nb_operateur_activite
+		dataType: int64
+		formatString: 0
+		lineageTag: 2e4bcadb-391a-4443-898c-b4ecb00d29c5
+		summarizeBy: sum
+		sourceColumn: nb_operateur_activite
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Faits = m
+		mode: import
+		source =
+				let
+				    Source = PostgreSQL.Database("127.0.0.1:5432", "bio_observatoire"),
+				    gold_fait_certification_activite = Source{[Schema="gold",Item="fait_certification_activite"]}[Data]
+				in
+				    gold_fait_certification_activite
+
+	changedProperty = Name
+
+	annotation PBI_ResultType = Table
+
