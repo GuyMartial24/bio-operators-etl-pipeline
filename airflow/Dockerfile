@@ -10,3 +10,7 @@ RUN apt-get update \
 
 # Retour à l'utilisateur non privilégié prévu par l'image officielle
 USER airflow
+
+# Exécution du notebook de contrôle qualité (papermill lance le notebook, ipykernel exécute les cellules)
+RUN pip install --no-cache-dir papermill==2.6.0 ipykernel==6.30.1
+

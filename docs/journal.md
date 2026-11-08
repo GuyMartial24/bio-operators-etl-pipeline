@@ -466,3 +466,12 @@ c'est éviter de refaire les jobs quand on découvre une erreur de grain.
 - **DAG `pipeline_bio`** : 5 `BashOperator` créés par une fonction, tous les jours à 6 h (Paris), `max_active_runs=1` (copies dans l'ordre), 2 relances, dépendances calquées sur les données (les deux bronze en parallèle).
 - **Pièges** : une commande `BashOperator` qui finit par `.sh` est prise pour un fichier modèle (`TemplateNotFound`) ; `{{ ds }}` est en UTC, donc minuit à Paris donnait la copie de la veille. Corrigé par `logical_date.in_timezone('Europe/Paris')`. `airflow tasks render` vérifie un modèle sans rien exécuter.
 - Testé avec `airflow dags test pipeline_bio 2026-11-05` : les 5 jobs en 36 s, dans l'ordre, avec la bonne date de copie.
+
+## Étape 11 — Contrôle qualité (08/11/2026)
+
+- **Notebook `notebooks/qualite/controle_qualite.ipynb`** : 13 contrôles sur les données réelles (copie présente et volume en bronze ; SIRET valides, rattachement, unicité et non-chevauchement des versions SCD 2, cohérence présence / certification, populations en silver ; rapprochements avec silver en gold ; rejets). Chaque contrôle : une requête qui renvoie une valeur, un seuil, une règle (`max` / `min`) et un niveau (`ALERTE` / `ECHEC`).
+- Résultats enregistrés dans `audit.controle_qualite` avec `qa_reader`, qui lit tout mais n'écrit que là. Un `ECHEC` arrête le notebook en erreur.
+- **papermill** exécute le notebook en ligne de commande et injecte `date_copie` dans la cellule étiquetée `parameters`. Tâche `controle_qualite` après `gold_etoile`, sans relance (une donnée fausse ne se corrige pas en relançant) ; un rapport exécuté par date dans les journaux d'Airflow.
+- **Piège Windows** : `localhost` passe d'abord par IPv6 (`::1`), où PostgreSQL n'écoute pas ; sans délai maximal, la connexion attendait indéfiniment. Connexion par `127.0.0.1` et `connect_timeout`.
+- Première exécution automatique (08/11) : les 6 tâches en succès, lancée au réveil du PC ; 13 contrôles `OK`.
+- Piste d'évolution : passer les millésimes INSEE depuis Airflow (`--context_param`) pour éviter de reconstruire `bronze_insee` chaque année.
