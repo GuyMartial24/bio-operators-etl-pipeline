@@ -49,6 +49,9 @@ services:
       AIRFLOW__CORE__LOAD_EXAMPLES: "False"
       AIRFLOW__CORE__DEFAULT_TIMEZONE: Europe/Paris
       TALEND_CONTEXTE: /opt/talend/contexte_docker.properties
+      # Notebook de contrôle qualité : connexion à la base avec le rôle qa_reader
+      PG_HOTE: postgres
+      QA_READER_PASSWORD: ${QA_READER_PASSWORD}
       TZ: Europe/Paris
     ports:
       - "127.0.0.1:8080:8080"
@@ -58,6 +61,8 @@ services:
       - ./talend/build:/opt/talend/jobs:ro
       - ./talend/contexte_docker.properties:/opt/talend/contexte_docker.properties:ro
       - ./data:/opt/airflow/data
+      - ./notebooks:/opt/airflow/notebooks:ro
+
 
 volumes:
   pgdata:

@@ -38,10 +38,17 @@ FUSEAU = "Europe/Paris"
 # On convertit la date logique à l'heure de Paris avant de la formater :
 # {{ ds }} la formaterait en UTC, et minuit à Paris (23 h UTC la veille)
 # donnerait la copie de la veille.
-PARAMETRE_DATE_COPIE = (
-    " --context_param date_copie="
+DATE_COPIE = (
     "{{ logical_date.in_timezone('" + FUSEAU + "').strftime('%Y-%m-%d') }}"
 )
+PARAMETRE_DATE_COPIE = " --context_param date_copie=" + DATE_COPIE
+
+# Notebook de contrôle qualité (volume ./notebooks, en lecture seule) et
+# dossier de ses rapports : le notebook exécuté, avec ses résultats, est
+# rangé avec les journaux d'Airflow (volume airflow_logs).
+NOTEBOOK_QUALITE = "/opt/airflow/notebooks/qualite/controle_qualite.ipynb"
+DOSSIER_RAPPORTS = "/opt/airflow/logs/qualite"
+
 
 # Adresse stable de l'annuaire sur data.gouv.fr : elle redirige toujours
 # vers la dernière version, publiée chaque nuit par l'Agence Bio.
@@ -169,10 +176,26 @@ with DAG(
 
     # Couche gold : l'étoile, recalculée entièrement.
     gold_etoile = job_talend("gold_etoile")
+    
+    # Contrôle qualité : le notebook vérifie les données réelles et
+    # enregistre ses résultats dans audit.controle_qualite.
+    controle_qualite = BashOperator(
+        task_id="controle_qualite",
+        bash_command=(
+            f"mkdir -p {DOSSIER_RAPPORTS} && papermill {NOTEBOOK_QUALITE} "
+            f"{DOSSIER_RAPPORTS}/controle_qualite_{DATE_COPIE}.ipynb "
+            f"-p date_copie {DATE_COPIE}"
+        ),
+        # Relancer ne corrigerait pas des données fausses.
+        retries=0,
+    )
+
 
     # Dépendances : « a >> b » signifie « a doit réussir avant b ».
     # silver_annuaire attend l'annuaire en bronze et ref_departement en silver.
     bronze_insee >> silver_referentiels
     [bronze_agence_bio, silver_referentiels] >> silver_annuaire >> gold_etoile
     telecharger >> bronze_agence_bio
+    gold_etoile >> controle_qualite
+
 
